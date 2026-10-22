@@ -179,17 +179,15 @@ function pickWords(words, n = 15) {
 
 /* ================= KOSTRA STRÁNKY ================= */
 function page(title, back, body) {
-  const other = L && (L.code === 'es' ? 'ru' : 'es');
   app.innerHTML = `
     <header class="bar">
       ${back != null
         ? `<a class="ibtn" href="${back}" aria-label="Zpět">${I.back}</a>`
         : `<a class="logo" href="#/" aria-label="Domů">J</a>`}
       <h1 class="bar-title">${title || ''}</h1>
-      ${L ? `<nav class="lang-switch" aria-label="Jazyk">
-        <span class="on" aria-current="true">${L.code.toUpperCase()}</span>
-        <a href="#/${other}" title="Přepnout na ${esc(DATA[other].name.toLowerCase())}">${other.toUpperCase()}</a>
-      </nav>` : ''}
+      ${L ? `<nav class="lang-switch" aria-label="Jazyk">${['es', 'ru'].map(c => c === L.code
+        ? `<span class="on" aria-current="page">${c.toUpperCase()}</span>`
+        : `<a href="#/${c}" title="Přepnout na ${esc(DATA[c].name.toLowerCase())}">${c.toUpperCase()}</a>`).join('')}</nav>` : ''}
       <button type="button" class="ibtn" data-act="settings" aria-label="Nastavení">${I.gear}</button>
     </header>
     <main class="main">${body}</main>`;
@@ -253,9 +251,15 @@ function answerForm(form, onCheck) {
     if (!field.value.trim()) { field.focus(); return; }
     answered = true;
     field.readOnly = true;
-    next = onCheck(field.value);
+    // Po odpovědi patří místo zpětné vazbě: klávesnici schovat, vazbu dát pod políčko a tlačítko až za ni
+    $$('.chars, .vkbd, .translit-help', form).forEach(el => el.hidden = true);
     const btn = $('button[type=submit]', form);
+    const after = form.nextElementSibling;
+    if (btn && after && after.classList.contains('after')) form.insertBefore(after, btn);
+    next = onCheck(field.value);
+    const target = btn && !btn.hidden ? btn : after;
     if (btn) { btn.textContent = 'Další'; btn.focus({ preventScroll: true }); }
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
   });
   if (field.tagName === 'TEXTAREA') field.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
@@ -264,42 +268,75 @@ function answerForm(form, onCheck) {
 }
 
 /* ================= SEZENÍ ================= */
-// Obecná řada úloh s průběhem a závěrečným přehledem toho, co nevyšlo
-function session({ title, back, intro = '', items, step, summary }) {
-  const queue = items.slice();
-  const missed = [];
-  let i = 0;
-  page(title, back, `${intro}<div class="progress" aria-hidden="true"><span></span></div><div id="stage" class="stage"></div>`);
-  const stage = $('#stage'), bar = $('.progress span');
+// Obecná řada úloh s průběhem a závěrečným přehledem toho, co nevyšlo.
+// Rozpracované sezení se ukládá po každé úloze, takže přežije zavření karty.
+function session(cfg) {
+  const { title, back, intro = '', step, summary } = cfg;
+  const hash = location.hash;
+  const saved = cfg.resume === false ? null : store.get('session', null);
+  const resumed = !!(saved && saved.hash === hash && saved.i > 0 && saved.i < saved.queue.length);
+  const queue = resumed ? saved.queue : cfg.items.map(x => ({ x, again: false }));
+  const missed = resumed ? saved.missed : [];
+  let i = resumed ? saved.i : 0;
+  const save = () => store.set('session', { hash, queue, i, missed });
+  const clear = () => store.set('session', null);
+  store.set('last_' + L.code, { hash, title });
+
+  page(title, back, `${intro}
+    ${resumed ? `<p class="resume">Pokračuješ tam, kde jsi skončil. <button type="button" class="link" data-restart>Začít znovu</button></p>` : ''}
+    <div class="progress-row">
+      <div class="progress" role="progressbar" aria-label="Průběh" aria-valuemin="0"><span></span></div>
+      <span class="count" aria-hidden="true"></span>
+    </div>
+    <div id="stage" class="stage"></div>`);
+  const stage = $('#stage'), pr = $('.progress'), bar = $('.progress span'), count = $('.count');
+  const restart = $('[data-restart]');
+  if (restart) restart.onclick = () => { clear(); route(); };
 
   const next = () => {
     onKey = null;
     bar.style.width = (i / queue.length * 100) + '%';
-    if (i >= queue.length) return finish();
-    const item = queue[i++];
+    pr.setAttribute('aria-valuemax', queue.length);
+    pr.setAttribute('aria-valuenow', i);
+    if (i >= queue.length) { clear(); return finish(); }
+    count.textContent = `${i + 1} / ${queue.length}`;
+    const cur = queue[i];
     stage.innerHTML = '';
-    step(item, stage, (ok, opts = {}) => {
+    step(cur.x, stage, (ok, opts = {}) => {
       if (!ok) {
-        if (!missed.includes(item.__orig || item)) missed.push(item.__orig || item);
-        if (opts.again && !item.__orig) queue.push(Object.assign(Array.isArray(item) ? [...item] : { ...item }, { __orig: item }));
+        const k = JSON.stringify(cur.x);
+        if (!missed.some(m => JSON.stringify(m) === k)) missed.push(cur.x);
+        if (opts.again && !cur.again) queue.push({ x: cur.x, again: true });
       }
+      i++;
+      save();
       next();
     });
   };
 
   const finish = () => {
+    count.textContent = '';
+    const n = missed.length;
     stage.innerHTML = `<div class="done">
       <h2 class="display">Hotovo</h2>
-      ${missed.length
-        ? `<p class="muted">Tohle si ještě projdi:</p><ul class="missed">${missed.map(m => `<li>${summary(m)}</li>`).join('')}</ul>`
+      ${n
+        ? `<p class="muted">${n === 1 ? 'Jedna věc chce' : `${n} ${plural(n, 'věc', 'věci', 'věcí')} chtějí`} ještě projít:</p><ul class="missed">${missed.map(m => `<li>${summary(m)}</li>`).join('')}</ul>`
         : `<p class="muted">Všechno sedělo.</p>`}
-      <div class="actions"><button type="button" class="btn primary" data-again>Ještě jednou</button><a class="btn" href="${back}">Zpět</a></div>
+      <div class="actions">
+        ${n ? `<button type="button" class="btn primary" data-retry>Zopakovat tyhle</button>` : ''}
+        <button type="button" class="btn ${n ? '' : 'primary'}" data-again>Nové kolo</button>
+      </div>
+      <a class="back-link" href="${back}">Zpět</a>
     </div>`;
-    $('[data-again]', stage).onclick = () => route();
-    onKey = e => { if (e.key === 'Enter') route(); };
+    const again = () => route();
+    const retry = () => session({ ...cfg, items: missed.slice(), resume: false });
+    $('[data-again]', stage).onclick = again;
+    if (n) $('[data-retry]', stage).onclick = retry;
+    $('.done .btn.primary', stage).focus({ preventScroll: true });
+    onKey = e => { if (e.key === 'Enter') { e.preventDefault(); (n ? retry : again)(); } };
   };
 
-  if (!items.length) {
+  if (!queue.length) {
     stage.innerHTML = `<p class="empty">Tady zatím nic není.</p>`;
     return;
   }
@@ -315,7 +352,6 @@ function fb(r, html) {
 function viewHome() {
   page('', null, `
     <section class="hero">
-      <p class="eyebrow">Osobní studovna</p>
       <h2 class="hero-title">Jazyky</h2>
     </section>
     <div class="lang-cards">
@@ -328,17 +364,27 @@ function viewHome() {
     </div>`);
 }
 
+// Španělština míří ke konverzaci, ruština k systematickému základu – podle toho jde pořadí režimů
+const MODE_ORDER = {
+  es: ['preklad', 'cteni', 'poslech', 'vety', 'slovicka', 'gramatika', 'casovani', 'moje'],
+  ru: ['gramatika', 'casovani', 'slovicka', 'vety', 'cteni', 'poslech', 'preklad', 'moje'],
+};
+
 function viewLang() {
   const due = dueWords().length;
+  const last = store.get('last_' + L.code, null);
+  const modes = MODE_ORDER[L.code].map(id => MODES.find(m => m.id === id));
   page(L.name, '#/', `
     <section class="lang-head">
-      <p class="eyebrow">${L.name} · ${L.level}</p>
       <h2 class="display">${L.native}</h2>
+      <p class="lang-sub">${L.name} · úroveň ${L.level}</p>
     </section>
     ${due ? `<a class="review" href="#/${L.code}/opakovani">
       <span><b>Opakování</b><small>${due} ${plural(due, 'slovo čeká', 'slova čekají', 'slov čeká')} na zopakování</small></span>${I.arrow}</a>` : ''}
-    <nav class="modes">
-      ${MODES.map(m => `<a class="mode" href="#/${L.code}/${m.id}">
+    ${last && !last.hash.endsWith('/opakovani') ? `<a class="row continue" href="${esc(last.hash)}">
+      <span class="row-main">${esc(last.title)}</span><span class="row-sub">naposledy</span>${I.arrow}</a>` : ''}
+    <nav class="modes" aria-label="Režimy">
+      ${modes.map(m => `<a class="mode" href="#/${L.code}/${m.id}">
         <span class="mode-word">${L.modeWords[m.id]}</span>
         <span class="mode-name">${m.name}</span>
         <span class="mode-desc">${m.desc}</span>
@@ -401,7 +447,7 @@ function stepCard(w, stage, done) {
     stage.innerHTML = `
       <div class="card" role="button" tabindex="0" aria-label="Otočit kartičku">
         <div class="card-inner">
-          <div class="face front"><span class="big ${tc ? 'tl' : ''}">${esc(front)}</span><small class="hint">klepni pro otočení</small></div>
+          <div class="face front"><span class="big ${tc ? 'tl' : ''}">${esc(front)}</span><small class="hint"><span class="touch-only">klepni pro otočení</span><span class="kbd-only">mezerník otočí · 1 / 2 ohodnotí</span></small></div>
           <div class="face back"><span class="big ${tc ? '' : 'tl'}">${esc(back)}</span><span class="other ${tc ? 'tl' : ''}">${esc(front)}</span></div>
         </div>
       </div>
@@ -414,9 +460,11 @@ function stepCard(w, stage, done) {
         <button type="button" class="btn ok" data-g="1">Umím</button>
       </div>`;
     const card = $('.card', stage), grade = $('.grade', stage);
+    if (matchMedia('(hover: hover)').matches) card.focus({ preventScroll: true });
     const flip = () => {
       if (card.classList.contains('flipped')) return;
       card.classList.add('flipped');
+      card.setAttribute('aria-label', `${front} – ${back}`);
       grade.hidden = false;
       if (!tc) autoSay(w.t);
     };
@@ -445,7 +493,7 @@ function stepChoice(w, pool, stage, done) {
       ${rev ? '' : sayBtn(w.t)}
     </div>
     <div class="opts">${opts.map((o, k) => `<button type="button" class="opt ${rev ? 'tl' : ''}" data-k="${k}"><kbd>${k + 1}</kbd>${esc(rev ? o.t : o.c)}</button>`).join('')}</div>
-    <div class="after"></div>`;
+    <div class="after" role="status"></div>`;
   if (!rev) autoSay(w.t);
   let answered = false;
   const choose = k => {
@@ -456,7 +504,7 @@ function stepChoice(w, pool, stage, done) {
     srs.grade(w.t, ok);
     if (rev) autoSay(w.t);
     if (ok) { setTimeout(() => done(true), 850); onKey = null; return; }
-    $('.after', stage).innerHTML = `<button type="button" class="btn primary wide" data-next>Pokračovat</button>`;
+    $('.after', stage).innerHTML = `<button type="button" class="btn primary wide" data-next>Další</button>`;
     const go = () => done(false, { again: true });
     $('[data-next]', stage).onclick = go;
     onKey = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
@@ -469,7 +517,7 @@ function stepWrite(w, stage, done) {
   stage.innerHTML = `
     <div class="prompt"><span class="big">${esc(w.c)}</span><small class="hint">napiš ${L.code === 'es' ? 'španělsky' : 'rusky'}</small></div>
     <form class="answer-form">${inputHTML(L.code)}<button class="btn primary wide" type="submit">Zkontrolovat</button></form>
-    <div class="after"></div>`;
+    <div class="after" role="status"></div>`;
   answerForm($('form', stage), val => {
     const res = check(val, w.t);
     const ok = res.r !== 'bad';
@@ -499,7 +547,8 @@ function viewBuild() {
       let chosen = [], answered = false;
       const end = /[?!]$/.test(t.trim()) ? t.trim().slice(-1) : '.';
 
-      const render = () => {
+      // focus: co dostane fokus po překreslení, aby klávesnice nepřišla o místo
+      const render = focus => {
         stage.innerHTML = `
           <div class="prompt"><span class="big2">${esc(cz)}</span></div>
           <div class="build tl">${chosen.map(id => `<button type="button" class="tile" data-c="${id}">${esc(tiles.find(x => x.id === id).w)}</button>`).join('')}${chosen.length ? `<span class="build-end">${end}</span>` : ''}</div>
@@ -508,11 +557,25 @@ function viewBuild() {
             <button type="button" class="btn" data-clear ${chosen.length ? '' : 'disabled'}>Vymazat</button>
             <button type="button" class="btn primary" data-check ${chosen.length ? '' : 'disabled'}>Zkontrolovat</button>
           </div>
-          <div class="after"></div>`;
-        $$('[data-b]', stage).forEach(b => b.onclick = () => { if (!chosen.includes(+b.dataset.b)) { chosen.push(+b.dataset.b); render(); } });
-        $$('[data-c]', stage).forEach(b => b.onclick = () => { chosen = chosen.filter(x => x !== +b.dataset.c); render(); });
-        $('[data-clear]', stage).onclick = () => { chosen = []; render(); };
+          <p class="kbd-only kbd-hint">Enter zkontroluje · Backspace vrátí poslední slovo</p>
+          <div class="after" role="status"></div>`;
+        const free = from => {
+          const bank = $$('.bank .tile', stage);
+          return [...bank.slice(from), ...bank.slice(0, from)].find(b => !b.classList.contains('used')) || $('[data-check]', stage);
+        };
+        $$('[data-b]', stage).forEach((b, pos) => b.onclick = () => {
+          if (chosen.includes(+b.dataset.b)) return;
+          chosen.push(+b.dataset.b);
+          render(() => free(pos));
+        });
+        $$('[data-c]', stage).forEach(b => b.onclick = () => {
+          const id = +b.dataset.c;
+          chosen = chosen.filter(x => x !== id);
+          render(() => $(`[data-b="${id}"]`, stage));
+        });
+        $('[data-clear]', stage).onclick = () => { chosen = []; render(() => free(0)); };
         $('[data-check]', stage).onclick = checkIt;
+        if (focus && document.activeElement === document.body) { const el = focus(); if (el) el.focus({ preventScroll: true }); }
       };
 
       const checkIt = () => {
@@ -545,12 +608,12 @@ function viewBuild() {
 /* ================= PŘEKLAD ================= */
 function trSwitch(active) {
   const lng = L.code === 'es' ? 'španělštiny' : 'ruštiny';
-  const opt = (id, label, href) => `<a class="seg-btn ${active === id ? 'on' : ''}" href="${href}" data-tr="${id}">${label}</a>`;
-  return `<div class="seg" role="tablist">
+  const opt = (id, label, href) => `<a class="seg-btn ${active === id ? 'on' : ''}" href="${href}" data-tr="${id}" ${active === id ? 'aria-current="page"' : ''}>${label}</a>`;
+  return `<nav class="seg" aria-label="Směr překladu">
     ${opt('ct', `Do ${lng}`, `#/${L.code}/preklad`)}
     ${opt('tc', 'Do češtiny', `#/${L.code}/preklad`)}
     ${opt('text', 'Celý text', `#/${L.code}/preklad/text`)}
-  </div>`;
+  </nav>`;
 }
 
 function bindTrSwitch() {
@@ -576,7 +639,7 @@ function viewTranslate() {
         <div class="prompt"><span class="big2 ${toT ? '' : 'tl'}">${esc(src)}</span>${toT ? '' : sayBtn(t)}</div>
         <form class="answer-form">${inputHTML(toT ? L.code : 'cz', { multi: true, placeholder: toT ? 'Tvůj překlad…' : 'Tvůj překlad do češtiny…' })}
           <button class="btn primary wide" type="submit">Zkontrolovat</button></form>
-        <div class="after"></div>`;
+        <div class="after" role="status"></div>`;
       answerForm($('form', stage), val => {
         const res = check(val, ref);
         if (toT) tts.say(t);
@@ -586,7 +649,7 @@ function viewTranslate() {
         }
         // Překlad má víc správných podob – rozhodnutí nechávám na tobě
         $('.after', stage).innerHTML = `<div class="fb neutral"><strong>Porovnej</strong>${diffBlock(val, ref, toT)}
-          <div class="actions"><button type="button" class="btn ok" data-self="1">Měl jsem to dobře</button><button type="button" class="btn bad" data-self="0">Bylo to špatně</button></div></div>`;
+          <div class="actions"><button type="button" class="btn ok" data-self="1">Bylo to dobře</button><button type="button" class="btn bad" data-self="0">Bylo to špatně</button></div></div>`;
         $$('[data-self]', stage).forEach(b => b.onclick = () => done(b.dataset.self === '1', { again: b.dataset.self !== '1' }));
         $('button[type=submit]', stage).hidden = true;
         return null;
@@ -612,15 +675,16 @@ function viewTextTranslate(i) {
   const src = dir === 'ct' ? x.cz : x.t, ref = dir === 'ct' ? x.t : x.cz;
   const draftKey = `draft_${L.code}_${i}_${dir}`;
   page('Překlad textu', `#/${L.code}/preklad/text`, `
-    <section class="sec-head"><p class="eyebrow">${x.level}</p><h2 class="display sm tl">${esc(x.title)}</h2></section>
-    <div class="seg small">
-      <button type="button" class="seg-btn ${dir === 'tc' ? 'on' : ''}" data-dir="tc">${L.code.toUpperCase()} → CZ</button>
-      <button type="button" class="seg-btn ${dir === 'ct' ? 'on' : ''}" data-dir="ct">CZ → ${L.code.toUpperCase()}</button>
+    <section class="sec-head"><h2 class="display sm tl">${esc(x.title)}</h2><p class="muted">Úroveň ${x.level}</p></section>
+    <div class="seg small" role="group" aria-label="Směr překladu">
+      <button type="button" class="seg-btn ${dir === 'tc' ? 'on' : ''}" data-dir="tc" aria-pressed="${dir === 'tc'}">${L.code.toUpperCase()} → CZ</button>
+      <button type="button" class="seg-btn ${dir === 'ct' ? 'on' : ''}" data-dir="ct" aria-pressed="${dir === 'ct'}">CZ → ${L.code.toUpperCase()}</button>
     </div>
     <div class="source ${dir === 'tc' ? 'tl' : ''}">${src.split('\n').map(p => `<p>${esc(p)}</p>`).join('')}</div>
     <form class="answer-form text-form">
       ${inputHTML(dir === 'ct' ? L.code : 'cz', { multi: true, placeholder: 'Piš svůj překlad…' })}
       <button class="btn primary wide" type="submit">Porovnat se vzorem</button>
+      <p class="muted small">Rozepsaný překlad se průběžně ukládá.</p>
     </form>
     <div class="compare" hidden>
       <div><small>Tvůj překlad</small><div class="mine"></div></div>
@@ -660,7 +724,7 @@ function viewListen() {
         </div>
         <form class="answer-form">${inputHTML(L.code, { multi: true, placeholder: 'Napiš, co slyšíš…' })}
           <button class="btn primary wide" type="submit">Zkontrolovat</button></form>
-        <div class="after"></div>`;
+        <div class="after" role="status"></div>`;
       $('[data-play]', stage).onclick = () => tts.say(t);
       $('[data-slow]', stage).onclick = () => tts.say(t, { slow: true });
       setTimeout(() => tts.say(t), 250);
@@ -702,8 +766,8 @@ function viewRead(i) {
   page('Čtení', `#/${L.code}/cteni`, `
     <article class="reading">
       <header class="sec-head">
-        <p class="eyebrow">${x.level}</p>
         <h2 class="display sm tl">${esc(x.title)}</h2>
+        <p class="muted">Úroveň ${x.level}</p>
         <div class="actions left">
           ${tts.ok ? `<button type="button" class="chip" data-read>${I.sound}<span>Přečíst nahlas</span></button>` : ''}
           <button type="button" class="chip" data-show>Zobrazit překlad</button>
@@ -711,11 +775,12 @@ function viewRead(i) {
       </header>
       <p class="muted small">Podtržená slova ťukni pro význam.</p>
       <div class="text tl">${glossify(x.t, x.gloss)}</div>
-      <div class="translation" hidden>${x.cz.split('\n').map(p => `<p>${esc(p)}</p>`).join('')}</div>
+      <div class="translation" hidden><small>Překlad</small>${x.cz.split('\n').map(p => `<p>${esc(p)}</p>`).join('')}</div>
       <section class="questions">
         <h3>Porozuměl jsi?</h3>
         ${x.q.map(([q, o], qi) => `<div class="q"><p>${esc(q)}</p><div class="opts small">
-          ${o.map((t, k) => `<button type="button" class="opt" data-q="${qi}" data-o="${k}">${esc(t)}</button>`).join('')}</div></div>`).join('')}
+          ${o.map((t, k) => `<button type="button" class="opt" data-q="${qi}" data-o="${k}">${esc(t)}</button>`).join('')}</div>
+          <p class="q-res" role="status"></p></div>`).join('')}
       </section>
       <a class="btn wide" href="#/${L.code}/preklad/text/${i}">Přeložit tento text</a>
     </article>
@@ -740,8 +805,11 @@ function viewRead(i) {
     e.currentTarget.lastChild.textContent = tr.hidden ? 'Zobrazit překlad' : 'Skrýt překlad';
   };
   $$('[data-q]').forEach(b => b.onclick = () => {
-    const qi = +b.dataset.q, right = x.q[qi][2];
+    const qi = +b.dataset.q, right = x.q[qi][2], ok = +b.dataset.o === right;
     $$(`[data-q="${qi}"]`).forEach(o => { o.disabled = true; if (+o.dataset.o === right) o.classList.add('ok'); else if (o === b) o.classList.add('bad'); });
+    const res = b.closest('.q').querySelector('.q-res');
+    res.className = 'q-res ' + (ok ? 'ok' : 'bad');
+    res.textContent = ok ? 'Správně.' : `Ne – správně je: ${x.q[qi][1][right]}.`;
   });
 }
 
@@ -755,9 +823,13 @@ function viewGrammarList() {
 function viewGrammar(id) {
   const g = L.grammar.find(x => x.id === id);
   if (!g) return viewGrammarList();
+  // Pravidlo je rozbalené jen napoprvé, pak by na mobilu zbytečně odsouvalo cvičení
+  const seen = store.get('ruleSeen', {});
+  const open = !seen[L.code + '|' + id];
+  store.set('ruleSeen', { ...seen, [L.code + '|' + id]: 1 });
   session({
     title: g.name, back: `#/${L.code}/gramatika`,
-    intro: `<details class="rule" open><summary>Pravidlo</summary><div>${g.rule}</div></details>`,
+    intro: `<details class="rule" ${open ? 'open' : ''}><summary>Pravidlo</summary><div>${g.rule}</div></details>`,
     items: sample(g.items, 10),
     summary: ([s, a, , cz]) => `<span class="tl">${s.includes('___') ? esc(s).replace('___', `<b>${esc(variants(a)[0])}</b>`) : `${esc(s)} – <b>${esc(a)}</b>`}</span><br><small>${esc(cz)}</small>`,
     step: ([s, a, hint, cz, opts], stage, done) => {
@@ -771,7 +843,7 @@ function viewGrammar(id) {
         ${opts
           ? `<div class="opts row-opts">${opts.map((o, k) => `<button type="button" class="opt ${isCyr(o) ? 'tl' : ''}" data-k="${k}"><kbd>${k + 1}</kbd>${esc(o)}</button>`).join('')}</div>`
           : `<form class="answer-form">${inputHTML(L.code)}<button class="btn primary wide" type="submit">Zkontrolovat</button></form>`}
-        <div class="after"></div>`;
+        <div class="after" role="status"></div>`;
 
       const reveal = (res, val) => {
         const ok = res.r !== 'bad';
@@ -820,7 +892,7 @@ function viewConj() {
   const on = tensesOn();
   page('Časování', `#/${L.code}`, `
     <section class="sec-head"><h2 class="display sm">Časování</h2><p class="muted">Vyber časy, které chceš procvičovat.</p></section>
-    <div class="chips">${L.conj.tenses.map(t => `<button type="button" class="chip tense ${on.includes(t.id) ? 'on' : ''}" data-t="${t.id}">
+    <div class="chips" role="group" aria-label="Časy k procvičení">${L.conj.tenses.map(t => `<button type="button" class="chip tense ${on.includes(t.id) ? 'on' : ''}" data-t="${t.id}" aria-pressed="${on.includes(t.id)}">
       <span>${t.name}</span><small class="tl">${t.sub}</small></button>`).join('')}</div>
     <a class="btn primary wide" href="#/${L.code}/casovani/cviceni">Procvičovat</a>
     <h3 class="sub">Tabulky sloves</h3>
@@ -831,7 +903,7 @@ function viewConj() {
     cur = cur.includes(b.dataset.t) ? cur.filter(x => x !== b.dataset.t) : [...cur, b.dataset.t];
     if (!cur.length) return;
     settings.tenses[L.code] = cur; saveSettings();
-    b.classList.toggle('on');
+    b.setAttribute('aria-pressed', b.classList.toggle('on'));
   });
 }
 
@@ -876,7 +948,7 @@ function viewConjDrill() {
           <span class="person tl">${esc(personsFor(x.t)[x.p])} …</span>
         </div>
         <form class="answer-form">${inputHTML(L.code)}<button class="btn primary wide" type="submit">Zkontrolovat</button></form>
-        <div class="after"></div>`;
+        <div class="after" role="status"></div>`;
       answerForm($('form', stage), val => {
         const res = check(val, x.form);
         const ok = res.r !== 'bad';
@@ -890,9 +962,12 @@ function viewConjDrill() {
 }
 
 /* ================= MOJE SLOVÍČKA ================= */
+let removed = null;   // naposledy smazané slovo, aby šlo smazání vrátit
+
 function viewMine() {
   const words = mineWords();
   const base = `#/${L.code}/moje`;
+  if (removed && removed.code !== L.code) removed = null;
   page('Moje slovíčka', `#/${L.code}`, `
     <section class="sec-head"><h2 class="display sm">Moje slovíčka</h2><p class="muted">Slova, která potkáš na cestě nebo v hovoru.</p></section>
     <form class="add-form">
@@ -901,7 +976,8 @@ function viewMine() {
       <button class="btn primary" type="submit">Přidat</button>
     </form>
     ${words.length ? exerciseButtons(base, words.length) : ''}
-    ${words.length ? wordList(words, true) : `<p class="empty">Zatím tu nic není.</p>`}`);
+    ${removed ? `<p class="undo" role="status">Smazáno: <span class="tl">${esc(removed.w.t)}</span> <button type="button" class="link" data-undo>Vrátit</button></p>` : ''}
+    ${words.length ? wordList(words, true) : `<p class="empty">Zatím tu nic není. Přidej první slovo, které potkáš.</p>`}`);
   const form = $('.add-form');
   form.addEventListener('submit', e => {
     e.preventDefault();
@@ -910,15 +986,26 @@ function viewMine() {
     const list = mine();
     if (!list.some(m => norm(m.t) === norm(t))) list.unshift({ t, c });
     store.set('mine_' + L.code, list);
+    removed = null;
     viewMine();
     $('.add-form').t.focus();
   });
   $$('[data-del]').forEach(b => b.onclick = () => {
     const list = mine();
-    list.splice(+b.dataset.del, 1);
+    const k = +b.dataset.del;
+    removed = { code: L.code, k, w: list[k] };
+    list.splice(k, 1);
     store.set('mine_' + L.code, list);
     viewMine();
   });
+  const undo = $('[data-undo]');
+  if (undo) undo.onclick = () => {
+    const list = mine();
+    list.splice(Math.min(removed.k, list.length), 0, removed.w);
+    store.set('mine_' + L.code, list);
+    removed = null;
+    viewMine();
+  };
 }
 
 /* ================= NASTAVENÍ ================= */
@@ -1005,10 +1092,11 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (!onKey || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
   const tag = document.activeElement && document.activeElement.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || $('#settings').open) return;
-  onKey(e);
+  if (e.key === 'Escape') { const back = $('.bar a.ibtn'); if (back) { e.preventDefault(); back.click(); } return; }
+  if (onKey) onKey(e);
 });
 
 /* ================= START ================= */
