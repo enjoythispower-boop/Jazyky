@@ -127,7 +127,7 @@
       ['По́езд опа́здывает на час.', 'Vlak má hodinu zpoždění.'],
       ['Я е́ду на рабо́ту на метро́.', 'Jezdím do práce metrem.'],
       ['Мы е́дем в Петербу́рг на по́езде.', 'Jedeme do Petrohradu vlakem.'],
-      ['Оди́н биле́т до Ка́зани, пожа́луйста.', 'Jednu jízdenku do Kazaně, prosím.'],
+      ['Оди́н биле́т до Каза́ни, пожа́луйста.', 'Jednu jízdenku do Kazaně, prosím.'],
       ['Ско́лько сто́ит биле́т?', 'Kolik stojí jízdenka?'],
       ['Э́тот авто́бус идёт в центр?', 'Jede tenhle autobus do centra?'],
       ['Где остано́вка трамва́я?', 'Kde je tramvajová zastávka?'],

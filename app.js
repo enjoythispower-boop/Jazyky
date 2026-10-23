@@ -473,8 +473,8 @@ const BLOCKS = [
 ];
 // Kolik čeho plán denně obsahuje: španělština víc používá jazyk, ruština staví základ
 const RECIPE = {
-  es: { review: 40, fresh: 15, verbs: 3, gram: 10, build: 5, tr: 8, listen: 5 },
-  ru: { review: 40, fresh: 15, verbs: 3, gram: 15, build: 5, tr: 5, listen: 4 },
+  es: { review: 40, fresh: 15, verbs: 3, gram: 10, build: 5, tr: 8, trDlg: 5, listen: 5 },
+  ru: { review: 40, fresh: 15, verbs: 3, gram: 15, build: 5, tr: 5, trDlg: 3, listen: 4 },
 };
 const STEP = {
   review: { name: 'Opakování', b: 0 },
@@ -554,7 +554,8 @@ function makePlan(D) {
     if (text) add('read', [text.title]);
     const dlg = rot.pick('dlg', [...atLevel(L.dialogs, lv), ...upToLevel(L.dialogs, lv).filter(x => lvOf(x) !== lv)], x => x.id, 1)[0];
     if (dlg) add('dialog', [dlg.id]);
-    add('tr', sents(dlg ? R.tr - 3 : R.tr));
+    // Dialog v bloku zabere čas, takže se ubere pár vět k překladu
+    add('tr', sents(dlg ? R.trDlg : R.tr));
     add('listen', sents(R.listen, s => words(s) <= 12));
 
     return { date: dayKey(), lv, steps, at: 0, intro: -1 };
