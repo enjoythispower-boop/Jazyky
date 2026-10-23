@@ -1,6 +1,8 @@
 // Síť má přednost, cache slouží jako záloha pro offline
-const CACHE = 'jazyky-v3';
-const CORE = ['./', 'index.html', 'styles.css', 'app.js', 'data/es.js', 'data/ru.js', 'manifest.webmanifest', 'icon.svg'];
+const CACHE = 'jazyky-v4';
+const DATA = ['core', 'es', 'ru', 'es/b1-slova', 'es/b1-vety', 'es/b1-texty', 'es/b1-gramatika',
+  'ru/a1-slova', 'ru/a1-vety', 'ru/a1-texty', 'ru/a1-gramatika'];
+const CORE = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon.svg', ...DATA.map(f => `data/${f}.js`)];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0e0f" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Jazyky">
@@ -27,6 +27,17 @@
         <h2 id="settings-title">Nastavení</h2>
         <button class="sheet-done" value="close">Hotovo</button>
       </header>
+
+      <p class="group-label">Úroveň</p>
+      <div class="group">
+        <label class="select"><span>Španělština</span><select name="level_es"></select></label>
+        <label class="select"><span>Ruština</span><select name="level_ru"></select></label>
+      </div>
+      <p class="group-note">Denní plán bere nová slova, texty a gramatiku z této úrovně. Starší látka se dál opakuje.</p>
+
+      <p class="group-label">Synchronizace</p>
+      <div class="group sync"></div>
+      <p class="group-note">Pokrok se ukládá do tvého soukromého gistu na GitHubu, takže máš stejný plán na mobilu i na počítači. Token vytvoříš na github.com → Settings → Developer settings → Personal access tokens: buď <i>Fine-grained</i> s oprávněním <b>Gists: Read and write</b>, nebo <i>classic</i> s oprávněním <b>gist</b>. Token zůstává jen v tomto prohlížeči; v druhém zařízení zadej stejný.</p>
 
       <p class="group-label">Výslovnost</p>
       <div class="group">
@@ -63,12 +74,21 @@
           </div>
         </div>
       </div>
-      <p class="group-note">Pokrok a vlastní slovíčka jsou uložené jen v tomto prohlížeči. Zálohou je přeneseš do jiného zařízení.</p>
+      <p class="group-note">Bez synchronizace je pokrok uložený jen v tomto prohlížeči. Zálohou ho přeneseš ručně.</p>
     </form>
   </dialog>
 
+  <script src="data/core.js"></script>
   <script src="data/es.js"></script>
   <script src="data/ru.js"></script>
+  <script src="data/es/b1-slova.js"></script>
+  <script src="data/es/b1-vety.js"></script>
+  <script src="data/es/b1-texty.js"></script>
+  <script src="data/es/b1-gramatika.js"></script>
+  <script src="data/ru/a1-slova.js"></script>
+  <script src="data/ru/a1-vety.js"></script>
+  <script src="data/ru/a1-texty.js"></script>
+  <script src="data/ru/a1-gramatika.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
