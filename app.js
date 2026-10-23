@@ -31,9 +31,25 @@ const I = {
   sound: '<svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5z"/><path d="M15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11"/></svg>',
   kbd: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M10.5 10h.01M14 10h.01M17 10h.01M8 14h8"/></svg>',
   swap: '<svg viewBox="0 0 24 24"><path d="M7 4L3.5 7.5 7 11M3.5 7.5H17M17 13l3.5 3.5L17 20M20.5 16.5H7"/></svg>',
-  arrow: '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
   x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   slow: '<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M10 3h4"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  almost: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5M12 16.2v.1"/></svg>',
+  bksp: '<svg viewBox="0 0 24 24"><path d="M8.5 5.5H19a2 2 0 012 2v9a2 2 0 01-2 2H8.5L3 12z"/><path d="M11.5 9.5l5 5M16.5 9.5l-5 5"/></svg>',
+  repeat: '<svg viewBox="0 0 24 24"><path d="M19.5 11A7.5 7.5 0 006 6.8M4.5 3.5v3.8h3.8M4.5 13A7.5 7.5 0 0018 17.2M19.5 20.5v-3.8h-3.8"/></svg>',
+};
+
+// Ikony režimů na rozcestníku jazyka
+const MI = {
+  slovicka: '<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="13" height="13" rx="2.5"/><path d="M8 3.5h9.5a3 3 0 013 3V16"/></svg>',
+  vety: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="6" rx="1.8"/><rect x="13" y="5" width="8" height="6" rx="1.8"/><rect x="3" y="13" width="11" height="6" rx="1.8"/></svg>',
+  preklad: '<svg viewBox="0 0 24 24"><path d="M3.5 5.5h9M8 3.5v2M10.5 5.5c-.6 3.6-2.8 6.4-6 7.8M6 8.5c1.2 2.2 3.2 3.9 5.5 4.8M13 20.5l3.8-9 3.7 9M14.3 17.5h5"/></svg>',
+  poslech: '<svg viewBox="0 0 24 24"><path d="M4 15.5V12a8 8 0 0116 0v3.5"/><rect x="3.5" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16" y="14" width="4.5" height="6.5" rx="1.8"/></svg>',
+  cteni: '<svg viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 3.5 5v13.5c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5c-3.5-.5-6.5 0-8.5 1.5zM12 6.5V20"/></svg>',
+  gramatika: '<svg viewBox="0 0 24 24"><path d="M4.5 19.5h4l10.3-10.3a2.1 2.1 0 00-3-3L5.5 16.5zM14.5 7.5l3 3"/></svg>',
+  casovani: '<svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2.8"/><path d="M3.5 9.5h17M3.5 14.7h17M10 9.5V20"/></svg>',
+  moje: '<svg viewBox="0 0 24 24"><path d="M7.5 3.5h9a1.5 1.5 0 011.5 1.5v15.5l-6-4.2-6 4.2V5a1.5 1.5 0 011.5-1.5z"/></svg>',
 };
 
 const MODES = [
@@ -184,7 +200,7 @@ function page(title, back, body) {
       ${back != null
         ? `<a class="ibtn" href="${back}" aria-label="Zpět">${I.back}</a>`
         : `<a class="logo" href="#/" aria-label="Domů">J</a>`}
-      <h1 class="bar-title">${title || ''}</h1>
+      <h1 class="bar-title ${/class="(sec-head|lang-head|hero)"/.test(body) ? 'collapse' : ''}">${title || ''}</h1>
       ${L ? `<nav class="lang-switch" aria-label="Jazyk">${['es', 'ru'].map(c => c === L.code
         ? `<span class="on" aria-current="page">${c.toUpperCase()}</span>`
         : `<a href="#/${c}" title="Přepnout na ${esc(DATA[c].name.toLowerCase())}">${c.toUpperCase()}</a>`).join('')}</nav>` : ''}
@@ -210,7 +226,7 @@ function inputHTML(lang, { multi = false, name = 'a', placeholder = '' } = {}) {
       <p class="translit-help" ${settings.translit ? '' : 'hidden'}>Piš latinkou: <b>w</b>=ш, <b>wh</b>=щ, <b>ch</b>=ч, <b>zh</b>=ж, <b>q</b> / <b>ya</b>=я, <b>yu</b>=ю, <b>yo</b>=ё, <b>y</b>=ы, <b>e'</b>=э, <b>'</b>=ь, <b>"</b>=ъ, <b>x</b> / <b>h</b>=х, <b>c</b>=ц, <b>j</b>=й</p>
       <div class="vkbd" ${settings.kbd ? '' : 'hidden'}>
         ${L.keyboard.map(r => `<div class="vk-row">${[...r].map(ch => `<button type="button" class="vk" data-ins="${ch}">${ch}</button>`).join('')}</div>`).join('')}
-        <div class="vk-row"><button type="button" class="vk wide" data-ins=" ">mezera</button><button type="button" class="vk wide" data-act="bksp" aria-label="Smazat">⌫</button></div>
+        <div class="vk-row"><button type="button" class="vk wide" data-ins=" ">mezera</button><button type="button" class="vk wide" data-act="bksp" aria-label="Smazat">${I.bksp}</button></div>
       </div>`;
   }
   return `<div class="answer-box" data-lang="${lang}">${field}${tools}</div>`;
@@ -345,7 +361,8 @@ function session(cfg) {
 
 function fb(r, html) {
   const head = { ok: 'Správně', almost: 'Skoro', bad: 'Ne tak docela' }[r];
-  return `<div class="fb ${r}"><strong>${head}</strong>${html}</div>`;
+  const icon = { ok: I.check, almost: I.almost, bad: I.x }[r];
+  return `<div class="fb ${r}"><strong>${icon}${head}</strong>${html}</div>`;
 }
 
 /* ================= DOMŮ ================= */
@@ -355,13 +372,24 @@ function viewHome() {
       <h2 class="hero-title">Jazyky</h2>
     </section>
     <div class="lang-cards">
-      ${['es', 'ru'].map(c => { const D = DATA[c]; return `
+      ${['es', 'ru'].map(c => { const D = DATA[c], due = dueCount(c); return `
         <a class="lang-card" data-l="${c}" href="#/${c}">
           <span class="lang-glyph" aria-hidden="true">${D.glyph}</span>
           <span class="lang-native">${D.native}</span>
           <span class="lang-name">${D.name} · ${D.level}</span>
+          ${due ? `<span class="lang-due">${due} ${plural(due, 'slovo čeká', 'slova čekají', 'slov čeká')} na zopakování</span>` : ''}
+          ${I.arrow}
         </a>`; }).join('')}
     </div>`);
+}
+
+// Počet slov k opakování pro jiný než aktuální jazyk (srs i slovíčka čtou L)
+function dueCount(code) {
+  const prev = L;
+  L = DATA[code];
+  const n = dueWords().length;
+  L = prev;
+  return n;
 }
 
 // Španělština míří ke konverzaci, ruština k systematickému základu – podle toho jde pořadí režimů
@@ -376,16 +404,17 @@ function viewLang() {
   const modes = MODE_ORDER[L.code].map(id => MODES.find(m => m.id === id));
   page(L.name, '#/', `
     <section class="lang-head">
-      <h2 class="display">${L.native}</h2>
+      <h2 class="display" lang="${L.code}">${L.native}</h2>
       <p class="lang-sub">${L.name} · úroveň ${L.level}</p>
     </section>
     ${due ? `<a class="review" href="#/${L.code}/opakovani">
+      <span class="review-icon">${I.repeat}</span>
       <span><b>Opakování</b><small>${due} ${plural(due, 'slovo čeká', 'slova čekají', 'slov čeká')} na zopakování</small></span>${I.arrow}</a>` : ''}
     ${last && !last.hash.endsWith('/opakovani') ? `<a class="row continue" href="${esc(last.hash)}">
-      <span class="row-main">${esc(last.title)}</span><span class="row-sub">naposledy</span>${I.arrow}</a>` : ''}
+      <span class="row-main">Pokračovat</span><span class="row-sub">${esc(last.title)} · naposledy</span>${I.arrow}</a>` : ''}
     <nav class="modes" aria-label="Režimy">
       ${modes.map(m => `<a class="mode" href="#/${L.code}/${m.id}">
-        <span class="mode-word">${L.modeWords[m.id]}</span>
+        <span class="mode-icon">${MI[m.id]}</span>
         <span class="mode-name">${m.name}</span>
         <span class="mode-desc">${m.desc}</span>
       </a>`).join('')}
@@ -396,6 +425,7 @@ function viewLang() {
 function viewTopics() {
   const base = `#/${L.code}/slovicka`;
   page('Slovíčka', `#/${L.code}`, `
+    <section class="sec-head"><h2 class="display">Slovíčka</h2></section>
     <div class="list">
       <a class="row" href="${base}/vse"><span class="row-main">Všechna témata</span><span class="row-sub">mix ze všech slovíček</span>${I.arrow}</a>
       ${L.vocab.map((t, i) => `<a class="row" href="${base}/${i}">
@@ -744,6 +774,7 @@ function viewListen() {
 /* ================= ČTENÍ ================= */
 function viewReadList() {
   page('Čtení', `#/${L.code}`, `
+    <section class="sec-head"><h2 class="display">Čtení</h2></section>
     <div class="list">${L.texts.map((x, i) => `<a class="row" href="#/${L.code}/cteni/${i}">
       <span class="row-main tl">${esc(x.title)}</span><span class="row-sub">${x.level} · ${esc(x.t.slice(0, 60).replace(/\n/g, ' '))}…</span>${I.arrow}</a>`).join('')}</div>`);
 }
@@ -816,8 +847,9 @@ function viewRead(i) {
 /* ================= GRAMATIKA ================= */
 function viewGrammarList() {
   page('Gramatika', `#/${L.code}`, `
+    <section class="sec-head"><h2 class="display">Gramatika</h2></section>
     <div class="list">${L.grammar.map(g => `<a class="row" href="#/${L.code}/gramatika/${g.id}">
-      <span class="row-main">${esc(g.name)}</span><span class="row-sub">${g.items.length} vět</span>${I.arrow}</a>`).join('')}</div>`);
+      <span class="row-main ${isCyr(g.name) ? 'tl' : ''}">${esc(g.name)}</span><span class="row-sub">${g.items.length} vět</span>${I.arrow}</a>`).join('')}</div>`);
 }
 
 function viewGrammar(id) {
@@ -1126,8 +1158,20 @@ function route() {
   viewLang();
 }
 
+// Přechod mezi obrazovkami: hlouběji se obrazovka nasune zprava, zpět se vrátí, mezi jazyky jen prolne
+let depth = location.hash.split('/').filter(Boolean).length;
+function navigate() {
+  const d = location.hash.split('/').filter(Boolean).length;
+  const dir = d > depth ? 'fwd' : d < depth ? 'back' : 'fade';
+  depth = d;
+  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return route();
+  document.documentElement.dataset.nav = dir;
+  document.startViewTransition(route);
+}
+
 bindSettings();
-window.addEventListener('hashchange', route);
+window.addEventListener('hashchange', navigate);
+addEventListener('scroll', () => { const h = document.documentElement; h.classList.toggle('scrolled', scrollY > 4); h.classList.toggle('past', scrollY > 48); }, { passive: true });
 route();
 
 if (location.protocol === 'https:' && 'serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');

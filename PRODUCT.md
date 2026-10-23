@@ -46,6 +46,7 @@ Na rozdíl od běžných aplikací (Duolingo a podobně) je stránka šitá na m
 - Název: **Jazyky**.
 - Bez XP, bodů, sérií, žebříčků, odznaků a statistik času stráveného učením. Jediné povolené číslo je funkční údaj, například kolik slov čeká na zopakování.
 - Kompletně zdarma a bez AI.
+- Vzhled: standard moderní aplikace, žádný vlastní tematický svět. Měřítkem řemesla jsou Apple (Poznámky, Fitness) a Things 3: klid, přesná typografie, jemné detaily.
 
 ## Evidence on Hand
 

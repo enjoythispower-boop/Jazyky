@@ -1,5 +1,5 @@
 // Síť má přednost, cache slouží jako záloha pro offline
-const CACHE = 'jazyky-v2';
+const CACHE = 'jazyky-v3';
 const CORE = ['./', 'index.html', 'styles.css', 'app.js', 'data/es.js', 'data/ru.js', 'manifest.webmanifest', 'icon.svg'];
 
 self.addEventListener('install', e => {

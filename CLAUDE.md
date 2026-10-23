@@ -7,7 +7,7 @@ Personal language-learning site for one user: Spanish (A2+ → B1, Latin America
 - [index.html](index.html): shell plus the settings `<dialog>`. It loads the data files, then `app.js`.
 - [app.js](app.js): the whole app, split into sections marked `/* ================= NAME ================= */`. Routing is hash-based (`#/es/slovicka/3/psani`) via `route()`. Every exercise runs through `session({ items, step, summary })`.
 - [data/es.js](data/es.js), [data/ru.js](data/ru.js): all content (`vocab`, `sentences`, `texts`, `grammar`, `conj`). Russian text carries stress marks (U+0301). `norm()` strips them, and `ё` counts as `е`, when answers are checked.
-- [styles.css](styles.css): design tokens on `:root`, light and dark via `prefers-color-scheme`. `data-lang` on `<html>` switches the accent (terracotta for Spanish, cobalt for Russian). Target-language text uses the `.tl` class (Literata serif); UI text uses Manrope.
+- [styles.css](styles.css): design tokens on `:root`, light and dark via `prefers-color-scheme`. The look follows iOS grouped style (Apple Notes/Fitness, Things 3): grey grouped ground, white cards without borders, hairline separators. `data-lang` on `<html>` switches the accent (orange-red for Spanish, deep blue for Russian). Target-language text uses the `.tl` class (Source Serif 4); UI text uses the system font (SF on Apple, Inter elsewhere). Route changes animate with View Transitions (`navigate()` in `app.js`). DESIGN.md records the system.
 - [sw.js](sw.js): network-first with a cache fallback. Bump `jazyky-vN` when the cached file list changes.
 
 ## Conventions
