@@ -20,7 +20,7 @@ Plán běží jako jeden tok, dá se přerušit a o půlnoci se obnoví.
 Pokrok se dá synchronizovat přes soukromý gist na GitHubu.
 
 1. Na github.com otevři Settings → Developer settings → Personal access tokens.
-2. Vytvoř token, a to buď *Fine-grained* s oprávněním **Gists: Read and write**, nebo *classic* se zaškrtnutým **gist**.
+2. Nejjednodušší je *Tokens (classic)* → Generate new token se zaškrtnutým oprávněním **gist**. U *Fine-grained* tokenu je potřeba v části **Account permissions** (ne Repository permissions) nastavit **Gists: Read and write**.
 3. V aplikaci otevři Nastavení → Synchronizace, vlož token a klepni na Připojit. Na druhém zařízení zadej stejný token. Aplikace si gist najde sama.
 
 Synchronizuje se při otevření, při návratu do aplikace, po každém kroku plánu a jednou za minutu, když se něco změnilo. Token zůstává jen v prohlížeči. Bez synchronizace jde pokrok přenést ručně přes Nastavení → Stáhnout / Nahrát zálohu.

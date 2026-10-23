@@ -1707,9 +1707,15 @@ const sync = {
       ...opts,
       headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + this.cfg.token, ...(opts.body ? { 'Content-Type': 'application/json' } : {}) },
     });
-    if (r.status === 401) throw new Error('GitHub token nepřijal – zkontroluj ho.');
-    if (r.status === 403 || r.status === 404) throw new Error('Token nemá oprávnění ke gistům.');
-    if (!r.ok) throw new Error(`GitHub odpověděl chybou ${r.status}.`);
+    if (!r.ok) {
+      // Přesná odpověď GitHubu pomůže poznat, co je s tokenem špatně
+      let why = '';
+      try { why = (await r.json()).message || ''; } catch { /* bez těla */ }
+      const hint = r.status === 401 ? 'GitHub token nepřijal – zkontroluj, že je celý a neprošlý.'
+        : r.status === 403 || r.status === 404 ? 'Token nemá oprávnění ke gistům (Account permissions → Gists: Read and write).'
+        : `GitHub odpověděl chybou ${r.status}.`;
+      throw new Error(why ? `${hint} GitHub: „${why}“` : hint);
+    }
     return r.json();
   },
 
