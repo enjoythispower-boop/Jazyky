@@ -1,9 +1,10 @@
 // Síť má přednost, cache slouží jako záloha pro offline
-const CACHE = 'jazyky-v5';
+const CACHE = 'jazyky-v8';
 const DATA = [
   'core', 'es', 'ru', 'es/b1-slova', 'es/b1-slova2', 'es/b1-vety', 'es/b1-vety2', 'es/b1-texty',
   'es/b1-texty2', 'es/b1-texty3', 'es/b1-gramatika', 'es/b1-gramatika2', 'es/b1-dialogy',
-  'ru/a1-slova', 'ru/a1-vety', 'ru/a1-texty', 'ru/a1-gramatika',
+  'ru/a1-slova', 'ru/a1-slova2', 'ru/a1-vety', 'ru/a1-vety2', 'ru/a1-texty', 'ru/a1-texty2',
+  'ru/a1-gramatika', 'ru/a1-gramatika2',
 ];
 const CORE = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon.svg', ...DATA.map(f => `data/${f}.js`)];
 
