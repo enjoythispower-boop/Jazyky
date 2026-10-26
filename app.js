@@ -1912,8 +1912,14 @@ function reloadState() {
   srs.all = store.get('srs', {});
   rot.all = store.get('rot', {});
   Object.assign(settings, store.get('settings', {}));
+  // Dnešní plán vznikl při otevření ještě ze starých dat; dokud se nezačal, vytvoří se znovu z aktuálních
+  let fresh = false;
+  for (const c of ['es', 'ru']) {
+    const p = store.get('plan_' + c, null);
+    if (p && p.date === dayKey() && p.at === 0 && p.intro < 0) { localStorage.removeItem('jz_plan_' + c); fresh = true; }
+  }
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
-  if (parts.length <= 1) route();
+  if (parts.length <= 1 || (fresh && parts[1] === 'dnes')) route();
 }
 
 /* ================= NASTAVENÍ ================= */
