@@ -1,6 +1,6 @@
-/* Ruština A1 – texty ke čtení */
+/* Ruština – Základy: texty ke čtení */
 (function () {
-  JZ.add('ru', 'a1', {
+  JZ.add('ru', 'a0', {
     texts: [
       {
         title: 'Меня́ зову́т А́нна',

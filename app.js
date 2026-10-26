@@ -15,7 +15,7 @@ const dayKey = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-
 const DAY = 864e5;
 
 // Klíče, které patří jen tomuto zařízení a nesynchronizují se
-const LOCAL_KEYS = new Set(['session', 'sync', 'meta']);
+const LOCAL_KEYS = new Set(['session', 'sessions', 'sync', 'meta']);
 const store = {
   get(k, d) { try { const v = localStorage.getItem('jz_' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) {
@@ -64,6 +64,7 @@ const I = {
   play: '<svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
   skip: '<svg viewBox="0 0 24 24"><path d="M5 6l8 6-8 6zM17 6v12"/></svg>',
   cloud: '<svg viewBox="0 0 24 24"><path d="M7 18.5h10.5a4 4 0 00.6-7.96A6 6 0 006.4 9.6 4.5 4.5 0 007 18.5z"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
 };
 
 // Ikony režimů na rozcestníku jazyka
@@ -93,7 +94,8 @@ const MODES = [
 
 /* ================= ÚROVNĚ ================= */
 const lvOf = x => JZ.lv.get(x);
-const curLevel = (D = L) => { const id = settings.level[D.code]; return D.levels.some(l => l.id === id) ? id : D.levels[0].id; };
+// Bez volby se začíná na úrovni označené start (nižší úroveň je jen základ, který už uživatel zná)
+const curLevel = (D = L) => { const id = settings.level[D.code]; return D.levels.some(l => l.id === id) ? id : (D.levels.find(l => l.start) || D.levels[0]).id; };
 const levelIdx = (id, D = L) => D.levels.findIndex(l => l.id === id);
 const levelOf = (id, D = L) => D.levels.find(l => l.id === id) || D.levels[0];
 const levelName = (id, D = L) => levelOf(id, D).name;
@@ -209,9 +211,16 @@ const srs = {
   grade(w, good) {
     const c = this.get(w) || { b: 0 };
     const b = good ? Math.min(c.b + 1, SRS_DAYS.length - 1) : 0;
-    this.all[L.code + '|' + w] = { b, d: Date.now() + SRS_DAYS[b] * DAY - 2 * 36e5, u: Date.now() };
-    store.set('srs', this.all);
+    // l = kolikrát slovo nevyšlo; jakmile se upevní (přihrádka 3+), zapomene se
+    const l = good ? (b >= 3 ? 0 : c.l || 0) : (c.l || 0) + 1;
+    this.put(w, { b, d: Date.now() + SRS_DAYS[b] * DAY - 2 * 36e5, l });
   },
+  put(w, e) { this.all[L.code + '|' + w] = { ...e, u: Date.now() }; store.set('srs', this.all); },
+  // Slovo poprvé ukázané v plánu se zítra vrátí v opakování, i když se nedošlo až k psaní
+  intro(w) { if (!this.get(w)) this.put(w, { b: 0, d: Date.now() + DAY - 4 * 36e5, l: 0 }); },
+  // Slovo, které už uživatel zná: jen občasné ověření
+  known(w) { this.put(w, { b: 4, d: Date.now() + SRS_DAYS[4] * DAY, l: 0 }); },
+  hard(w) { const c = this.get(w); return !!c && (c.l || 0) >= 2; },
   due(w) { const c = this.get(w); return !!c && c.d <= Date.now(); },
 };
 
@@ -257,14 +266,31 @@ const rot = {
     this.all[this.key(kind, id)] = { n: c.n + 1, d: Date.now() + days * DAY, u: Date.now() };
     store.set('rot', this.all);
   },
+  // Nabídnuto v plánu, ale možná neprobráno: pár dní se nenabízí znovu, ať se obsah obměňuje
+  offer(kind, id, days) { this.all[this.key(kind, id) + '~'] = { d: Date.now() + days * DAY, u: Date.now() }; },
   // Nejdřív nové (v pořadí seznamu), pak ty, které už přišly na řadu, nakonec ostatní od nejdřív splatných
   pick(kind, list, idOf, n) {
     const now = Date.now(), fresh = [], due = [], rest = [];
-    for (const x of list) { const c = this.get(kind, idOf(x)); (!c ? fresh : c.d <= now ? due : rest).push(x); }
-    const by = (a, b) => this.get(kind, idOf(a)).d - this.get(kind, idOf(b)).d;
-    return [...fresh, ...due.sort(by), ...rest.sort(by)].slice(0, n);
+    for (const x of list) {
+      const c = this.get(kind, idOf(x)), o = this.all[this.key(kind, idOf(x)) + '~'];
+      const od = o && o.d > now ? o.d : 0;
+      if (!c && !od) { fresh.push(x); continue; }
+      const d = Math.max(c ? c.d : 0, od);
+      (d <= now ? due : rest).push([x, d]);
+    }
+    const by = (a, b) => a[1] - b[1];
+    return [...fresh, ...due.sort(by).map(e => e[0]), ...rest.sort(by).map(e => e[0])].slice(0, n);
   },
 };
+
+// Přidá slovo nebo frázi do vlastních slovíček (z textu nebo z dialogu)
+function addMine(t, c) {
+  const list = mine();
+  if (list.some(m => norm(m.t) === norm(t))) return false;
+  list.unshift({ t: t.trim(), c: c.trim() });
+  store.set('mine_' + L.code, list);
+  return true;
+}
 
 /* ================= KOSTRA STRÁNKY ================= */
 function page(title, back, body, cls = '') {
@@ -282,6 +308,18 @@ function page(title, back, body, cls = '') {
     <main class="main ${cls}">${body}</main>`;
   document.documentElement.classList.toggle('page-wide', cls === 'wide');
   window.scrollTo(0, 0);
+}
+
+// Krátké potvrzení dole na obrazovce
+function toast(msg) {
+  let el = $('.toast');
+  if (!el) { el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); document.body.append(el); }
+  el.textContent = msg;
+  // Nad lištou se slovníčkem, ať ji nepřekryje
+  el.classList.toggle('up', !!$('.gloss-bar:not([hidden])'));
+  el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => el.classList.remove('on'), 2200);
 }
 
 // Výměna obsahu bez změny adresy (kroky denního plánu) s plynulým přechodem
@@ -374,19 +412,31 @@ function answerForm(form, onCheck) {
 }
 
 /* ================= SEZENÍ ================= */
+// Rozpracovaná sezení zvlášť pro každé cvičení a krok plánu, ať se navzájem nepřepisují
+const sessions = {
+  all: () => store.get('sessions', {}),
+  get(k) { return this.all()[k] || null; },
+  set(k, v) {
+    const a = this.all();
+    if (v) a[k] = { ...v, t: Date.now() }; else delete a[k];
+    Object.keys(a).sort((x, y) => a[y].t - a[x].t).slice(12).forEach(x => delete a[x]);
+    store.set('sessions', a);
+  },
+};
+
 // Obecná řada úloh s průběhem a závěrečným přehledem toho, co nevyšlo.
 // Rozpracované sezení se ukládá po každé úloze, takže přežije zavření karty.
 // key: vlastní klíč pro uložení (kroky plánu sdílejí jednu adresu), onEnd: místo závěrečné obrazovky
 function session(cfg) {
   const { title, back, intro = '', step, summary } = cfg;
   const key = cfg.key || location.hash;
-  const saved = cfg.resume === false ? null : store.get('session', null);
-  const resumed = !!(saved && saved.hash === key && saved.i > 0 && saved.i < saved.queue.length);
+  const saved = cfg.resume === false ? null : sessions.get(key);
+  const resumed = !!(saved && saved.i > 0 && saved.i < saved.queue.length);
   const queue = resumed ? saved.queue : cfg.items.map(x => ({ x, again: false }));
   const missed = resumed ? saved.missed : [];
   let i = resumed ? saved.i : 0;
-  const save = () => store.set('session', { hash: key, queue, i, missed });
-  const clear = () => store.set('session', null);
+  const save = () => sessions.set(key, { queue, i, missed });
+  const clear = () => sessions.set(key, null);
   if (!cfg.onEnd) store.set('last_' + L.code, { hash: location.hash, title });
   const single = queue.length === 1;
 
@@ -416,6 +466,9 @@ function session(cfg) {
         if (!missed.some(m => JSON.stringify(m) === k)) missed.push(cur.x);
         if (opts.again && !cur.again) queue.push({ x: cur.x, again: true });
       }
+      // Úloha může zbývající frontu upravit: odebrat (drop) nebo přidat (add) položky
+      if (opts.drop) for (let j = queue.length - 1; j > i; j--) if (opts.drop(queue[j].x)) queue.splice(j, 1);
+      if (opts.add) opts.add.forEach(x => queue.push({ x, again: false }));
       i++;
       save();
       next();
@@ -473,8 +526,8 @@ const BLOCKS = [
 ];
 // Kolik čeho plán denně obsahuje: španělština víc používá jazyk, ruština staví základ
 const RECIPE = {
-  es: { review: 40, fresh: 15, verbs: 3, gram: 10, build: 5, tr: 8, trDlg: 5, listen: 5 },
-  ru: { review: 40, fresh: 15, verbs: 3, gram: 15, build: 5, tr: 5, trDlg: 3, listen: 4 },
+  es: { review: 40, fresh: 15, verbs: 3, gram: 10, build: 5, tr: 8, trDlg: 5, listen: 5, minWords: 5 },
+  ru: { review: 40, fresh: 15, verbs: 3, gram: 15, build: 5, tr: 5, trDlg: 3, listen: 4, minWords: 4 },
 };
 const STEP = {
   review: { name: 'Opakování', b: 0 },
@@ -548,15 +601,26 @@ function makePlan(D) {
       got.forEach(s => used.add(s[0]));
       return got;
     };
-    add('build', sents(R.build, s => words(s) <= 10));
+    // Úplně krátké věty (pozdravy apod.) do plánu nepatří, ty zůstávají v ručních režimech
+    add('build', sents(R.build, s => words(s) >= 4 && words(s) <= 10));
 
     const text = rot.pick('text', [...atLevel(L.texts, lv), ...upToLevel(L.texts, lv).filter(x => lvOf(x) !== lv)], x => x.title, 1)[0];
     if (text) add('read', [text.title]);
     const dlg = rot.pick('dlg', [...atLevel(L.dialogs, lv), ...upToLevel(L.dialogs, lv).filter(x => lvOf(x) !== lv)], x => x.id, 1)[0];
     if (dlg) add('dialog', [dlg.id]);
     // Dialog v bloku zabere čas, takže se ubere pár vět k překladu
-    add('tr', sents(dlg ? R.trDlg : R.tr));
-    add('listen', sents(R.listen, s => words(s) <= 12));
+    add('tr', sents(dlg ? R.trDlg : R.tr, s => words(s) >= R.minWords));
+    add('listen', sents(R.listen, s => words(s) >= 4 && words(s) <= 12));
+
+    // Co plán nabídl, se pár dní znovu nenabídne, i kdyby se ke kroku nedošlo
+    for (const s of steps) {
+      if (s.k === 'conj') s.items.forEach(x => rot.offer('verb', x.inf, 2));
+      if (s.k === 'gram') s.items.forEach(x => rot.offer('g', x.g + '#' + x.i, 2));
+      if (['build', 'tr', 'listen'].includes(s.k)) s.items.forEach(x => rot.offer('s', x[0], 3));
+      if (s.k === 'read') rot.offer('text', s.items[0], 4);
+      if (s.k === 'dialog') rot.offer('dlg', s.items[0], 4);
+    }
+    store.set('rot', rot.all);
 
     return { date: dayKey(), lv, steps, at: 0, intro: -1 };
   });
@@ -564,7 +628,9 @@ function makePlan(D) {
 
 function getPlan(D) {
   let p = store.get('plan_' + D.code, null);
-  if (!p || p.date !== dayKey() || p.lv !== curLevel(D)) {
+  // Změna úrovně se projeví hned jen u nezačatého plánu, rozdělaný dnešek se dokončí na staré
+  const started = p && (p.at > 0 || p.intro >= 0);
+  if (!p || p.date !== dayKey() || (p.lv !== curLevel(D) && !started)) {
     p = makePlan(D);
     store.set('plan_' + D.code, p);
   }
@@ -600,7 +666,7 @@ function viewToday() {
 
 function todayPanel(D) {
   return withLang(D, () => {
-    const p = getPlan(D), cur = planBlock(p), lv = levelOf(curLevel());
+    const p = getPlan(D), cur = planBlock(p), lv = levelOf(p.lv), soon = p.lv !== curLevel() ? levelOf(curLevel()) : null;
     const of = k => p.steps.find(s => s.k === k);
     const started = p.at > 0 || p.intro >= 0;
     const tl = s => `<span class="tl" lang="${D.code}">${esc(s)}</span>`;
@@ -648,7 +714,7 @@ function todayPanel(D) {
     return `<section class="today-panel" data-l="${D.code}">
       <header class="tp-head">
         <h3 class="tp-native" lang="${D.code}">${D.native}</h3>
-        <p class="tp-meta">${D.name} · úroveň ${lv.name}</p>
+        <p class="tp-meta">${D.name} · úroveň ${lv.name}${soon ? ` · od zítřka ${soon.name}` : ''}</p>
       </header>
       <ol class="tbs">${rows}</ol>
       ${nx ? `<div class="lvup"><p>Nová slova úrovně ${lv.name} máš prošlá. Další je <b>${nx.name}</b> – ${esc(nx.about)}.</p>
@@ -714,9 +780,11 @@ function runStep(p, st) {
     swap(viewFlow);
   };
   const cfg = flowStep(st);
+  // Krok bez úloh (třeba opakování, když se slova mezitím zopakovala jinde) se tiše přeskočí
+  if (!cfg.items.length && !sessions.get(key)) { p.at++; savePlan(L.code, p); return viewFlow(); }
   const run = more => {
     session({ ...cfg, key, title: `Dnes · ${L.name}`, back: '#/', cls: 'flow', intro: flowHead(p), ...more });
-    $('[data-skip]').onclick = () => { store.set('session', null); advance(); };
+    $('[data-skip]').onclick = () => { sessions.set(key, null); sessions.set(key + '|znovu', null); advance(); };
   };
   run({
     onEnd: (missed, stage) => {
@@ -740,11 +808,34 @@ function flowStep(st) {
   const marked = (kind, idOf, good, bad, fn) => (x, stage, done) =>
     fn(x, stage, (ok, o) => { rot.mark(kind, idOf(x), ok ? good : bad); done(ok, o); });
   switch (st.k) {
-    case 'review':
-      return { items: st.items, step: (w, stage, done) => stepCard(w, stage, done), summary: wordSummary };
+    case 'review': {
+      // Jen slova, která opravdu čekají (mohla se mezitím zopakovat jinde).
+      // Slova, která opakovaně nejdou, dostanou místo kartičky výběr a psaní.
+      const due = st.items.filter(w => srs.due(w.t)), pool = allWords();
+      const items = [
+        ...due.filter(w => !srs.hard(w.t)).map(w => ({ w, m: 'card' })),
+        ...shuffle(due.filter(w => srs.hard(w.t))).flatMap(w => [{ w, m: 'choice' }, { w, m: 'write' }]),
+      ];
+      return {
+        items,
+        step: ({ w, m }, stage, done) => m === 'card' ? stepCard(w, stage, done)
+          : m === 'choice' ? stepChoice(w, pool, stage, done, false)
+          : stepWrite(w, stage, done),
+        summary: x => wordSummary(x.w),
+      };
+    }
     case 'fresh': {
-      // Každé nové slovo projde kartičkou, výběrem a psaním; o zařazení do opakování rozhoduje psaní
+      // Každé nové slovo projde kartičkou, výběrem a psaním; o přihrádce v opakování rozhoduje psaní
       const pool = baseWords().filter(w => w.lv === curLevel());
+      const planned = new Set(st.items.map(w => w.t));
+      // Za slovo, které už uživatel zná, přijde další nové
+      const another = () => {
+        const w = freshWords(curLevel(), 60).find(x => !planned.has(x.t));
+        if (!w) return [];
+        planned.add(w.t);
+        const nw = { t: w.t, c: w.c };
+        return [{ w: nw, m: 'card' }, { w: nw, m: 'choice' }, { w: nw, m: 'write' }];
+      };
       const items = [
         ...st.items.map(w => ({ w, m: 'card' })),
         ...shuffle(st.items).map(w => ({ w, m: 'choice' })),
@@ -752,7 +843,12 @@ function flowStep(st) {
       ];
       return {
         items,
-        step: ({ w, m }, stage, done) => m === 'card' ? stepCard(w, stage, done, false)
+        step: ({ w, m }, stage, done) => m === 'card'
+          ? stepCard(w, stage, (ok, o = {}) => {
+            if (o.known) { srs.known(w.t); return done(true, { drop: x => x.w && x.w.t === w.t, add: another() }); }
+            srs.intro(w.t);
+            done(ok, o);
+          }, 'intro')
           : m === 'choice' ? stepChoice(w, pool.length >= 4 ? pool : allWords(), stage, done, false)
           : stepWrite(w, stage, done),
         summary: x => wordSummary(x.w),
@@ -808,7 +904,7 @@ function viewLang() {
   page(L.name, '#/', `
     <section class="lang-head">
       <h2 class="lang-native" lang="${L.code}">${L.native}</h2>
-      <p class="lang-sub">${L.name} · úroveň ${levelName(curLevel())}</p>
+      <p class="lang-sub">${L.name} · úroveň ${levelName(p.lv)}${p.lv !== curLevel() ? ` · od zítřka ${levelName(curLevel())}` : ''}</p>
     </section>
     <a class="plan-card" href="#/${L.code}/dnes">
       <span class="pc-kicker">Dnešní plán</span>
@@ -860,11 +956,20 @@ function wordList(words, del = false) {
 
 function viewTopic(id) {
   const words = topicWords(id);
+  const unseen = words.filter(w => !srs.get(w.t)).length;
   const base = `#/${L.code}/slovicka/${id}`;
   page(topicName(id), `#/${L.code}/slovicka`, `
     <section class="sec-head"><h2 class="display sm">${esc(topicName(id))}</h2><p class="muted">${words.length} ${plural(words.length, 'slovo', 'slova', 'slov')}</p></section>
     ${exerciseButtons(base, words.length)}
+    ${id !== 'vse' && unseen ? `<p class="topic-known"><button type="button" class="link" data-topic-known>Tohle téma už umím</button> <span class="muted">– ${unseen} ${plural(unseen, 'nové slovo', 'nová slova', 'nových slov')} se přestane nabízet v plánu</span></p>` : ''}
     ${wordList(words)}`);
+  const tk = $('[data-topic-known]');
+  if (tk) tk.onclick = () => {
+    if (!confirm('Označit všechna dosud neprobraná slova tohoto tématu jako známá? Jednou za čas se ještě objeví v opakování.')) return;
+    words.forEach(w => { if (!srs.get(w.t)) srs.known(w.t); });
+    toast('Téma označeno jako známé');
+    viewTopic(id);
+  };
 }
 
 function vocabSession(words, mode, title, back) {
@@ -874,8 +979,8 @@ function vocabSession(words, mode, title, back) {
   session({ title, back, items, step: steps[mode] || stepCard, summary: wordSummary });
 }
 
-// grade = false: slovo se jen představuje, do opakování ho zařadí až pozdější psaní
-function stepCard(w, stage, done, grade = true) {
+// mode 'intro': slovo se jen představuje (známku dá až pozdější psaní) a jde ho označit jako známé
+function stepCard(w, stage, done, mode = 'grade') {
   const render = () => {
     const tc = settings.cardDir === 'tc';
     const front = tc ? w.t : w.c, back = tc ? w.c : w.t;
@@ -889,6 +994,7 @@ function stepCard(w, stage, done, grade = true) {
       <div class="card-tools">
         ${sayBtn(w.t)}
         <button type="button" class="chip" data-dir>${I.swap}<span>${tc ? `${L.code.toUpperCase()} → CZ` : `CZ → ${L.code.toUpperCase()}`}</span></button>
+        ${mode === 'intro' ? `<button type="button" class="chip" data-known>${I.check}<span>Už to znám</span></button>` : ''}
       </div>
       <div class="grade" hidden>
         <button type="button" class="btn bad" data-g="0">Ještě ne</button>
@@ -903,8 +1009,10 @@ function stepCard(w, stage, done, grade = true) {
       gradeEl.hidden = false;
       if (!tc) autoSay(w.t);
     };
-    const answer = ok => { if (grade) srs.grade(w.t, ok); done(ok, { again: !ok }); };
+    const answer = ok => { if (mode === 'grade') srs.grade(w.t, ok); done(ok, { again: !ok }); };
     card.onclick = flip;
+    const known = $('[data-known]', stage);
+    if (known) known.onclick = () => done(true, { known: true });
     $$('[data-g]', stage).forEach(b => b.onclick = () => answer(b.dataset.g === '1'));
     $('[data-dir]', stage).onclick = () => { settings.cardDir = tc ? 'ct' : 'tc'; saveSettings(); render(); };
     onKey = e => {
@@ -1240,8 +1348,9 @@ function bindReading(x, root) {
     $$('.g.on', root).forEach(el => el.classList.remove('on'));
     b.classList.add('on');
     bar.innerHTML = `<span class="gl-w tl">${esc(b.textContent)}</span><span class="gl-m">${esc(x.gloss[b.dataset.g])}</span>
-      ${sayBtn(b.textContent, 'sm')}<button type="button" class="ibtn sm" data-close aria-label="Zavřít">${I.x}</button>`;
+      ${sayBtn(b.textContent, 'sm')}<button type="button" class="ibtn sm" data-add aria-label="Přidat do mých slovíček" title="Přidat do mých slovíček">${I.plus}</button><button type="button" class="ibtn sm" data-close aria-label="Zavřít">${I.x}</button>`;
     bar.hidden = false;
+    $('[data-add]', bar).onclick = () => toast(addMine(b.dataset.g, x.gloss[b.dataset.g]) ? 'Přidáno do mých slovíček' : 'Tohle už v mých slovíčkách je');
     $('[data-close]', bar).onclick = () => { bar.hidden = true; b.classList.remove('on'); };
     autoSay(b.textContent);
   });
@@ -1305,9 +1414,10 @@ function stepDialog(id, stage, done) {
   const bubble = (side, t, cz) => {
     chat.insertAdjacentHTML('beforeend', `<div class="bub ${side}" role="button" tabindex="0">
       ${side === 'them' ? `<small class="who">${esc(d.who)}</small>` : ''}
-      <p class="tl" lang="${L.code}">${esc(t)}</p><p class="bub-cz" hidden>${esc(cz)}</p></div>`);
+      <p class="tl" lang="${L.code}">${esc(t)}</p><div class="bub-cz" hidden><p>${esc(cz)}</p><button type="button" class="bub-add">${I.plus}Do mých slovíček</button></div></div>`);
     const el = chat.lastElementChild;
     el.onclick = () => { const c = $('.bub-cz', el); c.hidden = !c.hidden; };
+    $('.bub-add', el).onclick = e => { e.stopPropagation(); toast(addMine(t, cz) ? 'Přidáno do mých slovíček' : 'Tohle už v mých slovíčkách je'); };
     el.onkeydown = e => { if (e.key === 'Enter') el.click(); };
     requestAnimationFrame(() => el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
   };
@@ -1974,6 +2084,8 @@ function navigate() {
   document.startViewTransition(route);
 }
 
+// Dřívější jediné společné rozpracované sezení nahradila sezení po klíčích
+try { localStorage.removeItem('jz_session'); } catch { /* soukromé okno */ }
 bindSettings();
 window.addEventListener('hashchange', navigate);
 addEventListener('scroll', () => { const h = document.documentElement; h.classList.toggle('scrolled', scrollY > 4); h.classList.toggle('past', scrollY > 48); }, { passive: true });

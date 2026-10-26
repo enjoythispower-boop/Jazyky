@@ -364,6 +364,7 @@ input, textarea { caret-color: var(--accent); }
 .lv-name { font: 600 1.375rem/1 var(--serif); letter-spacing: -.01em; }
 .lv-cur { padding: 3px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-size: .75rem; font-weight: 650; }
 
+.topic-known { margin: -12px 4px 22px; font-size: .9rem; }
 .ex-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 10px; margin-bottom: 24px; }
 .ex {
   display: flex; flex-direction: column; gap: 1px; padding: 14px 14px;
@@ -763,8 +764,28 @@ mark { padding: 0 .15em; border-radius: 4px; background: var(--warn-soft); color
 .bub.them { align-self: flex-start; border-bottom-left-radius: 6px; background: var(--surface); box-shadow: var(--shadow); }
 .bub.me { align-self: flex-end; border-bottom-right-radius: 6px; background: var(--accent-deep); color: #fff; }
 .who { display: block; margin-bottom: 2px; font-size: .75rem; font-weight: 650; color: var(--accent); }
-.bub-cz { margin-top: 6px !important; padding-top: 6px; border-top: .5px solid var(--line-2); font-size: .875rem; color: var(--muted); }
+.bub-cz { margin-top: 6px; padding-top: 6px; border-top: .5px solid var(--line-2); font-size: .875rem; color: var(--muted); }
+.bub-cz p { margin: 0; }
 .bub.me .bub-cz { border-top-color: rgb(255 255 255 / .3); color: rgb(255 255 255 / .82); }
+.bub-add {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; padding: 4px 10px 4px 8px;
+  border: 0; border-radius: 99px; background: var(--accent-soft); color: var(--accent);
+  font-size: .8125rem; font-weight: 600;
+}
+.bub-add svg { width: 14px; height: 14px; stroke-width: 2.4; }
+.bub.me .bub-add { background: rgb(255 255 255 / .18); color: #fff; }
+
+/* Krátké potvrzení */
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 30;
+  transform: translate(-50%, 12px); opacity: 0; pointer-events: none;
+  padding: 10px 18px; border-radius: 99px; background: rgb(28 28 30 / .92); color: #f5f5f7;
+  font-size: .9375rem; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 14px 30px -14px rgb(0 0 0 / .5);
+  transition: opacity .25s, transform .35s var(--ease);
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+.toast.up { bottom: calc(100px + env(safe-area-inset-bottom)); }
 .reply { display: flex; flex-direction: column; gap: 10px; }
 .reply:empty { display: none; }
 .reply-label { margin: 6px 4px 0; font-size: .875rem; color: var(--muted); }

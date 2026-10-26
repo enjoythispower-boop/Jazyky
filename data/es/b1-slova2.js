@@ -31,32 +31,6 @@
         tranquilo/a|klidný
         la estancia|pobyt`) },
 
-      { name: 'Doma a v kuchyni', words: T(`
-        la cocina|kuchyně; sporák
-        el refrigerador / la heladera (AR)|lednice
-        la estufa (MX)|sporák
-        el horno|trouba
-        la olla|hrnec
-        la sartén|pánev
-        el plato|talíř; jídlo (chod)
-        el vaso|sklenice
-        la taza|hrnek; šálek
-        hervir|vařit (vodu); vřít
-        freír|smažit
-        cortar|krájet; řezat
-        pelar|loupat
-        mezclar|míchat (smíchat)
-        lavar los platos|mýt nádobí
-        el fregadero|dřez
-        la basura|odpadky
-        sacar la basura|vynést odpadky
-        el piso|podlaha; patro; byt (ES)
-        la pared|zeď
-        el techo|strop; střecha
-        el enchufe|zásuvka
-        la luz|světlo; elektřina
-        prender (LatAm) / encender|zapnout
-        apagar|vypnout`) },
 
       { name: 'Telefon a internet', words: T(`
         el celular (LatAm) / el móvil|mobil
@@ -82,31 +56,6 @@
         funcionar|fungovat
         estar descompuesto/a (MX)|být rozbitý; nefungovat`) },
 
-      { name: 'Oblečení a vzhled', words: T(`
-        la camisa|košile
-        la camiseta / la playera (MX) / la remera (AR)|tričko
-        los pantalones|kalhoty
-        los pantalones cortos|kraťasy
-        la falda / la pollera (AR)|sukně
-        el vestido|šaty
-        la chamarra (MX) / la campera (AR)|bunda
-        el suéter / el buzo (AR)|svetr; mikina
-        los zapatos|boty
-        los tenis / las zapatillas|tenisky
-        las sandalias|sandály
-        el traje de baño|plavky
-        la gorra|kšiltovka
-        el sombrero|klobouk
-        los lentes (LatAm) / las gafas|brýle
-        ponerse|obléct si; nasadit si
-        quitarse|svléct si; sundat
-        quedar bien|slušet; padnout
-        el pelo|vlasy
-        alto/a|vysoký
-        bajo/a|malý (postavou); nízký
-        delgado/a / flaco/a|hubený
-        rubio/a / güero/a (MX)|blonďatý; světlovlasý
-        moreno/a|snědý; tmavovlasý`) },
 
       { name: 'Povaha a vlastnosti', words: T(`
         simpático/a|sympatický; milý
@@ -239,31 +188,6 @@
         ¡Auxilio! / ¡Socorro!|Pomoc!
         peligroso/a|nebezpečný`) },
 
-      { name: 'Zvířata a příroda', words: T(`
-        el animal|zvíře
-        el perro|pes
-        el gato|kočka
-        el pájaro|pták
-        el mono|opice
-        la tortuga|želva
-        la ballena|velryba
-        el delfín|delfín
-        el tiburón|žralok
-        la serpiente / la culebra|had
-        el mosquito / el zancudo (LatAm)|komár
-        la araña|pavouk
-        el caballo|kůň
-        la vaca|kráva
-        la llama|lama
-        el cóndor|kondor
-        el loro|papoušek
-        el árbol|strom
-        la flor|květina
-        la planta|rostlina
-        la arena|písek
-        la piedra|kámen
-        el desierto|poušť
-        el glaciar|ledovec`) },
 
       { name: 'Ve městě a na silnici', words: T(`
         el colectivo (AR) / la combi (MX)|městský autobus; dodávka
@@ -380,32 +304,6 @@
         el boliche (AR)|klub; diskotéka
         de una (CO)|jasně; hned`) },
 
-      { name: 'Na trhu a při vaření', words: T(`
-        el kilo|kilo
-        medio kilo|půl kila
-        un pedazo de|kousek (čeho)
-        la docena|tucet
-        maduro/a|zralý
-        fresco/a|čerstvý
-        la fruta|ovoce
-        el plátano / la banana|banán
-        la piña|ananas
-        la sandía|meloun
-        el limón|citron; limetka
-        la naranja|pomeranč
-        el jitomate (MX) / el tomate|rajče
-        la cebolla|cibule
-        el ajo|česnek
-        el chile (MX) / el ají (SA)|chilli paprička
-        el maíz / el choclo (SA)|kukuřice
-        la tortilla|tortilla (placka)
-        el queso|sýr
-        el huevo|vejce
-        la harina|mouka
-        el azúcar|cukr
-        la sal|sůl
-        el aceite|olej
-        cocinar|vařit (jídlo)`) },
     ],
   });
 })();

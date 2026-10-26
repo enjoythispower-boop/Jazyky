@@ -31,7 +31,9 @@
       dialogy: 'разгово́р', gramatika: 'грамма́тика', casovani: 'глаго́лы', moje: 'мои́ слова́',
     },
     levels: [
-      { id: 'a1', name: 'A1', about: 'základní věty, rod, první pády, přítomný a minulý čas',
+      { id: 'a0', name: 'Základy', about: 'pozdravy, rodina, čísla a první slova, která už umíš',
+        tenses: ['pres'] },
+      { id: 'a1', name: 'A1', about: 'běžná témata, rod, první pády, přítomný a minulý čas', start: true,
         tenses: ['pres', 'past'] },
       { id: 'a2', name: 'A2', about: 'všechny pády, vid sloves, pohybová slovesa, budoucí čas',
         tenses: ['pres', 'past', 'fut', 'impv'] },

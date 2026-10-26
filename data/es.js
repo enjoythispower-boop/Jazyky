@@ -48,7 +48,9 @@
     },
     // Úrovně jdou po sobě; tenses = časy, které denní plán na dané úrovni procvičuje
     levels: [
-      { id: 'b1', name: 'B1', about: 'cesta, každodenní život, minulé časy a první konjunktiv',
+      { id: 'a2', name: 'A2', about: 'základní slovní zásoba, kterou už z velké části znáš',
+        tenses: ['pres', 'ind', 'imp', 'perf'] },
+      { id: 'b1', name: 'B1', about: 'cesta, každodenní život, minulé časy a první konjunktiv', start: true,
         tenses: ['pres', 'ind', 'imp', 'perf', 'fut', 'subj'] },
       { id: 'b1p', name: 'B1+', about: 'názory, vyprávění, reakce v rozhovoru',
         tenses: ['ind', 'imp', 'perf', 'fut', 'cond', 'subj', 'impv', 'plusc', 'subjimp'] },

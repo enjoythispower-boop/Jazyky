@@ -1,6 +1,6 @@
-/* Ruština A1 – věty pro skládání, překlad a poslech */
+/* Ruština – Základy: věty pro skládání, překlad a poslech */
 (function () {
-  JZ.add('ru', 'a1', {
+  JZ.add('ru', 'a0', {
     sentences: [
       ['Как вас зову́т?', 'Jak se jmenujete?'],
       ['Я из Че́хии.', 'Jsem z Česka.'],

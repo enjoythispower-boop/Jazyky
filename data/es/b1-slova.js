@@ -31,33 +31,6 @@
         de ida y vuelta|zpáteční
         el camión (MX)|autobus (v Mexiku)`) },
 
-      { name: 'Jídlo a restaurace', words: T(`
-        la cuenta|účet
-        la propina|spropitné
-        el menú del día|denní menu
-        pedir|objednat si; požádat
-        la bebida|nápoj
-        el agua sin gas|neperlivá voda
-        picante|pálivý
-        el pollo|kuře
-        la carne de res|hovězí maso
-        el cerdo|vepřové; prase
-        los mariscos|mořské plody
-        el pescado|ryba (jídlo)
-        las verduras|zelenina
-        el arroz|rýže
-        los frijoles|fazole
-        el aguacate / la palta|avokádo
-        el desayuno|snídaně
-        el almuerzo|oběd
-        la cena|večeře
-        probar|ochutnat; vyzkoušet
-        tener hambre|mít hlad
-        tener sed|mít žízeň
-        el mesero / el camarero|číšník
-        la cuchara|lžíce
-        el tenedor|vidlička
-        el cuchillo|nůž`) },
 
       { name: 'Zdraví a tělo', words: T(`
         me duele la cabeza|bolí mě hlava
@@ -85,55 +58,7 @@
         sano/a|zdravý
         mejorarse|uzdravit se`) },
 
-      { name: 'Město a cesta', words: T(`
-        a la derecha|doprava; vpravo
-        a la izquierda|doleva; vlevo
-        todo recto / derecho|rovně
-        la cuadra (LatAm)|blok (domů)
-        la esquina|roh (ulice)
-        cerca de|blízko
-        lejos de|daleko od
-        el barrio|čtvrť
-        el mercado|trh
-        la plaza|náměstí
-        el puente|most
-        el cajero automático|bankomat
-        el banco|banka; lavička
-        la iglesia|kostel
-        el semáforo|semafor
-        cruzar|přejít
-        doblar / girar|zahnout
-        seguir|pokračovat; následovat
-        perderse|zabloudit
-        la calle|ulice
-        el edificio|budova
-        la orilla|břeh`) },
 
-      { name: 'Příroda a počasí', words: T(`
-        el clima|podnebí; počasí
-        llover|pršet
-        la lluvia|déšť
-        nublado|zataženo
-        hace calor|je horko
-        hace frío|je zima
-        húmedo|vlhký
-        la tormenta|bouřka
-        el terremoto|zemětřesení
-        el volcán|sopka
-        la selva|džungle; prales
-        la montaña|hora
-        el cerro|kopec
-        la playa|pláž
-        el lago|jezero
-        el río|řeka
-        la ola|vlna
-        el amanecer|svítání
-        el atardecer|západ slunce
-        la temporada de lluvias|období dešťů
-        la isla|ostrov
-        el sendero|stezka
-        el paisaje|krajina
-        la cascada|vodopád`) },
 
       { name: 'Lidé a vztahy', words: T(`
         conocer a alguien|poznat někoho
@@ -232,27 +157,6 @@
         enseguida|hned
         por fin|konečně`) },
 
-      { name: 'Peníze a nakupování', words: T(`
-        el precio|cena
-        caro/a|drahý
-        barato/a|levný
-        el cambio|drobné; směna
-        la tarjeta|karta
-        en efectivo|v hotovosti
-        el descuento|sleva
-        la talla|velikost (oblečení)
-        probarse|vyzkoušet si (oblečení)
-        ¿Cuánto cuesta?|Kolik to stojí?
-        regatear|smlouvat
-        el recibo|účtenka
-        la tienda|obchod
-        la bolsa|taška
-        la moneda|mince; měna
-        el billete|bankovka
-        cobrar|účtovat; inkasovat
-        abierto/a|otevřený
-        cerrado/a|zavřený
-        la oferta|nabídka; akce`) },
     ],
   });
 })();

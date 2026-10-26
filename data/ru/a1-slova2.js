@@ -4,30 +4,6 @@
 
   JZ.add('ru', 'a1', {
     vocab: [
-      { name: 'Otázky a zájmena', words: T(`
-        кто?|kdo?
-        что?|co?
-        когда́?|kdy?
-        почему́?|proč?
-        заче́м?|proč? (za jakým účelem)
-        как?|jak?
-        ско́лько?|kolik?
-        како́й?|jaký?
-        кото́рый?|který?
-        чей?|čí?
-        отку́да?|odkud?
-        я|já
-        ты|ty
-        он|on
-        она́|ona
-        мы|my
-        вы|vy; Vy (zdvořile)
-        они́|oni
-        мой|můj
-        твой|tvůj
-        наш|náš
-        ваш|váš`) },
-
       { name: 'Spojky a příslovce', words: T(`
         и|a (spojka)
         а|a (ale; kdežto)
@@ -108,21 +84,6 @@
         тре́тий|třetí
         полови́на|polovina`) },
 
-      { name: 'Barvy', words: T(`
-        цвет|barva
-        како́го цве́та?|jaké barvy?
-        кра́сный|červený
-        си́ний|modrý (tmavě)
-        голубо́й|světle modrý
-        зелёный|zelený
-        жёлтый|žlutý
-        чёрный|černý
-        бе́лый|bílý
-        се́рый|šedý
-        кори́чневый|hnědý
-        ора́нжевый|oranžový
-        ро́зовый|růžový
-        фиоле́товый|fialový`) },
 
       { name: 'Oblečení', words: T(`
         пальто́|kabát

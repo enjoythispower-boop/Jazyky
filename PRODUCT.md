@@ -52,9 +52,11 @@ Na rozdíl od běžných aplikací (Duolingo a podobně) je stránka šitá na m
 ## Evidence on Hand
 
 - Obsah (říjen 2026):
-  - ES B1: 603 slov, 300 vět, 21 textů, 152 gramatických vět, 48 sloves, 6 dialogů.
+  - ES A2 (základ, který už uživatel zná): 190 slov.
+  - ES B1: 413 slov, 300 vět, 21 textů, 152 gramatických vět, 48 sloves, 6 dialogů.
   - ES B1+: 600 slov, 300 vět, 20 textů, 149 gramatických vět, 30 sloves, 16 dialogů.
-  - RU A1: 603 slov, 302 vět, 21 textů, 154 gramatických vět, 57 sloves.
+  - RU Základy (už je umí): 204 slov, 42 vět, 5 textů.
+  - RU A1: 399 slov, 260 vět, 16 textů, 154 gramatických vět, 57 sloves.
   - RU A2: 617 slov, 300 vět, 20 textů, 146 gramatických vět, 30 sloves, 15 dialogů.
   - ES B2 a RU B1 se doplní během cesty.
 - Uživatelé ani reference neexistují a nemají se vymýšlet. Jde o soukromý nástroj.
