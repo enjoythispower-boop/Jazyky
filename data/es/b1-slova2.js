@@ -43,9 +43,7 @@
         conectarse|připojit se
         descargar|stáhnout
         subir una foto|nahrát fotku
-        el mensaje|zpráva
         mandar un mensaje|poslat zprávu
-        la llamada|hovor
         colgar|zavěsit
         la computadora (LatAm) / el ordenador|počítač
         la pantalla|obrazovka
@@ -54,6 +52,10 @@
         los datos|data (mobilní)
         la aplicación|aplikace
         funcionar|fungovat
+        borrar|smazat
+        guardar|uložit
+        el teclado|klávesnice
+        la tableta|tablet
         estar descompuesto/a (MX)|být rozbitý; nefungovat`) },
 
 
@@ -87,7 +89,6 @@
         anoche|včera večer; včera v noci
         anteayer|předevčírem
         pasado mañana|pozítří
-        la semana pasada|minulý týden
         el mes que viene|příští měsíc
         dentro de dos días|za dva dny
         hace una hora|před hodinou
@@ -95,16 +96,11 @@
         hasta|až do
         durante|během
         a tiempo|včas
-        tarde|pozdě; odpoledne
-        temprano|brzy
         pronto|brzy (za chvíli)
         ahorita (MX)|hned; za chvilku
-        siempre|vždycky
-        nunca|nikdy
         casi nunca|skoro nikdy
         a menudo|často
         de vez en cuando|občas
-        cada día|každý den
         dos veces por semana|dvakrát týdně
         mientras tanto|mezitím
         al rato (MX)|za chvíli; později`) },
@@ -112,27 +108,26 @@
       { name: 'Volný čas a sport', words: T(`
         el tiempo libre|volný čas
         salir de fiesta / ir de carrete (CL)|jít pařit
-        bailar|tancovat
         el partido|zápas
         el equipo|tým; vybavení
         el gol|gól
         perder|prohrát; ztratit
         empatar|remizovat
-        nadar|plavat
         bucear|potápět se
         surfear|surfovat
         hacer senderismo|chodit na túry
         escalar|lézt; šplhat
         andar en bici|jezdit na kole
-        el concierto|koncert
         la entrada|vstupenka; vstup
-        la película|film
-        el cine|kino
         la serie|seriál
         aburrido/a|nudný; znuděný
         divertirse|bavit se
         aburrirse|nudit se
         el pasatiempo|koníček
+        la novela|román
+        la natación|plavání
+        el resultado|výsledek
+        hacer ejercicio|cvičit; sportovat
         la cancha|hřiště (sportovní)
         la carrera|závod; studium (obor)`) },
 
@@ -158,12 +153,12 @@
         el siglo|století
         la guerra|válka
         la independencia|nezávislost
+        el presidente / la presidenta|prezident; prezidentka
         el guía / la guía|průvodce; průvodkyně
         la visita guiada|prohlídka s průvodcem
         construir|stavět`) },
 
       { name: 'Úřady, banka a bezpečnost', words: T(`
-        el pasaporte|pas
         la visa|vízum
         el sello|razítko
         la migración|imigrační úřad; pasová kontrola
@@ -191,8 +186,6 @@
 
       { name: 'Ve městě a na silnici', words: T(`
         el colectivo (AR) / la combi (MX)|městský autobus; dodávka
-        el metro|metro
-        la estación|stanice; nádraží
         el andén|nástupiště
         la línea|linka
         el boleto sencillo|jednosměrná jízdenka
@@ -214,32 +207,18 @@
         la multa|pokuta`) },
 
       { name: 'Slovesa každodenního života', words: T(`
-        abrir|otevřít
-        cerrar|zavřít
-        empezar / comenzar|začít
-        terminar|skončit; dokončit
-        esperar|čekat; doufat
-        buscar|hledat
-        encontrar|najít
         llevar|nést; mít na sobě; brát s sebou
-        traer|přinést
         dejar|nechat; přestat
-        poner|dát; položit
         sacar|vytáhnout; vyndat
-        ayudar|pomoct
-        necesitar|potřebovat
         intentar|zkusit
         lograr|dokázat; dosáhnout
-        preguntar|ptát se
         responder / contestar|odpovědět
         explicar|vysvětlit
-        entender|rozumět
         recordar|pamatovat si; připomenout
         decidir|rozhodnout se
         elegir|vybrat si
         cambiar|změnit; vyměnit
         quedarse|zůstat
-        volver / regresar|vrátit se
         llegar tarde|přijít pozdě
         pasar|projít; stát se; strávit (čas)
         conseguir|sehnat; získat
@@ -248,19 +227,14 @@
       { name: 'Konverzační reakce', words: T(`
         ¿En serio?|Vážně?
         ¡No me digas!|Nepovídej!
-        ¡Qué bien!|To je dobře!
         ¡Qué pena! / ¡Qué lástima!|To je škoda!
         ¡Qué suerte!|To je štěstí!
         ¡Qué horror!|To je hrůza!
         No pasa nada.|To nic. / Nevadí.
         No te preocupes.|Neboj se. / Nedělej si starosti.
-        Claro que sí.|Jasně že ano.
-        Por supuesto.|Samozřejmě.
         Depende.|Záleží na tom.
         Tienes razón.|Máš pravdu.
         No estoy de acuerdo.|Nesouhlasím.
-        A mí también.|Mně taky.
-        A mí tampoco.|Mně taky ne.
         ¿Qué tal te fue?|Jak to šlo? / Jak ses měl?
         ¿Cómo que no?|Jak to, že ne?
         Ya veo.|Aha. / Chápu.
@@ -271,7 +245,6 @@
         ¡Buen viaje!|Šťastnou cestu!
         ¡Que te vaya bien!|Ať se ti daří!
         ¡Felicidades!|Gratuluju!
-        ¡Salud!|Na zdraví!
         Con permiso.|S dovolením.
         Disculpa la molestia.|Promiň, že obtěžuju.
         Me da gusto (LatAm).|Těší mě. / Mám radost.
@@ -303,6 +276,51 @@
         vos (AR, UY)|ty (argentinsky)
         el boliche (AR)|klub; diskotéka
         de una (CO)|jasně; hned`) },
+
+      { name: 'Příroda a výlety', words: T(`
+        el terremoto|zemětřesení
+        el volcán|sopka
+        la selva|džungle; prales
+        el cerro|kopec
+        el sendero|stezka
+        la cascada|vodopád
+        el amanecer|svítání
+        el atardecer|západ slunce
+        la temporada de lluvias|období dešťů
+        húmedo|vlhký
+        la orilla|břeh
+        el glaciar|ledovec
+        el cóndor|kondor
+        la ballena|velryba
+        el tiburón|žralok
+        el loro|papoušek
+        la cueva|jeskyně
+        el mirador|vyhlídka
+        acampar|kempovat; stanovat
+        la carpa (LatAm) / la tienda de campaña|stan`) },
+
+      { name: 'Vaření a domácnost', words: T(`
+        el fregadero|dřez
+        el enchufe|zásuvka
+        la olla|hrnec
+        la sartén|pánev
+        pelar|loupat
+        hervir|vařit (vodu); vřít
+        freír|smažit
+        el sabor|chuť
+        la merienda|svačina
+        frito/a|smažený
+        crudo/a|syrový
+        la licuadora|mixér
+        el microondas|mikrovlnka
+        la lavadora|pračka
+        lavar la ropa|prát prádlo
+        tender la ropa|pověsit prádlo
+        planchar|žehlit
+        barrer|zametat
+        trapear (LatAm)|vytírat (podlahu)
+        el foco (MX) / la bombilla|žárovka
+        el grifo / la canilla (AR)|kohoutek`) },
 
     ],
   });

@@ -44,7 +44,7 @@
     chars: ['á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü', '¿', '¡'],
     modeWords: {
       slovicka: 'palabras', vety: 'frases', preklad: 'traducir', poslech: 'escuchar', cteni: 'leer',
-      dialogy: 'conversar', gramatika: 'gramática', casovani: 'verbos', moje: 'mis palabras',
+      dialogy: 'conversar', gramatika: 'gramática', casovani: 'verbos', moje: 'mis palabras', fraze: 'expresiones',
     },
     // Úrovně jdou po sobě; tenses = časy, které denní plán na dané úrovni procvičuje
     levels: [
@@ -57,7 +57,7 @@
       { id: 'b2', name: 'B2', about: 'plynulá konverzace, argumentace, podmínkové věty',
         tenses: ['ind', 'imp', 'cond', 'subj', 'impv', 'plusc', 'subjimp', 'subjperf', 'condperf'] },
     ],
-    vocab: [], sentences: [], texts: [], grammar: [], dialogs: [],
+    vocab: [], phrases: [], sentences: [], texts: [], grammar: [], dialogs: [],
 
     conj: {
       persons: ['yo', 'tú', 'él / ella / usted', 'nosotros', 'vosotros', 'ellos / ustedes'],

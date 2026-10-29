@@ -140,8 +140,6 @@
         renovar|obnovit; prodloužit`) },
 
       { name: 'Kultura, hudba a film', words: T(`
-        el/la cantante|zpěvák; zpěvačka
-        la canción|píseň
         la letra|text (písně); písmeno
         el ritmo|rytmus
         la cumbia|cumbia (tanec)
@@ -154,7 +152,6 @@
         la trama|děj; zápletka
         el personaje|postava
         estrenarse|mít premiéru
-        la novela|román
         el/la escritor/a|spisovatel
         el cuento|povídka; pohádka
         la poesía|poezie
@@ -170,7 +167,6 @@
         la gastronomía|gastronomie
         el plato típico|typické jídlo
         la receta tradicional|tradiční recept
-        el sabor|chuť
         sabroso/a|chutný
         soso/a / desabrido/a|bez chuti; nevýrazný
         amargo/a|hořký
@@ -181,13 +177,9 @@
         el asado (AR)|grilované maso; grilovačka
         a la parrilla|grilovaný
         al horno|pečený (v troubě)
-        frito/a|smažený
-        crudo/a|syrový
         el ingrediente|přísada
         la porción|porce
         el antojito (MX)|drobné občerstvení
-        la merienda|svačina
-        el bocadillo / el sándwich|sendvič
         la empanada|empanada (plněná taštička)
         estar lleno/a|být plný (po jídle)
         se me antoja…|mám chuť na…
@@ -199,8 +191,6 @@
         actualizar|aktualizovat
         la actualización|aktualizace
         instalar|nainstalovat
-        borrar|smazat
-        guardar|uložit
         la nube|cloud; mrak
         la copia de seguridad|záloha
         el virus informático|počítačový virus
@@ -212,12 +202,9 @@
         el enlace|odkaz
         el archivo|soubor
         adjuntar|připojit (přílohu)
-        el correo electrónico|e-mail
         la videollamada|videohovor
         el auricular|sluchátko
         los audífonos (LatAm)|sluchátka
-        la tableta|tablet
-        el teclado|klávesnice
         estar enganchado/a al celular|být závislý na mobilu`) },
 
       { name: 'Sport a pohyb', words: T(`
@@ -232,19 +219,16 @@
         el aficionado / la aficionada|fanoušek
         la afición|fandové; zájem
         marcar un gol|dát gól
-        el resultado|výsledek
         la victoria|vítězství
         la derrota|porážka
         competir|soutěžit
         el maratón|maraton
-        la natación|plavání
         el ciclismo|cyklistika
         hacer yoga|cvičit jógu
         estirarse|protáhnout se
         lesionarse|zranit se
         la lesión|zranění
         el estadio|stadion
-        el gimnasio|posilovna
         estar en forma|být ve formě`) },
 
       { name: 'Rodina a životní etapy', words: T(`
@@ -255,16 +239,11 @@
         crecer|vyrůst; růst
         criarse|vyrůstat
         criar a los hijos|vychovávat děti
-        el/la bebé|miminko
-        nacer|narodit se
         el nacimiento|narození
         embarazada|těhotná
         jubilarse|odejít do důchodu
         la jubilación|důchod (penze)
-        morir|zemřít
         el/la viudo/a|vdovec; vdova
-        soltero/a|svobodný
-        casado/a|ženatý; vdaná
         divorciado/a|rozvedený
         los suegros|tchán a tchyně
         el yerno|zeť
@@ -292,7 +271,6 @@
         aprobar una solicitud|schválit žádost
         el permiso de residencia|povolení k pobytu
         caducar / vencer|vypršet; propadnout
-        la oficina de correos|pošta
         enviar un paquete|poslat balík
         el código postal|PSČ
         el/la funcionario/a|úředník
@@ -302,7 +280,6 @@
         el horario de atención|úřední hodiny`) },
 
       { name: 'Hovorová španělština', words: T(`
-        ¿Qué onda? (MX) / ¿Qué tal?|Jak je? / Jak se máš?
         ¡Qué padre! (MX)|To je super!
         ¡Qué chido! (MX)|To je bezva!
         ¡Qué bárbaro! (AR)|To je síla!

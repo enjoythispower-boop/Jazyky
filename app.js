@@ -78,10 +78,12 @@ const MI = {
   gramatika: '<svg viewBox="0 0 24 24"><path d="M4.5 19.5h4l10.3-10.3a2.1 2.1 0 00-3-3L5.5 16.5zM14.5 7.5l3 3"/></svg>',
   casovani: '<svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2.8"/><path d="M3.5 9.5h17M3.5 14.7h17M10 9.5V20"/></svg>',
   moje: '<svg viewBox="0 0 24 24"><path d="M7.5 3.5h9a1.5 1.5 0 011.5 1.5v15.5l-6-4.2-6 4.2V5a1.5 1.5 0 011.5-1.5z"/></svg>',
+  fraze: '<svg viewBox="0 0 24 24"><path d="M5.5 4.5h13a2 2 0 012 2v8a2 2 0 01-2 2h-7l-4.5 3.5v-3.5H5.5a2 2 0 01-2-2v-8a2 2 0 012-2z"/><path d="M7.5 9h9M7.5 12.2h5.5"/></svg>',
 };
 
 const MODES = [
   { id: 'slovicka', name: 'Slovíčka', desc: 'Kartičky, výběr a psaní podle témat' },
+  { id: 'fraze', name: 'Fráze', desc: 'Hotové věty a spojení do běžných situací' },
   { id: 'vety', name: 'Skládání vět', desc: 'Poskládej větu ze slov' },
   { id: 'preklad', name: 'Překlad', desc: 'Věty i celé texty, oběma směry' },
   { id: 'poslech', name: 'Poslech', desc: 'Poslechni si větu a napiš ji' },
@@ -245,13 +247,13 @@ function topicWords(id) {
 }
 const topicName = id => id === 'vse' ? 'Všechna témata' : (L.vocab[+id] || {}).name || 'Slovíčka';
 
-// Nejdřív slova k opakování, pak nová, pak ta, která přijdou na řadu nejdřív
-function pickWords(words, n = 15) {
+// Nejdřív slova k opakování, pak nová, pak ta, která přijdou na řadu nejdřív (s: srs, nebo phr u frází)
+function pickWords(words, n = 15, s = srs) {
   const now = Date.now();
-  const due = shuffle(words.filter(w => srs.due(w.t)));
-  const fresh = shuffle(words.filter(w => !srs.get(w.t)));
-  const rest = words.filter(w => { const s = srs.get(w.t); return s && s.d > now; })
-    .sort((a, b) => srs.get(a.t).d - srs.get(b.t).d);
+  const due = shuffle(words.filter(w => s.due(w.t)));
+  const fresh = shuffle(words.filter(w => !s.get(w.t)));
+  const rest = words.filter(w => { const c = s.get(w.t); return c && c.d > now; })
+    .sort((a, b) => s.get(a.t).d - s.get(b.t).d);
   return [...due, ...fresh, ...rest].slice(0, n);
 }
 
@@ -282,6 +284,20 @@ const rot = {
     return [...fresh, ...due.sort(by).map(e => e[0]), ...rest.sort(by).map(e => e[0])].slice(0, n);
   },
 };
+
+// Fráze se opakují s rostoucím odstupem jako slovíčka; záznam leží v rot pod druhem 'phr' (n = přihrádka)
+const PHR_DAYS = [1, 3, 7, 16, 35, 70];
+const phr = {
+  get: t => rot.get('phr', t),
+  put(t, n) { rot.all[rot.key('phr', t)] = { n, d: Date.now() + PHR_DAYS[n] * DAY - 2 * 36e5, u: Date.now() }; store.set('rot', rot.all); },
+  grade(t, ok) { this.put(t, ok ? Math.min((this.get(t) || { n: 0 }).n + 1, PHR_DAYS.length - 1) : 0); },
+  // Poprvé ukázaná fráze se zítra vrátí, i když se ke skládání nedošlo
+  intro(t) { if (!this.get(t)) this.put(t, 0); },
+  known(t) { this.put(t, 4); },
+  due(t) { const c = this.get(t); return !!c && c.d <= Date.now(); },
+};
+// Všechny fráze jazyka: { t, c, topic, lv }
+const phraseItems = () => L.phrases.flatMap((tp, i) => tp.items.map(([t, c]) => ({ t, c, topic: i, lv: lvOf(tp) })));
 
 // Přidá slovo nebo frázi do vlastních slovíček (z textu nebo z dialogu)
 function addMine(t, c) {
@@ -520,18 +536,19 @@ const wordSummary = w => `<span class="tl">${esc(w.t)}</span> — ${esc(w.c)}`;
 
 /* ================= DENNÍ PLÁN ================= */
 const BLOCKS = [
-  { name: 'Slovní zásoba', desc: 'opakování a nová slova' },
+  { name: 'Slovní zásoba', desc: 'opakování, nová slova a fráze' },
   { name: 'Stavba jazyka', desc: 'časování, gramatika, skládání vět' },
   { name: 'Jazyk v použití', desc: 'čtení, dialog, překlad, poslech' },
 ];
 // Kolik čeho plán denně obsahuje: španělština víc používá jazyk, ruština staví základ
 const RECIPE = {
-  es: { review: 40, fresh: 15, verbs: 3, gram: 10, build: 5, tr: 8, trDlg: 5, listen: 5, minWords: 5 },
-  ru: { review: 40, fresh: 15, verbs: 3, gram: 15, build: 5, tr: 5, trDlg: 3, listen: 4, minWords: 4 },
+  es: { review: 40, fresh: 15, phr: 8, phrNew: 4, verbs: 3, gram: 10, build: 5, tr: 8, trDlg: 5, listen: 5, minWords: 5 },
+  ru: { review: 40, fresh: 15, phr: 6, phrNew: 3, verbs: 3, gram: 15, build: 5, tr: 5, trDlg: 3, listen: 4, minWords: 4 },
 };
 const STEP = {
   review: { name: 'Opakování', b: 0 },
   fresh: { name: 'Nová slova', b: 0 },
+  phr: { name: 'Fráze', b: 0 },
   conj: { name: 'Časování', b: 1 },
   gram: { name: 'Gramatika', b: 1 },
   build: { name: 'Skládání vět', b: 1 },
@@ -570,6 +587,15 @@ function planConj(lv, n) {
   return verbs.flatMap(v => sample(okT(v), 2).map(t => ({ inf: v.inf, t })));
 }
 
+// Fráze: nejdřív ty, které čekají na zopakování, ale každý den aspoň pár nových (z aktuální úrovně, pak ze starších)
+function planPhrases(lv, n, nNew) {
+  const all = phraseItems().filter(p => levelIdx(p.lv) <= levelIdx(lv));
+  const due = all.filter(p => phr.due(p.t)).sort((a, b) => phr.get(a.t).d - phr.get(b.t).d);
+  const fresh = [...all.filter(p => p.lv === lv), ...all.filter(p => p.lv !== lv)].filter(p => !phr.get(p.t));
+  const nf = Math.min(fresh.length, Math.max(nNew, n - due.length));
+  return [...due.slice(0, n - nf).map(p => ({ t: p.t, c: p.c })), ...fresh.slice(0, nf).map(p => ({ t: p.t, c: p.c, f: 1 }))];
+}
+
 // Gramatika: dvě až tři sady z aktuální úrovně, z každé pět vět, které nejdéle nepřišly na řadu
 function planGrammar(lv, n) {
   let sets = atLevel(L.grammar, lv);
@@ -588,6 +614,7 @@ function makePlan(D) {
 
     add('review', shuffle(dueWords()).slice(0, R.review).map(strip));
     add('fresh', freshWords(lv, R.fresh).map(strip));
+    add('phr', planPhrases(lv, R.phr, R.phrNew));
 
     add('conj', planConj(lv, R.verbs));
     add('gram', planGrammar(lv, R.gram));
@@ -673,10 +700,11 @@ function todayPanel(D) {
 
     const preview = b => {
       if (b === 0) {
-        const f = of('fresh'), r = of('review');
+        const f = of('fresh'), r = of('review'), ph = of('phr');
         return {
           main: f ? tl(f.items.slice(0, 3).map(w => w.t).join(', ') + (f.items.length > 3 ? '…' : '')) : 'Jen opakování',
-          meta: [f && `${f.items.length} ${plural(f.items.length, 'nové', 'nová', 'nových')}`, r && `${r.items.length} k opakování`].filter(Boolean).join(' · '),
+          meta: [f && `${f.items.length} ${plural(f.items.length, 'nové', 'nová', 'nových')}`, r && `${r.items.length} k opakování`,
+            ph && `${ph.items.length} ${plural(ph.items.length, 'fráze', 'fráze', 'frází')}`].filter(Boolean).join(' · '),
         };
       }
       if (b === 1) {
@@ -854,6 +882,16 @@ function flowStep(st) {
         summary: x => wordSummary(x.w),
       };
     }
+    case 'phr': {
+      // Nová fráze: kartička a na konci složení ze slov; ostatní podle toho, jak pevně už sedí
+      const fresh = st.items.filter(p => p.f), old = st.items.filter(p => !p.f && phr.due(p.t));
+      const items = [
+        ...fresh.map(p => ({ p, m: 'card' })),
+        ...shuffle(old).map(p => ({ p, m: 'auto' })),
+        ...shuffle(fresh).map(p => ({ p, m: 'build' })),
+      ];
+      return { items, step: phraseStep(true), summary: x => wordSummary(x.p) };
+    }
     case 'conj':
       return { items: st.items, step: marked('verb', x => x.inf, 7, 2, stepConjGrid), summary: x => `<span class="tl">${esc(x.inf)}</span> · ${esc(tenseOf(x.t).name)}` };
     case 'gram': {
@@ -892,15 +930,15 @@ function flowDone(p) {
 /* ================= JAZYK ================= */
 // Španělština míří ke konverzaci, ruština k systematickému základu – podle toho jde pořadí režimů
 const MODE_ORDER = {
-  es: ['preklad', 'dialogy', 'cteni', 'poslech', 'vety', 'slovicka', 'gramatika', 'casovani', 'moje'],
-  ru: ['gramatika', 'casovani', 'slovicka', 'vety', 'cteni', 'dialogy', 'poslech', 'preklad', 'moje'],
+  es: ['preklad', 'fraze', 'dialogy', 'cteni', 'poslech', 'vety', 'slovicka', 'gramatika', 'casovani', 'moje'],
+  ru: ['gramatika', 'casovani', 'slovicka', 'fraze', 'vety', 'cteni', 'dialogy', 'poslech', 'preklad', 'moje'],
 };
 
 function viewLang() {
   const due = dueWords().length;
   const last = store.get('last_' + L.code, null);
   const p = getPlan(L), cur = planBlock(p);
-  const modes = MODE_ORDER[L.code].map(id => MODES.find(m => m.id === id)).filter(m => m.id !== 'dialogy' || L.dialogs.length);
+  const modes = MODE_ORDER[L.code].map(id => MODES.find(m => m.id === id)).filter(m => (m.id !== 'dialogy' || L.dialogs.length) && (m.id !== 'fraze' || L.phrases.length));
   page(L.name, '#/', `
     <section class="lang-head">
       <h2 class="lang-native" lang="${L.code}">${L.native}</h2>
@@ -979,16 +1017,18 @@ function vocabSession(words, mode, title, back) {
   session({ title, back, items, step: steps[mode] || stepCard, summary: wordSummary });
 }
 
-// mode 'intro': slovo se jen představuje (známku dá až pozdější psaní) a jde ho označit jako známé
+// mode 'intro': slovo se jen představuje (známku dá až pozdější psaní) a jde ho označit jako známé;
+// mode 'self': známku si zpracuje volající (fráze), do opakování slov se nezapisuje
 function stepCard(w, stage, done, mode = 'grade') {
   const render = () => {
     const tc = settings.cardDir === 'tc';
     const front = tc ? w.t : w.c, back = tc ? w.c : w.t;
+    const long = s => s.length > 24 ? 'long' : '';
     stage.innerHTML = `
       <div class="card" role="button" tabindex="0" aria-label="Otočit kartičku">
         <div class="card-inner">
-          <div class="face front"><span class="big ${tc ? 'tl' : ''}">${esc(front)}</span><small class="hint"><span class="touch-only">klepni pro otočení</span><span class="kbd-only">mezerník otočí · 1 / 2 ohodnotí</span></small></div>
-          <div class="face back"><span class="big ${tc ? '' : 'tl'}">${esc(back)}</span><span class="other ${tc ? 'tl' : ''}">${esc(front)}</span></div>
+          <div class="face front"><span class="big ${tc ? 'tl' : ''} ${long(front)}">${esc(front)}</span><small class="hint"><span class="touch-only">klepni pro otočení</span><span class="kbd-only">mezerník otočí · 1 / 2 ohodnotí</span></small></div>
+          <div class="face back"><span class="big ${tc ? '' : 'tl'} ${long(back)}">${esc(back)}</span><span class="other ${tc ? 'tl' : ''}">${esc(front)}</span></div>
         </div>
       </div>
       <div class="card-tools">
@@ -1071,6 +1111,57 @@ function stepWrite(w, stage, done) {
       <p class="answer-line"><span class="tl">${esc(w.t)}</span>${sayBtn(w.t, 'sm')}</p>`);
     return () => done(ok, { again: !ok });
   });
+}
+
+/* ================= FRÁZE ================= */
+const PHR_MODES = { karticky: 'card', skladani: 'build', preklad: 'write' };
+
+// Jedna úloha s frází. m: card, build (složit ze slov), write (napsat z češtiny),
+// auto = podle přihrádky: dokud fráze nesedí pevně, skládá se, potom se píše.
+// V plánu se nová fráze na kartičce jen představí (známku dá až skládání) a jde ji označit jako známou.
+function phraseStep(inPlan = false) {
+  const pool = phraseItems().map(p => [p.t, p.c]);
+  const build = stepBuild(pool), write = stepTranslate(true);
+  return ({ p, m }, stage, done) => {
+    if (m === 'card') return stepCard(p, stage, (ok, o = {}) => {
+      if (o.known) { phr.known(p.t); return done(true, { drop: x => x.p.t === p.t }); }
+      if (inPlan) phr.intro(p.t); else phr.grade(p.t, ok);
+      done(ok, o);
+    }, inPlan ? 'intro' : 'self');
+    if (m === 'auto') m = (phr.get(p.t) || { n: 0 }).n >= 2 ? 'write' : 'build';
+    (m === 'write' ? write : build)([p.t, p.c], stage, (ok, o) => { phr.grade(p.t, ok); done(ok, o); });
+  };
+}
+
+function viewPhraseTopics() {
+  const base = `#/${L.code}/fraze`, all = phraseItems();
+  const due = all.filter(p => phr.due(p.t)).length;
+  page('Fráze', `#/${L.code}`, `
+    <section class="sec-head"><h2 class="display">Fráze</h2><p class="muted">Hotové věty a slovní spojení z běžných situací · ${all.length} ${plural(all.length, 'fráze', 'fráze', 'frází')}</p></section>
+    ${due ? `<a class="row review-row" href="${base}/opakovani">
+      <span class="row-main">${I.repeat} Opakování</span><span class="row-sub">${due} ${plural(due, 'fráze čeká', 'fráze čekají', 'frází čeká')} na zopakování</span>${I.arrow}</a>` : ''}
+    ${byLevel(L.phrases, (t, i) => `<a class="row" href="${base}/${i}">
+        <span class="row-main">${esc(t.name)}</span>
+        <span class="row-sub tl">${esc(t.items[0][0])}</span>${I.arrow}</a>`)}`);
+}
+
+function viewPhraseTopic(id) {
+  const tp = L.phrases[+id];
+  if (!tp) return viewPhraseTopics();
+  const base = `#/${L.code}/fraze/${id}`, items = tp.items.map(([t, c]) => ({ t, c }));
+  page(tp.name, `#/${L.code}/fraze`, `
+    <section class="sec-head"><h2 class="display sm">${esc(tp.name)}</h2><p class="muted">Úroveň ${levelName(lvOf(tp))} · ${items.length} ${plural(items.length, 'fráze', 'fráze', 'frází')}</p></section>
+    <div class="ex-buttons">
+      <a class="ex" href="${base}/karticky"><b>Kartičky</b><small>Otoč a ohodnoť se</small></a>
+      <a class="ex" href="${base}/skladani"><b>Skládání</b><small>Poskládej frázi ze slov</small></a>
+      <a class="ex" href="${base}/preklad"><b>Překlad</b><small>Napiš ji z češtiny</small></a>
+    </div>
+    ${wordList(items)}`);
+}
+
+function phraseSession(items, mode, title, back) {
+  const m = PHR_MODES[mode] || 'auto';
+  session({ title, back, items: pickWords(items, 12, phr).map(p => ({ p: { t: p.t, c: p.c }, m })), step: phraseStep(), summary: x => wordSummary(x.p) });
 }
 
 /* ================= SKLÁDÁNÍ VĚT ================= */
@@ -2068,6 +2159,11 @@ function route() {
       if (b == null) return viewTopic(a);
       return vocabSession(topicWords(a), b, topicName(a), `${base}/slovicka/${a}`);
     case 'moje': return a == null ? viewMine() : vocabSession(mineWords(), a, 'Moje slovíčka', `${base}/moje`);
+    case 'fraze':
+      if (a == null) return viewPhraseTopics();
+      if (a === 'opakovani') return phraseSession(phraseItems().filter(p => phr.due(p.t)), 'auto', 'Opakování frází', `${base}/fraze`);
+      if (b == null) return viewPhraseTopic(a);
+      return phraseSession((L.phrases[+a] || { items: [] }).items.map(([t, c]) => ({ t, c })), b, (L.phrases[+a] || {}).name || 'Fráze', `${base}/fraze/${a}`);
     case 'vety': return viewBuild();
     case 'preklad': return a === 'text' ? (b == null ? viewTextList() : viewTextTranslate(+b)) : viewTranslate();
     case 'poslech': return viewListen();

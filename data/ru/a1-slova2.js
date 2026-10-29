@@ -30,7 +30,15 @@
         там|tam
         до́ма|doma
         домо́й|domů
-        то́лько|jen; jenom`) },
+        то́лько|jen; jenom
+        ра́ньше|dříve
+        тепе́рь|teď; nyní
+        ско́ро|brzy
+        пото́м|potom
+        снача́ла|nejdřív
+        ка́ждый день|každý den
+        вме́сте|spolu
+        наприме́р|například`) },
 
       { name: 'Dny a měsíce', words: T(`
         вто́рник|úterý
@@ -176,7 +184,6 @@
         колле́га|kolega
         нача́льник|šéf; vedoucí
         зарпла́та|plat
-        безрабо́тный|nezaměstnaný
         рабо́тать кем?|pracovat jako kdo?`) },
 
       { name: 'Škola a učení', words: T(`
@@ -329,7 +336,6 @@
 
       { name: 'Jaký je? (přídavná jména)', words: T(`
         молодо́й|mladý
-        пожило́й|starší (o člověku)
         высо́кий|vysoký
         ни́зкий|nízký
         дли́нный|dlouhý
@@ -352,7 +358,10 @@
         до́брый|hodný; laskavý
         злой|zlý
         ну́жный|potřebný
-        ва́жный|důležitý`) },
+        ва́жный|důležitý
+        тёплый|teplý
+        тёмный|tmavý
+        све́тлый|světlý`) },
 
       { name: 'Jídlo na trhu a v kuchyni', words: T(`
         о́вощи|zelenina
@@ -420,7 +429,30 @@
         нельзя́|nesmí se; nelze
         я хочу́|chci
         я люблю́|miluji; mám rád
-        стра́шно|je mi úzko; strašně`) },
+        стра́шно|je mi úzko; strašně
+        Не за что.|Není zač.
+        Пра́вда?|Opravdu?
+        Поздравля́ю!|Gratuluju!
+        С днём рожде́ния!|Všechno nejlepší k narozeninám!`) },
+
+      { name: 'Lidé a místa', words: T(`
+        роди́тели|rodiče
+        дя́дя|strýc
+        тётя|teta
+        сосе́дка|sousedka
+        лицо́|obličej
+        во́лосы|vlasy
+        рестора́н|restaurace
+        банк|banka
+        по́чта|pošta
+        библиоте́ка|knihovna
+        пляж|pláž
+        любо́вь|láska
+        компью́тер|počítač
+        интерне́т|internet
+        стадио́н|stadion
+        те́ннис|tenis
+        хокке́й|hokej`) },
     ],
   });
 })();

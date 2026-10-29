@@ -98,8 +98,6 @@
         па́мятник|pomník
         собо́р|chrám
         це́рковь|kostel
-        по́чта|pošta
-        банк|banka
         поликли́ника|poliklinika
         полице́йский уча́сток|policejní stanice
         стоя́нка|parkoviště
@@ -135,8 +133,7 @@
         путеводи́тель|průvodce (kniha)
         достопримеча́тельность|pamětihodnost
         сувени́р|suvenýr
-        загора́ть|opalovat se
-        пляж|pláž`) },
+        загора́ть|opalovat se`) },
 
       { name: 'V hotelu', words: T(`
         но́мер|pokoj (v hotelu); číslo
@@ -166,7 +163,6 @@
         оста́вить ве́щи|nechat si věci`) },
 
       { name: 'Restaurace a vaření', words: T(`
-        рестора́н|restaurace
         столо́вая|jídelna
         официа́нтка|servírka
         заказа́ть|objednat si
@@ -221,11 +217,9 @@
 
       { name: 'Vzhled', words: T(`
         вне́шность|vzhled
-        во́лосы|vlasy
         све́тлые во́лосы|světlé vlasy
         тёмные во́лосы|tmavé vlasy
         ры́жий|zrzavý
-        лицо́|obličej
         борода́|vousy
         усы́|knír
         глаза́|oči
@@ -244,7 +238,8 @@
         кра́сить во́лосы|barvit si vlasy
         мо́дный|módní
         элега́нтный|elegantní
-        бле́дный|bledý`) },
+        бле́дный|bledý
+        пожило́й|starší (o člověku)`) },
 
       { name: 'Povaha', words: T(`
         хара́ктер|povaha
@@ -274,12 +269,9 @@
         пессими́ст|pesimista`) },
 
       { name: 'Rodina a vztahy', words: T(`
-        роди́тели|rodiče
         ро́дственники|příbuzní
         двою́родный брат|bratranec
         двою́родная сестра́|sestřenice
-        дя́дя|strýc
-        тётя|teta
         племя́нник|synovec
         внук|vnuk
         вну́чка|vnučka
@@ -297,8 +289,7 @@
         ревнова́ть|žárlit
         скуча́ть по|stýskat se po
         па́ра|pár
-        доверя́ть|důvěřovat
-        сосе́дка|sousedka`) },
+        доверя́ть|důvěřovat`) },
 
       { name: 'Práce a kancelář', words: T(`
         устро́иться на рабо́ту|najít si práci; nastoupit
@@ -325,7 +316,8 @@
         успе́х|úspěch
         компа́ния|firma; společnost
         предприя́тие|podnik
-        сро́чно|naléhavě`) },
+        сро́чно|naléhavě
+        безрабо́тный|nezaměstnaný`) },
 
       { name: 'Studium', words: T(`
         факульте́т|fakulta
@@ -342,7 +334,6 @@
         дипло́м|diplom
         стипе́ндия|stipendium
         общежи́тие|kolej (ubytovna)
-        библиоте́ка|knihovna
         уче́бник|učebnice
         изучи́ть|nastudovat
         поступи́ть в университе́т|dostat se na univerzitu

@@ -15,7 +15,6 @@
         счёт ма́тча|skóre zápasu
         боле́ть за|fandit (komu)
         боле́льщик|fanoušek
-        стадио́н|stadion
         бассе́йн|bazén
         спортза́л|posilovna
         лы́жи|lyže
@@ -25,8 +24,6 @@
         рыба́лка|rybaření
         соревнова́ние|závod; soutěž
         чемпиона́т|mistrovství
-        те́ннис|tenis
-        хокке́й|hokej
         йо́га|jóga
         заря́дка|ranní rozcvička
         увлече́ние|záliba; koníček`) },
@@ -85,13 +82,11 @@
         вулка́н|sopka`) },
 
       { name: 'Technika a internet', words: T(`
-        компью́тер|počítač
         ноутбу́к|notebook
         смартфо́н|chytrý telefon
         заря́дка для телефо́на|nabíječka
         батаре́йка|baterie
         сеть|síť
-        интерне́т|internet
         сайт|webová stránka
         ссы́лка|odkaz
         электро́нная по́чта|e-mail
@@ -162,21 +157,14 @@
         интере́с|zájem
         ску́ка|nuda
         страх|strach
-        любо́вь|láska
         не́нависть|nenávist`) },
 
       { name: 'Čas a frekvence', words: T(`
-        ра́ньше|dříve
-        тепе́рь|teď; nyní
         неда́вно|nedávno
         давно́|dávno; dlouho
-        ско́ро|brzy
         сра́зу|hned
         наконе́ц|konečně
-        снача́ла|nejdřív
-        пото́м|potom
         зате́м|poté
-        ка́ждый день|každý den
         раз в неде́лю|jednou týdně
         два ра́за в ме́сяц|dvakrát měsíčně
         че́рез час|za hodinu
@@ -204,7 +192,6 @@
         зато́|zato
         одна́ко|avšak
         кро́ме того́|kromě toho
-        наприме́р|například
         к сожале́нию|bohužel
         к сча́стью|naštěstí
         по-мо́ему|podle mě
@@ -213,8 +200,7 @@
         совсе́м|úplně
         почти́|skoro
         вдруг|najednou
-        сно́ва|znovu
-        вме́сте|spolu`) },
+        сно́ва|znovu`) },
 
       { name: 'Užitečné fráze', words: T(`
         Как пройти́ к…?|Jak se dostanu k…?
@@ -222,7 +208,6 @@
         Мо́жно вас спроси́ть?|Můžu se vás zeptat?
         Всё в поря́дке.|Všechno je v pořádku.
         Ничего́ стра́шного.|To nic. / Nic se neděje.
-        Не за что.|Není zač.
         Бу́дьте добры́…|Buďte tak laskav…
         С удово́льствием!|S radostí!
         Договори́лись!|Dohodnuto!
@@ -230,12 +215,9 @@
         Я не про́тив.|Nemám nic proti.
         Мне всё равно́.|Je mi to jedno.
         Как жаль!|To je škoda!
-        Пра́вда?|Opravdu?
         Не мо́жет быть!|To není možné!
         Ну и что?|No a co?
         Как здо́рово!|To je skvělé!
-        Поздравля́ю!|Gratuluju!
-        С днём рожде́ния!|Všechno nejlepší k narozeninám!
         С Но́вым го́дом!|Šťastný nový rok!
         Счастли́вого пути́!|Šťastnou cestu!
         Уда́чи!|Hodně štěstí!
@@ -256,9 +238,6 @@
         стра́нный|zvláštní; divný
         гро́мкий|hlasitý
         я́ркий|jasný; výrazný
-        тёмный|tmavý
-        све́тлый|světlý
-        тёплый|teplý
         прохла́дный|chladný (příjemně)
         мя́гкий|měkký
         твёрдый|tvrdý
@@ -320,6 +299,20 @@
         переезжа́ть|stěhovat se
         ремо́нт кварти́ры|rekonstrukce bytu
         ую́тный|útulný`) },
+
+      { name: 'Zrádná slova II', words: T(`
+        чёрствый|okoralý; bezcitný
+        вонь|smrad
+        позо́р|hanba; ostuda
+        ла́вка|krámek; lavice
+        пыта́ться|snažit se; pokoušet se
+        на́глый|drzý
+        прили́чный|slušný; pořádný
+        ли́чный|osobní
+        ведро́|kbelík
+        заво́д|továrna
+        я́года|bobule; lesní plod
+        ла́ска|něha; laskavost`) },
     ],
   });
 })();

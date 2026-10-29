@@ -30,7 +30,8 @@
         el mesero / el camarero|číšník
         la cuchara|lžíce
         el tenedor|vidlička
-        el cuchillo|nůž`) },
+        el cuchillo|nůž
+        el bocadillo / el sándwich|sendvič`) },
 
       { name: 'Město a cesta', words: T(`
         a la derecha|doprava; vpravo
@@ -54,7 +55,10 @@
         perderse|zabloudit
         la calle|ulice
         el edificio|budova
-        la orilla|břeh`) },
+        el metro|metro
+        la estación|stanice; nádraží
+        el pasaporte|pas
+        la oficina de correos|pošta`) },
 
       { name: 'Příroda a počasí', words: T(`
         el clima|podnebí; počasí
@@ -63,24 +67,15 @@
         nublado|zataženo
         hace calor|je horko
         hace frío|je zima
-        húmedo|vlhký
         la tormenta|bouřka
-        el terremoto|zemětřesení
-        el volcán|sopka
-        la selva|džungle; prales
         la montaña|hora
-        el cerro|kopec
         la playa|pláž
         el lago|jezero
         el río|řeka
         la ola|vlna
-        el amanecer|svítání
-        el atardecer|západ slunce
-        la temporada de lluvias|období dešťů
         la isla|ostrov
-        el sendero|stezka
         el paisaje|krajina
-        la cascada|vodopád`) },
+        la naturaleza|příroda`) },
 
       { name: 'Peníze a nakupování', words: T(`
         el precio|cena
@@ -93,13 +88,11 @@
         la talla|velikost (oblečení)
         probarse|vyzkoušet si (oblečení)
         ¿Cuánto cuesta?|Kolik to stojí?
-        regatear|smlouvat
         el recibo|účtenka
         la tienda|obchod
         la bolsa|taška
         la moneda|mince; měna
         el billete|bankovka
-        cobrar|účtovat; inkasovat
         abierto/a|otevřený
         cerrado/a|zavřený
         la oferta|nabídka; akce`) },
@@ -109,24 +102,17 @@
         el refrigerador / la heladera (AR)|lednice
         la estufa (MX)|sporák
         el horno|trouba
-        la olla|hrnec
-        la sartén|pánev
         el plato|talíř; jídlo (chod)
         el vaso|sklenice
         la taza|hrnek; šálek
-        hervir|vařit (vodu); vřít
-        freír|smažit
         cortar|krájet; řezat
-        pelar|loupat
         mezclar|míchat (smíchat)
         lavar los platos|mýt nádobí
-        el fregadero|dřez
         la basura|odpadky
         sacar la basura|vynést odpadky
         el piso|podlaha; patro; byt (ES)
         la pared|zeď
         el techo|strop; střecha
-        el enchufe|zásuvka
         la luz|světlo; elektřina
         prender (LatAm) / encender|zapnout
         apagar|vypnout`) },
@@ -164,24 +150,19 @@
         el pájaro|pták
         el mono|opice
         la tortuga|želva
-        la ballena|velryba
         el delfín|delfín
-        el tiburón|žralok
         la serpiente / la culebra|had
         el mosquito / el zancudo (LatAm)|komár
         la araña|pavouk
         el caballo|kůň
         la vaca|kráva
         la llama|lama
-        el cóndor|kondor
-        el loro|papoušek
         el árbol|strom
         la flor|květina
         la planta|rostlina
         la arena|písek
         la piedra|kámen
-        el desierto|poušť
-        el glaciar|ledovec`) },
+        el desierto|poušť`) },
 
       { name: 'Na trhu a při vaření', words: T(`
         el kilo|kilo
@@ -209,6 +190,84 @@
         la sal|sůl
         el aceite|olej
         cocinar|vařit (jídlo)`) },
+
+      { name: 'Lidé a tělo', words: T(`
+        el amigo / la amiga|kamarád; kamarádka
+        los padres|rodiče
+        los hermanos|sourozenci
+        el novio / la novia|přítel; přítelkyně
+        la gente|lidé
+        el cumpleaños|narozeniny
+        el vecino / la vecina|soused; sousedka
+        la farmacia|lékárna
+        la espalda|záda
+        el brazo|paže
+        la pierna|noha
+        el diente|zub
+        cansado/a|unavený
+        el/la bebé|miminko
+        nacer|narodit se
+        morir|zemřít
+        soltero/a|svobodný
+        casado/a|ženatý; vdaná
+        el amor|láska
+        rico/a|bohatý; chutný
+        pobre|chudý`) },
+
+      { name: 'Každý den', words: T(`
+        el trabajo|práce
+        la ropa|oblečení
+        despertarse|probudit se
+        levantarse|vstát
+        ducharse|osprchovat se
+        la llave|klíč
+        a veces|někdy
+        casi|skoro
+        siempre|vždycky
+        nunca|nikdy
+        cada día|každý den
+        la semana pasada|minulý týden
+        temprano|brzy
+        tarde|pozdě; odpoledne
+        el mensaje|zpráva
+        la llamada|hovor`) },
+
+      { name: 'Základní slovesa', words: T(`
+        abrir|otevřít
+        cerrar|zavřít
+        empezar / comenzar|začít
+        terminar|skončit; dokončit
+        buscar|hledat
+        encontrar|najít
+        ayudar|pomoct
+        necesitar|potřebovat
+        preguntar|ptát se
+        entender|rozumět
+        volver / regresar|vrátit se
+        poner|dát; položit
+        traer|přinést
+        esperar|čekat; doufat`) },
+
+      { name: 'Volný čas a reakce', words: T(`
+        me encanta|moc se mi líbí
+        bailar|tancovat
+        nadar|plavat
+        la película|film
+        el cine|kino
+        el concierto|koncert
+        ¡Qué bien!|To je dobře!
+        A mí también.|Mně taky.
+        A mí tampoco.|Mně taky ne.
+        Claro que sí.|Jasně že ano.
+        Por supuesto.|Samozřejmě.
+        ¡Salud!|Na zdraví!
+        la canción|píseň
+        el/la cantante|zpěvák; zpěvačka
+        el gimnasio|posilovna
+        el correo electrónico|e-mail
+        las noticias|zprávy
+        el periódico|noviny
+        la revista|časopis`) },
     ],
   });
 })();

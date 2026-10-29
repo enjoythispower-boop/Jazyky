@@ -486,6 +486,9 @@ p.kbd-only { display: none; }
 .face.front::before { content: ""; position: absolute; left: 28px; right: 28px; top: 20px; height: 3px; border-radius: 3px; background: var(--accent); opacity: .7; }
 .face.back { transform: rotateY(180deg); background: var(--accent-soft); box-shadow: none; }
 .face .big.tl { font-size: clamp(2.3rem, 9.5vw, 3.3rem); }
+/* Celá fráze se musí vejít na kartičku */
+.face .big.long { font-size: clamp(1.5rem, 6vw, 2rem); line-height: 1.25; }
+.face .big.tl.long { font-size: clamp(1.65rem, 6.6vw, 2.25rem); }
 .face .other { color: var(--muted); font-size: 1.125rem; }
 .card-tools { display: flex; justify-content: center; align-items: center; gap: 8px; }
 .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

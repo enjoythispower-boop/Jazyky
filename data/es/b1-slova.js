@@ -35,7 +35,6 @@
       { name: 'Zdraví a tělo', words: T(`
         me duele la cabeza|bolí mě hlava
         el dolor de estómago|bolest břicha
-        la farmacia|lékárna
         la receta|recept (od lékaře)
         el medicamento|lék
         la fiebre|horečka
@@ -47,27 +46,20 @@
         la cita|termín (u lékaře); schůzka
         herido/a|zraněný
         la sangre|krev
-        la espalda|záda
         la garganta|krk; hrdlo
         el tobillo|kotník
         la rodilla|koleno
-        el brazo|paže
-        la pierna|noha
-        el diente|zub
-        cansado/a|unavený
         sano/a|zdravý
-        mejorarse|uzdravit se`) },
+        mejorarse|uzdravit se
+        el estrés|stres
+        la alergia|alergie`) },
 
 
 
       { name: 'Lidé a vztahy', words: T(`
         conocer a alguien|poznat někoho
         llevarse bien|dobře spolu vycházet
-        el amigo / la amiga|kamarád; kamarádka
         la pareja|partner; pár
-        los padres|rodiče
-        los hermanos|sourozenci
-        el novio / la novia|přítel; přítelkyně
         divertido/a|zábavný
         amable|milý; laskavý
         tímido/a|stydlivý
@@ -79,13 +71,9 @@
         extrañar|stýskat se (po)
         acordarse de|vzpomenout si na
         mudarse|přestěhovat se
-        la boda|svatba
-        el vecino / la vecina|soused; sousedka
-        la gente|lidé
-        el cumpleaños|narozeniny`) },
+        la boda|svatba`) },
 
       { name: 'Každodenní život a práce', words: T(`
-        el trabajo|práce
         el sueldo|plat
         la empresa|firma
         el jefe / la jefa|šéf; šéfová
@@ -93,16 +81,14 @@
         ganar|vydělávat; vyhrát
         ahorrar|šetřit
         gastar|utrácet
+        regatear|smlouvat
+        cobrar|účtovat; inkasovat
+        la economía|ekonomika
         pedir prestado|půjčit si
         devolver|vrátit
-        despertarse|probudit se
-        levantarse|vstát
-        ducharse|osprchovat se
-        la ropa|oblečení
         la lavandería|prádelna
         limpiar|uklízet
         el alquiler|nájem
-        la llave|klíč
         olvidar|zapomenout
         tardar|trvat (o čase)
         soler + infinitivo|mít ve zvyku
@@ -121,7 +107,6 @@
         emocionado/a|nadšený
         agradecido/a|vděčný
         molestar|obtěžovat; vadit
-        me encanta|moc se mi líbí
         me da igual|je mi to jedno
         tener ganas de|mít chuť na
         sentirse|cítit se
@@ -150,8 +135,6 @@
         para que|aby
         por lo menos|aspoň
         a lo mejor|možná
-        casi|skoro
-        a veces|někdy
         de hecho|ve skutečnosti
         o sea|tedy; jinými slovy
         enseguida|hned

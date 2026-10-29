@@ -28,7 +28,7 @@
     keyboard: ['йцукенгшщзхъ', 'фывапролджэ', 'ячсмитьбюё'],
     modeWords: {
       slovicka: 'слова́', vety: 'фра́зы', preklad: 'перево́д', poslech: 'слу́шать', cteni: 'чита́ть',
-      dialogy: 'разгово́р', gramatika: 'грамма́тика', casovani: 'глаго́лы', moje: 'мои́ слова́',
+      dialogy: 'разгово́р', gramatika: 'грамма́тика', casovani: 'глаго́лы', moje: 'мои́ слова́', fraze: 'выраже́ния',
     },
     levels: [
       { id: 'a0', name: 'Základy', about: 'pozdravy, rodina, čísla a první slova, která už umíš',
@@ -40,7 +40,7 @@
       { id: 'b1', name: 'B1', about: 'delší texty, souvětí, příčestí a přechodníky',
         tenses: ['pres', 'past', 'fut', 'impv'] },
     ],
-    vocab: [], sentences: [], texts: [], grammar: [], dialogs: [],
+    vocab: [], phrases: [], sentences: [], texts: [], grammar: [], dialogs: [],
 
     conj: {
       persons: ['я', 'ты', 'он / она́', 'мы', 'вы', 'они́'],

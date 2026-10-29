@@ -61,7 +61,6 @@
       { name: 'Láska a přátelství', words: T(`
         enamorarse de|zamilovat se do
         estar enamorado/a|být zamilovaný
-        el amor|láska
         la amistad|přátelství
         salir con alguien|chodit s někým
         romper con alguien|rozejít se s někým
@@ -140,7 +139,6 @@
         matricularse / inscribirse|zapsat se`) },
 
       { name: 'Peníze a ekonomika', words: T(`
-        la economía|ekonomika
         la crisis|krize
         la inflación|inflace
         subir los precios|zvyšovat ceny
@@ -161,15 +159,10 @@
         el gasto|výdaj
         la factura|faktura; účet (za služby)
         el salario mínimo|minimální mzda
-        rico/a|bohatý; chutný
-        pobre|chudý
         la pobreza|chudoba
         la desigualdad|nerovnost`) },
 
       { name: 'Média a internet', words: T(`
-        las noticias|zprávy
-        el periódico|noviny
-        la revista|časopis
         el/la periodista|novinář
         el titular|titulek
         la entrevista|rozhovor (v médiích)
@@ -217,13 +210,11 @@
         el calentamiento global|globální oteplování
         desperdiciar|plýtvat
         la bolsa reutilizable|taška na více použití
-        el transporte público|veřejná doprava
-        la naturaleza|příroda`) },
+        el transporte público|veřejná doprava`) },
 
       { name: 'Společnost a politika', words: T(`
         la sociedad|společnost
         el gobierno|vláda
-        el presidente / la presidenta|prezident; prezidentka
         las elecciones|volby
         votar|volit; hlasovat
         el partido político|politická strana
@@ -249,13 +240,11 @@
 
       { name: 'Zdraví a životní styl', words: T(`
         llevar una vida sana|žít zdravě
-        hacer ejercicio|cvičit; sportovat
         ponerse en forma|dostat se do formy
         la dieta equilibrada|vyvážená strava
         adelgazar / bajar de peso|zhubnout
         engordar / subir de peso|ztloustnout
         dejar de fumar|přestat kouřit
-        el estrés|stres
         relajarse|uvolnit se; odpočinout si
         dormir la siesta|dát si siestu
         el insomnio|nespavost
@@ -264,7 +253,6 @@
         la depresión|deprese
         el/la psicólogo/a|psycholog; psycholožka
         la meditación|meditace
-        la alergia|alergie
         la vacuna|očkování; vakcína
         la radiografía|rentgen
         la operación|operace
