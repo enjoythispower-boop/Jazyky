@@ -19,6 +19,7 @@ Personal language-learning site for one user: Spanish (A2 basics → B1 → B1+ 
 ## Conventions
 
 - Vocab meanings: separate alternatives with ` / ` or `;`, never with a comma. Commas are part of phrases. `o/a` endings (`cansado/a`) expand automatically. Russian aspect pairs are written `де́лать / сде́лать|dělat / udělat`.
+- Russian is read, never typed (`typing: false` in `ru.js`, checked through `typing()`). The user only needs to read Cyrillic, so no Russian exercise may ask for Cyrillic input. Word writing becomes a CZ → RU choice, phrases are built from tiles, translation and listening go into Czech, grammar gaps offer four forms (`gramChoices`, shown without stress so the stress doesn't give the answer away), and conjugation offers the verb's forms to choose from. Dialogs have no writing mode. Spanish keeps all writing.
 - Russian text carries a stress mark (U+0301) on every word of two or more syllables; `ё` needs no mark. `norm()` strips stress, and `ё` counts as `е`, when answers are checked.
 - Vocab belongs to the level a learner meets it at: everyday A1/A2 words go to the basics level (ES `a2`, RU `a1`/`a0`), not to B1 or B1+. SRS progress is keyed by the word text, so moving a word between topics or levels keeps its progress.
 - Phrases (`*-fraze.js`): topics `{ name, items: T(...) }` with lines `phrase|czech`. The target side is a single phrase with no ` / `, `;`, `(…)` or `…`, because it is built from tiles and checked as typed. Hints and alternatives go on the Czech side.

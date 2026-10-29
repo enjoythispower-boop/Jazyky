@@ -1,5 +1,5 @@
 // Síť má přednost, ale když neodpoví do pár sekund (slabý signál), použije se uložená verze
-const CACHE = 'jazyky-v23';
+const CACHE = 'jazyky-v24';
 const DATA = [
   'core', 'es', 'ru', 'es/a2-slova', 'es/b1-slova', 'es/b1-slova2', 'es/b1-vety', 'es/b1-vety2',
   'es/b1-texty', 'es/b1-texty2', 'es/b1-texty3', 'es/b1-gramatika', 'es/b1-gramatika2',

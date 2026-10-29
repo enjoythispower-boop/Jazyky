@@ -39,6 +39,8 @@ const settings = Object.assign({
 const saveSettings = () => store.set('settings', settings);
 
 let L = null;       // data aktuálního jazyka
+// Píše se v cílovém jazyce? V ruštině ne – azbuku stačí číst
+const typing = () => L.typing !== false;
 let onKey = null;   // klávesy pro aktuální obrazovku
 
 // Dočasně přepne aktuální jazyk (opakování i plán čtou L)
@@ -81,12 +83,13 @@ const MI = {
   fraze: '<svg viewBox="0 0 24 24"><path d="M5.5 4.5h13a2 2 0 012 2v8a2 2 0 01-2 2h-7l-4.5 3.5v-3.5H5.5a2 2 0 01-2-2v-8a2 2 0 012-2z"/><path d="M7.5 9h9M7.5 12.2h5.5"/></svg>',
 };
 
+// read: popis pro jazyk, ve kterém se nepíše (typing: false)
 const MODES = [
-  { id: 'slovicka', name: 'Slovíčka', desc: 'Kartičky, výběr a psaní podle témat' },
+  { id: 'slovicka', name: 'Slovíčka', desc: 'Kartičky, výběr a psaní podle témat', read: 'Kartičky a výběr podle témat' },
   { id: 'fraze', name: 'Fráze', desc: 'Hotové věty a spojení do běžných situací' },
   { id: 'vety', name: 'Skládání vět', desc: 'Poskládej větu ze slov' },
-  { id: 'preklad', name: 'Překlad', desc: 'Věty i celé texty, oběma směry' },
-  { id: 'poslech', name: 'Poslech', desc: 'Poslechni si větu a napiš ji' },
+  { id: 'preklad', name: 'Překlad', desc: 'Věty i celé texty, oběma směry', read: 'Věty i celé texty do češtiny' },
+  { id: 'poslech', name: 'Poslech', desc: 'Poslechni si větu a napiš ji', read: 'Poslechni si větu a napiš, co znamená' },
   { id: 'cteni', name: 'Čtení', desc: 'Texty se slovníčkem a otázkami' },
   { id: 'dialogy', name: 'Dialogy', desc: 'Co v rozhovoru říct a jak' },
   { id: 'gramatika', name: 'Gramatika', desc: 'Doplňování podle pravidel' },
@@ -848,7 +851,7 @@ function flowStep(st) {
         items,
         step: ({ w, m }, stage, done) => m === 'card' ? stepCard(w, stage, done)
           : m === 'choice' ? stepChoice(w, pool, stage, done, false)
-          : stepWrite(w, stage, done),
+          : stepRecall(w, pool, stage, done),
         summary: x => wordSummary(x.w),
       };
     }
@@ -878,7 +881,7 @@ function flowStep(st) {
             done(ok, o);
           }, 'intro')
           : m === 'choice' ? stepChoice(w, pool.length >= 4 ? pool : allWords(), stage, done, false)
-          : stepWrite(w, stage, done),
+          : stepRecall(w, pool.length >= 4 ? pool : allWords(), stage, done),
         summary: x => wordSummary(x.w),
       };
     }
@@ -901,7 +904,7 @@ function flowStep(st) {
     case 'build':
       return { items: st.items, step: marked('s', s => s[0], 14, 3, stepBuild(L.sentences)), summary: sentSummary };
     case 'tr':
-      return { items: st.items, step: marked('s', s => s[0], 14, 3, stepTranslate(true)), summary: sentSummary };
+      return { items: st.items, step: marked('s', s => s[0], 14, 3, stepTranslate(typing())), summary: sentSummary };
     case 'listen':
       return { items: st.items, step: marked('s', s => s[0], 14, 3, stepListen), summary: sentSummary };
     case 'read':
@@ -960,7 +963,7 @@ function viewLang() {
         <span class="mode-icon">${MI[m.id]}</span>
         <span class="mode-word tl" lang="${L.code}">${L.modeWords[m.id]}</span>
         <span class="mode-name">${m.name}</span>
-        <span class="mode-desc">${m.desc}</span>
+        <span class="mode-desc">${!typing() && m.read || m.desc}</span>
       </a>`).join('')}
     </nav>`);
 }
@@ -980,7 +983,7 @@ function exerciseButtons(base, n) {
   return `<div class="ex-buttons">
     <a class="ex" href="${base}/karticky"><b>Kartičky</b><small>Otoč a ohodnoť se</small></a>
     ${n >= 4 ? `<a class="ex" href="${base}/vyber"><b>Výběr</b><small>Vyber správný překlad</small></a>` : ''}
-    <a class="ex" href="${base}/psani"><b>Psaní</b><small>Napiš slovo sám</small></a>
+    ${typing() ? `<a class="ex" href="${base}/psani"><b>Psaní</b><small>Napiš slovo sám</small></a>` : ''}
   </div>`;
 }
 
@@ -1013,7 +1016,7 @@ function viewTopic(id) {
 function vocabSession(words, mode, title, back) {
   const items = pickWords(words, 15);
   const pool = words.length >= 4 ? words : allWords();
-  const steps = { karticky: stepCard, vyber: (w, stage, done) => stepChoice(w, pool, stage, done), psani: stepWrite };
+  const steps = { karticky: stepCard, vyber: (w, stage, done) => stepChoice(w, pool, stage, done), psani: (w, stage, done) => stepRecall(w, pool, stage, done) };
   session({ title, back, items, step: steps[mode] || stepCard, summary: wordSummary });
 }
 
@@ -1065,9 +1068,13 @@ function stepCard(w, stage, done, mode = 'grade') {
   render();
 }
 
-// Výběr ze čtyř možností; střídá směr
-function stepChoice(w, pool, stage, done, grade = true) {
-  const rev = Math.random() < 0.5;
+// Vybavení slova: napsat ho, nebo (bez psaní) vybrat ho z možností podle češtiny
+function stepRecall(w, pool, stage, done) {
+  return typing() ? stepWrite(w, stage, done) : stepChoice(w, pool, stage, done, true, true);
+}
+
+// Výběr ze čtyř možností; bez rev střídá směr
+function stepChoice(w, pool, stage, done, grade = true, rev = Math.random() < 0.5) {
   const others = sample(pool.filter(x => x.t !== w.t && x.c !== w.c), 3);
   const opts = shuffle([w, ...others]);
   stage.innerHTML = `
@@ -1129,6 +1136,7 @@ function phraseStep(inPlan = false) {
       done(ok, o);
     }, inPlan ? 'intro' : 'self');
     if (m === 'auto') m = (phr.get(p.t) || { n: 0 }).n >= 2 ? 'write' : 'build';
+    if (!typing()) m = 'build';
     (m === 'write' ? write : build)([p.t, p.c], stage, (ok, o) => { phr.grade(p.t, ok); done(ok, o); });
   };
 }
@@ -1154,7 +1162,7 @@ function viewPhraseTopic(id) {
     <div class="ex-buttons">
       <a class="ex" href="${base}/karticky"><b>Kartičky</b><small>Otoč a ohodnoť se</small></a>
       <a class="ex" href="${base}/skladani"><b>Skládání</b><small>Poskládej frázi ze slov</small></a>
-      <a class="ex" href="${base}/preklad"><b>Překlad</b><small>Napiš ji z češtiny</small></a>
+      ${typing() ? `<a class="ex" href="${base}/preklad"><b>Překlad</b><small>Napiš ji z češtiny</small></a>` : ''}
     </div>
     ${wordList(items)}`);
 }
@@ -1249,7 +1257,7 @@ function trSwitch(active) {
   const lng = L.code === 'es' ? 'španělštiny' : 'ruštiny';
   const opt = (id, label, href) => `<a class="seg-btn ${active === id ? 'on' : ''}" href="${href}" data-tr="${id}" ${active === id ? 'aria-current="page"' : ''}>${label}</a>`;
   return `<nav class="seg" aria-label="Směr překladu">
-    ${opt('ct', `Do ${lng}`, `#/${L.code}/preklad`)}
+    ${typing() ? opt('ct', `Do ${lng}`, `#/${L.code}/preklad`) : ''}
     ${opt('tc', 'Do češtiny', `#/${L.code}/preklad`)}
     ${opt('text', 'Celý text', `#/${L.code}/preklad/text`)}
   </nav>`;
@@ -1294,10 +1302,10 @@ function stepTranslate(toT) {
 function viewTranslate() {
   session({
     title: 'Překlad', back: `#/${L.code}`,
-    intro: trSwitch(settings.trDir),
+    intro: trSwitch(typing() ? settings.trDir : 'tc'),
     items: sample(upToLevel(L.sentences, curLevel()), 10),
     summary: sentSummary,
-    step: stepTranslate(settings.trDir === 'ct'),
+    step: stepTranslate(typing() && settings.trDir === 'ct'),
   });
   bindTrSwitch();
 }
@@ -1314,15 +1322,15 @@ function viewTextList() {
 function viewTextTranslate(i) {
   const x = L.texts[i];
   if (!x) return viewTextList();
-  const dir = store.get('textDir', 'tc');
+  const dir = typing() ? store.get('textDir', 'tc') : 'tc';
   const src = dir === 'ct' ? x.cz : x.t, ref = dir === 'ct' ? x.t : x.cz;
   const draftKey = `draft_${L.code}_${i}_${dir}`;
   page('Překlad textu', `#/${L.code}/preklad/text`, `
     <section class="sec-head"><h2 class="display sm tl">${esc(x.title)}</h2><p class="muted">Úroveň ${levelName(lvOf(x))}</p></section>
-    <div class="seg small" role="group" aria-label="Směr překladu">
+    ${typing() ? `<div class="seg small" role="group" aria-label="Směr překladu">
       <button type="button" class="seg-btn ${dir === 'tc' ? 'on' : ''}" data-dir="tc" aria-pressed="${dir === 'tc'}">${L.code.toUpperCase()} → CZ</button>
       <button type="button" class="seg-btn ${dir === 'ct' ? 'on' : ''}" data-dir="ct" aria-pressed="${dir === 'ct'}">CZ → ${L.code.toUpperCase()}</button>
-    </div>
+    </div>` : ''}
     <div class="source ${dir === 'tc' ? 'tl' : ''}">${src.split('\n').map(p => `<p>${esc(p)}</p>`).join('')}</div>
     <form class="answer-form text-form">
       ${inputHTML(dir === 'ct' ? L.code : 'cz', { multi: true, placeholder: 'Piš svůj překlad…' })}
@@ -1348,13 +1356,15 @@ function viewTextTranslate(i) {
 }
 
 /* ================= POSLECH ================= */
+// Bez psaní v cílovém jazyce se napíše česky, co věta znamená
 function stepListen([t, cz], stage, done) {
+  const tl = typing();
   stage.innerHTML = `
     <div class="listen">
       <button type="button" class="play" data-play aria-label="Přehrát">${I.sound}<span class="ripple" aria-hidden="true"></span></button>
       <button type="button" class="chip" data-slow>${I.slow}<span>Pomaleji</span></button>
     </div>
-    <form class="answer-form">${inputHTML(L.code, { multi: true, placeholder: 'Napiš, co slyšíš…' })}
+    <form class="answer-form">${inputHTML(tl ? L.code : 'cz', { multi: true, placeholder: tl ? 'Napiš, co slyšíš…' : 'Napiš česky, co slyšíš…' })}
       <button class="btn primary wide" type="submit">Zkontrolovat</button></form>
     <div class="after" role="status"></div>`;
   const play = $('[data-play]', stage);
@@ -1362,6 +1372,20 @@ function stepListen([t, cz], stage, done) {
   play.onclick = () => say(false);
   $('[data-slow]', stage).onclick = () => say(true);
   setTimeout(() => say(false), 250);
+  if (!tl) return answerForm($('form', stage), val => {
+    const res = check(val, cz);
+    const heard = `<p class="answer-line"><span class="tl">${esc(t)}</span>${sayBtn(t, 'sm')}</p>`;
+    if (res.r !== 'bad') {
+      $('.after', stage).innerHTML = fb(res.r, `${res.why ? `<p>${res.why}</p>` : ''}${heard}<p class="cz-line">${esc(cz)}</p>`);
+      return () => done(true);
+    }
+    // Česky jde větu říct víc způsoby – rozhodnutí nechávám na tobě
+    $('.after', stage).innerHTML = `<div class="fb neutral"><strong>Porovnej</strong>${heard}${diffBlock(val, cz, false)}
+      <div class="actions"><button type="button" class="btn ok" data-self="1">Bylo to dobře</button><button type="button" class="btn bad" data-self="0">Bylo to špatně</button></div></div>`;
+    $$('[data-self]', stage).forEach(b => b.onclick = () => done(b.dataset.self === '1', { again: b.dataset.self !== '1' }));
+    $('button[type=submit]', stage).hidden = true;
+    return null;
+  });
   answerForm($('form', stage), val => {
     const res = check(val, t);
     const ok = res.r !== 'bad';
@@ -1482,16 +1506,16 @@ function stepRead(title, stage, done) {
 function stepDialog(id, stage, done) {
   const d = L.dialogs.find(x => x.id === id);
   if (!d) return done(true);
-  const write = settings.dlgWrite;
+  const write = typing() && settings.dlgWrite;
   let k = 0, good = 0, turns = 0;
   stage.innerHTML = `
     <header class="dlg-head">
       <h3 class="dlg-title tl" lang="${L.code}">${esc(d.title)}</h3>
       <p class="dlg-scene">${esc(d.scene)}</p>
-      <div class="seg small" role="group" aria-label="Způsob odpovědi">
+      ${typing() ? `<div class="seg small" role="group" aria-label="Způsob odpovědi">
         <button type="button" class="seg-btn ${write ? '' : 'on'}" data-mode="0" aria-pressed="${!write}">Vybírat repliky</button>
         <button type="button" class="seg-btn ${write ? 'on' : ''}" data-mode="1" aria-pressed="${write}">Psát sám</button>
-      </div>
+      </div>` : ''}
     </header>
     <div class="chat" aria-live="polite"></div>
     <div class="reply"></div>`;
@@ -1625,7 +1649,57 @@ function viewGrammarList() {
 const grammarSummary = ([s, a, , cz]) => `<span class="tl">${s.includes('___') ? esc(s).replace('___', `<b>${esc(variants(a)[0])}</b>`) : `${esc(s)} – <b>${esc(a)}</b>`}</span><br><small>${esc(cz)}</small>`;
 
 // Doplňování: s mezerou se píše přímo do věty, s možnostmi se vybírá
-function stepGrammar([s, a, hint, cz, opts], stage, done) {
+// Koncovky pro vymyšlené tvary podle zakončení výchozího tvaru (přídavná jména, ‑ь, ‑я, ‑а, ‑о, souhláska)
+const DECL = [
+  [/(ый|ой|ий)$/, ['ый', 'ая', 'ое', 'ые', 'ого', 'ому', 'ым', 'ом', 'ую', 'ой', 'ых', 'ыми']],
+  [/ь$/, ['ь', 'я', 'ю', 'е', 'ем', 'и', 'ей', 'ям', 'ях']],
+  [/я$/, ['я', 'и', 'е', 'ю', 'ей', 'ям', 'ях']],
+  [/а$/, ['а', 'ы', 'е', 'у', 'ой', 'ам', 'ах', 'ами']],
+  [/о$/, ['о', 'а', 'у', 'е', 'ом', 'ам', 'ах']],
+  [/(?<=[бвгдзклмнпрстфх])$/, ['', 'а', 'у', 'е', 'ом', 'ы', 'ов', 'ам', 'ах']],
+];
+// Po г, к, х, ж, ш, ч, щ se píše и, ne ы
+const spell = s => s.replace(/([гкхжшчщ])ы/g, '$1и');
+
+// Bez psaní se místo doplňování vybírá ze čtyř tvarů: výchozí tvar, jiné tvary téhož slova
+// (z ostatních úloh a z časování), tvary se zaměněnou koncovkou a nakonec odpovědi z téže sady.
+// Přízvuk se v nabídce nezobrazuje, jinak by správnou odpověď prozradil.
+function gramChoices([s, a, hint]) {
+  const right = variants(a)[0], seen = new Set([norm(right)]);
+  const head = String(hint).split(/,| – | \/ /)[0].trim();
+  const lemma = isCyr(head) ? norm(head) : '';
+  const same = [];
+  if (lemma) {
+    for (const g of L.grammar) for (const it of g.items) if (norm(String(it[2]).split(/,| – | \/ /)[0]) === lemma) same.push(variants(it[1])[0]);
+    const v = L.conj.verbs.find(x => norm(x.inf) === lemma);
+    if (v) for (const t of L.conj.tenses) if (tenseOk(v, t.id)) same.push(...L.conj.conjugate(v, t.id));
+  }
+  // Vymyšlené tvary jen u jmen, jejichž tvar sdílí kmen s výchozím tvarem
+  const made = [], low = plain(right).toLowerCase(), base = plain(head).toLowerCase();
+  let pre = 0;
+  while (pre < low.length && pre < base.length && norm(low[pre]) === norm(base[pre])) pre++;
+  const decl = lemma && pre >= 3 && !/(ть|ти|чь|ся|сь)$/.test(base) && DECL.find(([re]) => re.test(base));
+  if (decl) {
+    const stem = base.replace(decl[0], '');
+    for (const e of shuffle(decl[1])) made.push(spell(stem + e));
+  }
+  const set = L.grammar.find(g => g.items.some(it => it[0] === s && it[1] === a));
+  const others = set ? set.items.map(it => variants(it[1])[0]) : [];
+  const pick = [];
+  for (const o of [head, ...shuffle(same), ...made, ...shuffle(others)]) {
+    if (pick.length >= 3 || !o || !isCyr(o) || o.includes(' ') !== right.includes(' ')) continue;
+    const k = norm(o);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    pick.push(o);
+  }
+  const up = /^[А-ЯЁ]/.test(right);
+  return shuffle([right, ...pick]).map(o => { o = plain(o).toLowerCase(); return up ? o[0].toUpperCase() + o.slice(1) : o; });
+}
+
+function stepGrammar(item, stage, done) {
+  let [s, a, hint, cz, opts] = item;
+  if (!opts && !typing()) opts = gramChoices(item);
   const blank = s.includes('___');
   const full = blank ? s.replace('___', variants(a)[0]) : s;
   const [before, after] = blank ? s.split('___') : [s, ''];
@@ -1649,7 +1723,7 @@ function stepGrammar([s, a, hint, cz, opts], stage, done) {
         ${blank ? `<span class="gram-line tl">${esc(before)}<span class="blank">?</span>${esc(after)}</span>` : `<span class="big tl">${esc(s)}</span>`}
         <small class="hint">${esc(hint)}</small>
       </div>
-      <div class="opts row-opts">${opts.map((o, k) => `<button type="button" class="opt ${isCyr(o) ? 'tl' : ''}" data-k="${k}"><kbd>${k + 1}</kbd>${esc(o)}</button>`).join('')}</div>
+      <div class="opts ${opts.every(o => o.length <= 5) ? 'row-opts' : ''}">${opts.map((o, k) => `<button type="button" class="opt ${isCyr(o) ? 'tl' : ''}" data-k="${k}"><kbd>${k + 1}</kbd>${esc(o)}</button>`).join('')}</div>
       <div class="after" role="status"></div>`;
     let answered = false;
     const choose = k => {
@@ -1746,16 +1820,46 @@ function viewVerb(inf) {
       <section class="t-block"><h3>${t.name} <small class="tl">${t.sub}</small></h3>${conjTable(v, t.id)}</section>`).join('')}</div>`);
 }
 
-// Jeden tvar: osoba + infinitiv → napiš tvar
+// Jeden tvar: osoba + infinitiv → napiš tvar (bez psaní: vyber ho ze čtyř tvarů téhož slovesa)
 function stepConj(x, stage, done) {
   const T = tenseOf(x.t);
-  stage.innerHTML = `
+  const prompt = `
     <div class="prompt conj-prompt">
       <span class="tag">${T.name} · <span class="tl">${T.sub}</span></span>
       <span class="big tl">${esc(x.v.inf)}</span>
       <small class="hint">${esc(x.v.cz)}</small>
       <span class="person tl">${esc(personsFor(x.t)[x.p])} …</span>
-    </div>
+    </div>`;
+  if (!typing()) {
+    const own = L.conj.conjugate(x.v, x.t);
+    const rest = L.conj.tenses.filter(t => t.id !== x.t && tenseOk(x.v, t.id)).flatMap(t => L.conj.conjugate(x.v, t.id));
+    const seen = new Set([norm(x.form)]), pick = [];
+    for (const f of [...shuffle(own), ...shuffle(rest)]) {
+      if (pick.length >= 3 || !f || f === '—' || seen.has(norm(f))) continue;
+      seen.add(norm(f));
+      pick.push(f);
+    }
+    const opts = shuffle([x.form, ...pick]);
+    stage.innerHTML = `${prompt}
+      <div class="opts">${opts.map((o, k) => `<button type="button" class="opt tl" data-k="${k}"><kbd>${k + 1}</kbd>${esc(o)}</button>`).join('')}</div>
+      <div class="after" role="status"></div>`;
+    let answered = false;
+    const choose = k => {
+      if (answered) return;
+      answered = true;
+      const ok = opts[k] === x.form;
+      $$('.opt', stage).forEach((b, j) => { b.disabled = true; if (opts[j] === x.form) b.classList.add('ok'); else if (j === k) b.classList.add('bad'); });
+      tts.say(x.form);
+      $('.after', stage).innerHTML = fb(ok ? 'ok' : 'bad', conjTable(x.v, x.t, x.p)) + `<button type="button" class="btn primary wide" data-next>Další</button>`;
+      const go = () => done(ok, { again: !ok });
+      $('[data-next]', stage).onclick = go;
+      onKey = e => { if (e.key === 'Enter') { e.preventDefault(); go(); } };
+    };
+    $$('.opt', stage).forEach(b => b.onclick = () => choose(+b.dataset.k));
+    onKey = e => { const k = +e.key - 1; if (k >= 0 && k < opts.length) choose(k); };
+    return;
+  }
+  stage.innerHTML = `${prompt}
     <form class="answer-form">${inputHTML(L.code)}<button class="btn primary wide" type="submit">Zkontrolovat</button></form>
     <div class="after" role="status"></div>`;
   answerForm($('form', stage), val => {
@@ -1768,13 +1872,17 @@ function stepConj(x, stage, done) {
   });
 }
 
-// Celá tabulka jednoho času: vyplňuje se řádek po řádku, kontroluje se najednou
+// Celá tabulka jednoho času: vyplňuje se řádek po řádku, kontroluje se najednou.
+// Bez psaní má každá osoba nabídku tvarů z téže tabulky.
 function stepConjGrid({ inf, t }, stage, done) {
   const v = L.conj.verbs.find(x => x.inf === inf), T = tenseOf(t);
   if (!v || !T || !tenseOk(v, t)) return done(true);
   const forms = L.conj.conjugate(v, t), persons = personsFor(t);
   const rows = forms.map((_, i) => i).filter(i => rowVisible(t, i, forms));
-  const { tools } = inputParts(L.code);
+  const pickFrom = shuffle([...new Set(rows.map(i => forms[i]))]);
+  const slot = i => typing() ? inputParts(L.code, { name: 'f' + i, cls: 'cin' }).field
+    : `<select class="answer cin tl" name="f${i}" lang="${L.code}"><option value="">vyber tvar</option>${pickFrom.map(f => `<option>${esc(f)}</option>`).join('')}</select>`;
+  const tools = typing() ? inputParts(L.code).tools : '';
   stage.innerHTML = `
     <div class="cg-head">
       <span class="tag">${T.name} · <span class="tl">${T.sub}</span></span>
@@ -1785,7 +1893,7 @@ function stepConjGrid({ inf, t }, stage, done) {
       <div class="answer-box" data-lang="${L.code}">
         <div class="cgrid">${rows.map(i => `<label class="crow" data-i="${i}">
           <span class="cp tl">${esc(persons[i])}</span>
-          <span class="cslot">${inputParts(L.code, { name: 'f' + i, cls: 'cin' }).field}</span>
+          <span class="cslot">${slot(i)}</span>
         </label>`).join('')}</div>
         ${tools}
       </div>
@@ -1809,7 +1917,7 @@ function stepConjGrid({ inf, t }, stage, done) {
     let bad = 0;
     rows.forEach((i, n) => {
       const el = inputs[n], res = check(el.value, forms[i]), row = el.closest('.crow');
-      el.readOnly = true;
+      if (el.tagName === 'SELECT') el.disabled = true; else el.readOnly = true;
       row.classList.add(res.r);
       if (res.r === 'bad') bad++;
       if (res.r !== 'ok') row.insertAdjacentHTML('beforeend', `<span class="cfix tl">${esc(forms[i])}</span>`);

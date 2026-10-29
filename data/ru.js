@@ -25,6 +25,8 @@
     name: 'Ruština',
     native: 'Русский',
     glyph: 'Ж',
+    // Azbuku stačí číst: cvičení místo psaní nabízejí výběr, skládání nebo odpověď česky
+    typing: false,
     keyboard: ['йцукенгшщзхъ', 'фывапролджэ', 'ячсмитьбюё'],
     modeWords: {
       slovicka: 'слова́', vety: 'фра́зы', preklad: 'перево́д', poslech: 'слу́шать', cteni: 'чита́ть',
