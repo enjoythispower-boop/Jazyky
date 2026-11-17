@@ -271,6 +271,15 @@ const rot = {
     this.all[this.key(kind, id)] = { n: c.n + 1, d: Date.now() + days * DAY, u: Date.now() };
     store.set('rot', this.all);
   },
+  // Výsledek z plánu: co jde, se vrací čím dál později (good, 2× good, 4× good), co nejde, za `bad` dní.
+  // k = kolikrát za sebou to šlo; u starších záznamů bez k se bere počet průchodů n
+  done(kind, id, ok, good, bad) {
+    const c = this.get(kind, id) || { n: 0 };
+    const k = ok ? (c.k ?? c.n) + 1 : 0;
+    const days = ok ? good * 2 ** Math.min(k - 1, 2) : bad;
+    this.all[this.key(kind, id)] = { n: c.n + 1, k, d: Date.now() + days * DAY, u: Date.now() };
+    store.set('rot', this.all);
+  },
   // Nabídnuto v plánu, ale možná neprobráno: pár dní se nenabízí znovu, ať se obsah obměňuje
   offer(kind, id, days) { this.all[this.key(kind, id) + '~'] = { d: Date.now() + days * DAY, u: Date.now() }; },
   // Nejdřív nové (v pořadí seznamu), pak ty, které už přišly na řadu, nakonec ostatní od nejdřív splatných
@@ -837,7 +846,7 @@ function runStep(p, st) {
 // Co který krok plánu znamená: položky, jedna úloha a řádek v přehledu chyb
 function flowStep(st) {
   const marked = (kind, idOf, good, bad, fn) => (x, stage, done) =>
-    fn(x, stage, (ok, o) => { rot.mark(kind, idOf(x), ok ? good : bad); done(ok, o); });
+    fn(x, stage, (ok, o) => { rot.done(kind, idOf(x), ok, good, bad); done(ok, o); });
   switch (st.k) {
     case 'review': {
       // Jen slova, která opravdu čekají (mohla se mezitím zopakovat jinde).
@@ -896,21 +905,21 @@ function flowStep(st) {
       return { items, step: phraseStep(true), summary: x => wordSummary(x.p) };
     }
     case 'conj':
-      return { items: st.items, step: marked('verb', x => x.inf, 7, 2, stepConjGrid), summary: x => `<span class="tl">${esc(x.inf)}</span> · ${esc(tenseOf(x.t).name)}` };
+      return { items: st.items, step: marked('verb', x => x.inf, 10, 2, stepConjGrid), summary: x => `<span class="tl">${esc(x.inf)}</span> · ${esc(tenseOf(x.t).name)}` };
     case 'gram': {
       const items = st.items.map(({ g, i }) => { const s = L.grammar.find(x => x.id === g); return s && s.items[i] ? { g, i, it: s.items[i] } : null; }).filter(Boolean);
-      return { items, step: marked('g', x => x.g + '#' + x.i, 10, 2, (x, stage, done) => stepGrammar(x.it, stage, done)), summary: x => grammarSummary(x.it) };
+      return { items, step: marked('g', x => x.g + '#' + x.i, 14, 2, (x, stage, done) => stepGrammar(x.it, stage, done)), summary: x => grammarSummary(x.it) };
     }
     case 'build':
-      return { items: st.items, step: marked('s', s => s[0], 14, 3, stepBuild(L.sentences)), summary: sentSummary };
+      return { items: st.items, step: marked('s', s => s[0], 21, 3, stepBuild(L.sentences)), summary: sentSummary };
     case 'tr':
-      return { items: st.items, step: marked('s', s => s[0], 14, 3, stepTranslate(typing())), summary: sentSummary };
+      return { items: st.items, step: marked('s', s => s[0], 21, 3, stepTranslate(typing())), summary: sentSummary };
     case 'listen':
-      return { items: st.items, step: marked('s', s => s[0], 14, 3, stepListen), summary: sentSummary };
+      return { items: st.items, step: marked('s', s => s[0], 21, 3, stepListen), summary: sentSummary };
     case 'read':
-      return { items: st.items, step: (title, stage, done) => stepRead(title, stage, ok => { const c = rot.get('text', title); rot.mark('text', title, c && c.n >= 2 ? 45 : 7); done(ok); }), summary: t => `<span class="tl">${esc(t)}</span>` };
+      return { items: st.items, step: (title, stage, done) => stepRead(title, stage, ok => { rot.done('text', title, true, 14, 14); done(ok); }), summary: t => `<span class="tl">${esc(t)}</span>` };
     case 'dialog':
-      return { items: st.items, step: marked('dlg', id => id, 10, 3, stepDialog), summary: id => `<span class="tl">${esc((L.dialogs.find(d => d.id === id) || {}).title || id)}</span>` };
+      return { items: st.items, step: marked('dlg', id => id, 14, 3, stepDialog), summary: id => `<span class="tl">${esc((L.dialogs.find(d => d.id === id) || {}).title || id)}</span>` };
   }
   return { items: [], step: () => {}, summary: () => '' };
 }
@@ -1633,7 +1642,7 @@ function viewDialog(i) {
     title: 'Dialog', back: `#/${L.code}/dialogy`,
     items: [d.id],
     summary: id => `<span class="tl">${esc(d.title)}</span>`,
-    step: (id, stage, done) => stepDialog(id, stage, ok => { rot.mark('dlg', id, ok ? 10 : 3); done(ok); }),
+    step: (id, stage, done) => stepDialog(id, stage, ok => { rot.done('dlg', id, ok, 14, 3); done(ok); }),
     resume: false,
   });
 }

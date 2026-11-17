@@ -36,7 +36,7 @@ Naštěstí mě viděl ustaraného jeden ochranka a vysvětlil mi, co mám děla
 V pondělí ráno jsem šel do banky. Musel jsem čekat skoro hodinu a vyplnit formulář, ale nakonec mi kartu vrátili. Od té doby cestuju vždycky se dvěma různými kartami a mám trochu peněz schovaných v batohu.`,
         gloss: {
           'me dio mucho miedo': 'hodně mě vyděsil', 'sacar dinero': 'vybrat peníze', 'se tragó': 'spolkl', 'efectivo': 'hotovost',
-          'Por suerte': 'naštěstí', 'guardia de seguridad': 'ochranka; strážný', 'preocupado': 'ustaraný', 'me dijo que llamara': 'řekl mi, ať zavolám',
+          'Por suerte': 'naštěstí', 'guardia de seguridad': 'ochranka; strážný', 'preocupado': 'ustaraný', 'Me dijo que llamara': 'řekl mi, ať zavolám',
           'que volviera': 'ať se vrátím', 'llenar un formulario': 'vyplnit formulář', 'me devolvieron': 'vrátili mi', 'escondido': 'schovaný',
         },
         q: [
@@ -60,7 +60,7 @@ Co nabízíme? Ubytování ve sdíleném pokoji, tři jídla denně a lekce keč
 Co potřebuješ? Základní španělštinu, chuť pracovat venku a dobrou náladu. Zkušenosti nejsou nutné.
 Jestli tě to zajímá, napiš nám zprávu a řekni nám něco o sobě.`,
         gloss: {
-          'Se busca': 'hledá se', 'granja': 'farma', 'al menos': 'alespoň', 'huerto': 'zahrada (zeleninová)', 'cuidar de': 'starat se o',
+          'SE BUSCA': 'hledá se', 'granja': 'farma', 'al menos': 'alespoň', 'huerto': 'zahrada (zeleninová)', 'cuidar de': 'starat se o',
           'gallinas': 'slepice', 'cuyes': 'morčata', 'comunidad': 'komunita; obec', 'ofrecemos': 'nabízíme', 'quechua': 'kečuánština',
           'ganas de': 'chuť (něco dělat)', 'al aire libre': 'venku', 'buen humor': 'dobrá nálada', 'cuéntanos': 'řekni nám',
         },
