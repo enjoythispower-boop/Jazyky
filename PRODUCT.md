@@ -35,7 +35,7 @@ Na rozdíl od běžných aplikací (Duolingo a podobně) je stránka šitá na m
 ## Capabilities and Constraints
 
 - **Denní plán:** každý jazyk má vlastní plán na zhruba 45 minut ve třech blocích: slovní zásoba, stavba jazyka a jazyk v použití. Plán běží jako jeden souvislý tok bez rozhodování a dá se přerušit a dokončit později. O půlnoci se obnoví, vynechané dny se nepřenášejí. Úvodní obrazovka „Dnes“ ukazuje skutečný obsah dne.
-- **Úrovně:** španělština B1, B1+ a B2, ruština A1, A2 a B1. Každá úroveň má vlastní slovíčka, věty, texty, gramatiku, slovesa a (od ES B1 a RU A2) dialogy. Když v úrovni dojdou nová slova, nabídne se postup dál. Starší látka se dál opakuje.
+- **Úrovně:** španělština B1, B1+ a B2, ruština A1, A2 a B1. Každá úroveň má vlastní slovíčka, věty, texty, gramatiku a dialogy; texty a dialogy mají místo děje a část textů má podobu skutečných dokumentů (lístek, jízdní řád, zprávy). Když v úrovni dojdou nová slova, nabídne se postup dál. Starší látka se dál opakuje.
 - **Režimy:** slovíčka (kartičky, výběr, psaní) s opakováním v intervalech, skládání vět, překlad vět i celých textů oběma směry, poslech (diktát), čtení se slovníčkem a otázkami, dialogy (výběr nebo psaní repliky), gramatika (doplňování přímo ve větě), časování (celé tabulky) a vlastní slovíčka.
 - **Bez backendu, účtů, placených služeb a AI.** Kontrola odpovědí je deterministická. U volného překladu a psaných replik rozhoduje o správnosti uživatel sám podle porovnání se vzorem.
 - **Stav:** `localStorage` daného prohlížeče. Volitelně se synchronizuje přes soukromý GitHub Gist, token zadá uživatel jednou na každém zařízení. Ruční záloha zůstává.
@@ -51,14 +51,15 @@ Na rozdíl od běžných aplikací (Duolingo a podobně) je stránka šitá na m
 
 ## Evidence on Hand
 
-- Obsah (říjen 2026):
-  - ES A2 (základ, který už uživatel zná): 190 slov.
-  - ES B1: 413 slov, 300 vět, 21 textů, 152 gramatických vět, 48 sloves, 6 dialogů.
-  - ES B1+: 600 slov, 300 vět, 20 textů, 149 gramatických vět, 30 sloves, 16 dialogů.
+- Obsah (listopad 2026, připravený na tři měsíce cesty bez možnosti doplňovat):
+  - ES A2 (základ, který už uživatel zná): 241 slov.
+  - ES B1: 410 slov, 418 vět, 31 textů (z toho 4 skutečné formáty), 181 gramatických vět, 12 dialogů.
+  - ES B1+: 565 slov, 300 vět, 26 textů, 149 gramatických vět, 20 dialogů.
+  - ES B2: 463 slov, 149 vět, 10 textů, 60 gramatických vět, 8 dialogů, fráze.
   - RU Základy (už je umí): 204 slov, 42 vět, 5 textů.
-  - RU A1: 399 slov, 260 vět, 16 textů, 154 gramatických vět, 57 sloves.
-  - RU A2: 617 slov, 300 vět, 20 textů, 146 gramatických vět, 30 sloves, 15 dialogů.
-  - ES B2 a RU B1 se doplní během cesty.
+  - RU A1: 425 slov, 362 vět, 22 textů, 183 gramatických vět, 6 dialogů.
+  - RU A2: 599 slov, 300 vět, 26 textů, 146 gramatických vět, 19 dialogů.
+  - RU B1: 345 slov, 119 vět, 8 textů, 48 gramatických vět, 6 dialogů, fráze.
 - Uživatelé ani reference neexistují a nemají se vymýšlet. Jde o soukromý nástroj.
 
 ## Product Principles
