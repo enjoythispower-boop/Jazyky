@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     texts: [
       {
-        title: 'Llegada a la Ciudad de México',
+        title: 'Llegada a la Ciudad de México', place: 'Ciudad de México, México',
         t: `El avión aterrizó a las once de la noche. Estaba muy cansado, pero también nervioso, porque era la primera vez que viajaba solo tan lejos. En el aeropuerto cambié un poco de dinero y busqué un taxi autorizado, como me había recomendado mi amiga Lucía.
 El taxista era un señor muy platicador. Durante todo el camino me habló de su familia, del tráfico y de los mejores lugares para comer tacos. Yo solo entendía la mitad, pero le contestaba «sí, claro» y él se reía.
 Cuando por fin llegué al hostal, la recepcionista me dio la llave y una toalla. Subí a mi cuarto, me acosté y me dormí enseguida. Al día siguiente me desperté con el ruido de la calle: vendedores, música y bocinas. Abrí la ventana y pensé: «Ya estoy aquí. Empieza la aventura».`,
@@ -22,7 +22,7 @@ Když jsem konečně dorazil do hostelu, recepční mi dala klíč a ručník. V
         ],
       },
       {
-        title: 'Un correo a mi familia',
+        title: 'Un correo a mi familia', place: 'Guatemala',
         t: `Queridos papás:
 ¿Cómo están? Yo estoy muy bien. Ya llevo dos semanas en Guatemala y han pasado muchísimas cosas. Esta semana he estado en el lago de Atitlán. He nadado, he subido a un mirador precioso y he probado comida que nunca había visto.
 También he empezado unas clases de español con una profesora del pueblo. Se llama Doña Rosa y es muy paciente. Me ha enseñado muchas palabras nuevas y siempre me corrige cuando me equivoco con los verbos.
@@ -49,7 +49,7 @@ Tomáš`,
         ],
       },
       {
-        title: 'La señora del comedor',
+        title: 'La señora del comedor', place: 'Oaxaca, México',
         t: `Cuando vivía en Oaxaca, comía casi todos los días en un comedor pequeño cerca del mercado. Lo atendía Doña Carmen, una señora de unos sesenta años que siempre llevaba un delantal de flores.
 El comedor no tenía menú. Cada mañana Doña Carmen decidía qué iba a cocinar según lo que encontraba en el mercado. A veces había mole negro, otras veces sopa de frijol o tamales. Todo costaba lo mismo: cincuenta pesos con agua de fruta incluida.
 Lo que más me gustaba era la conversación. Doña Carmen sabía todo lo que pasaba en el barrio: quién se casaba, quién se había mudado, qué familia tenía problemas. Mientras comía, ella se sentaba conmigo y me contaba historias de cuando era joven.
@@ -71,7 +71,7 @@ Poslední den jsem jí za všechno poděkoval. Objala mě a řekla mi: „Tady b
         ],
       },
       {
-        title: 'El Día de Muertos',
+        title: 'El Día de Muertos', place: 'México',
         t: `En México, el primero y el dos de noviembre se celebra el Día de Muertos. Aunque el nombre suena triste, es una fiesta llena de color, música y comida. Según la tradición, en esos días las almas de los muertos vuelven a visitar a sus familias.
 Para recibirlas, la gente pone en casa un altar con fotos de sus familiares, velas, flores de cempasúchil de color naranja y la comida que más les gustaba. También se pone pan de muerto, un pan dulce redondo, y calaveritas de azúcar con nombres escritos.
 Por la noche, muchas familias van al cementerio. Limpian las tumbas, las decoran con flores y se quedan allí hasta muy tarde, comiendo, platicando y recordando a los que ya no están.
@@ -92,7 +92,7 @@ Pro Mexičany není smrt jen něco smutného: je součástí života. Proto mís
         ],
       },
       {
-        title: 'Perdido en Oaxaca',
+        title: 'Perdido en Oaxaca', place: 'Oaxaca, México',
         t: `Un sábado decidí ir a un pueblo de artesanos que estaba a una hora de Oaxaca. Tomé una combi en el centro y me bajé donde me dijo el chofer. El problema fue que me bajé en el pueblo equivocado.
 Al principio no me di cuenta. Caminé por las calles buscando los talleres de cerámica, pero no encontré ninguno. Le pregunté a una señora que vendía tortillas y se rio: «Joven, aquí no hay cerámica. Usted quería ir a San Bartolo, eso está al otro lado del valle».
 No tenía señal en el celular y ya eran las cuatro de la tarde. La señora llamó a su hijo, que tenía una moto, y él me llevó hasta la carretera principal. No quiso aceptar dinero, así que le compré dos refrescos.
@@ -137,7 +137,7 @@ A nakonec měj vždycky malé bankovky. Hodně taxikářů říká, že nemají 
         ],
       },
       {
-        title: 'Mi compañero de cuarto',
+        title: 'Mi compañero de cuarto', place: 'Medellín, Colombia',
         t: `En el hostal de Medellín compartí cuarto con Mateo, un chico argentino de veintiséis años. Al principio pensé que íbamos a tener problemas, porque él era muy desordenado: dejaba la ropa en el suelo, nunca cerraba la mochila y comía galletas en la cama.
 Sin embargo, poco a poco me di cuenta de que era una persona increíble. Era muy generoso: compartía todo lo que tenía y siempre invitaba a los demás a tomar mate. Además, era muy gracioso. Contaba chistes con su acento porteño y todo el hostal se moría de risa.
 Una noche le pregunté por qué viajaba. Me contó que había trabajado cinco años en una oficina en Buenos Aires y que un día se dio cuenta de que no era feliz. Vendió su carro, dejó el trabajo y se fue a recorrer el continente.
@@ -159,7 +159,7 @@ Od té doby jsme velcí kamarádi. Pořád je nepořádný, ale už mi to nevad�
         ],
       },
       {
-        title: 'Un domingo en Bogotá',
+        title: 'Un domingo en Bogotá', place: 'Bogotá, Colombia',
         t: `Los domingos, Bogotá cambia por completo. Desde las siete de la mañana hasta las dos de la tarde, muchas avenidas principales se cierran a los carros y se convierten en la «ciclovía». Miles de personas salen a andar en bici, a correr, a patinar o simplemente a caminar.
 La primera vez que la vi, no lo podía creer. Familias enteras pedaleaban juntas, había abuelos en bicicletas viejas y niños pequeños con cascos de colores. En algunas esquinas vendían jugos de fruta y arepas, y en los parques había clases gratuitas de baile y de aeróbicos.
 Alquilé una bicicleta por pocos pesos y recorrí casi veinte kilómetros. Pasé por barrios que nunca habría visitado en carro. Lo que más me gustó fue el ambiente: la gente sonreía, se saludaba y nadie tenía prisa.

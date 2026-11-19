@@ -3,7 +3,7 @@
   JZ.add('ru', 'a1', {
     dialogs: [
       {
-        id: 'kafe-a1', title: 'В кафе́', who: 'Официа́нт',
+        id: 'kafe-a1', title: 'В кафе́', who: 'Официа́нт', place: 'Москва́',
         scene: 'Sedíš v malé kavárně v Moskvě a chceš si dát snídani.',
         lines: [
           ['Здра́вствуйте! Что вы бу́дете?', 'Dobrý den! Co si dáte?'],
@@ -70,7 +70,7 @@
         ],
       },
       {
-        id: 'gde-metro', title: 'Где метро́?', who: 'Же́нщина',
+        id: 'gde-metro', title: 'Где метро́?', who: 'Же́нщина', place: 'Санкт-Петербу́рг',
         scene: 'Jsi v Petrohradu a hledáš nejbližší stanici metra. Oslovíš paní na ulici.',
         lines: [
           { ok: ['Извини́те, пожа́луйста, где здесь метро́?', 'Promiňte prosím, kde je tu metro?'],

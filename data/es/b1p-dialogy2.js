@@ -3,7 +3,7 @@
   JZ.add('es', 'b1p', {
     dialogs: [
       {
-        id: 'alquiler-baires', title: 'Un departamento en Buenos Aires', who: 'Propietaria',
+        id: 'alquiler-baires', title: 'Un departamento en Buenos Aires', who: 'Propietaria', place: 'Buenos Aires, Argentina',
         scene: 'Chceš si na dva měsíce pronajmout byt v Palermu. Majitelka mluví argentinsky (vos).',
         lines: [
           ['¡Hola! ¿Vos sos el que llamó por el departamento?', 'Ahoj! Ty jsi ten, kdo volal kvůli bytu?'],
@@ -29,7 +29,7 @@
         ],
       },
       {
-        id: 'cafe-conversacion', title: 'Un café con Lucía', who: 'Lucía',
+        id: 'cafe-conversacion', title: 'Un café con Lucía', who: 'Lucía', place: 'Bogotá, Colombia',
         scene: 'Na jazykovém tandemu v Bogotě sedíš s Lucíou. Mluví se o tom, co kdo dělá a o čem sní.',
         lines: [
           ['Bueno, cuéntame, ¿a qué te dedicas cuando no estás viajando?', 'Tak povídej, čím se živíš, když zrovna necestuješ?'],
@@ -55,7 +55,7 @@
         ],
       },
       {
-        id: 'denuncia-celular', title: 'Me robaron el celular', who: 'Policía',
+        id: 'denuncia-celular', title: 'Me robaron el celular', who: 'Policía', place: 'Ciudad de México, México',
         scene: 'V metru v Mexico City ti někdo ukradl mobil. Jdeš na policejní stanici podat oznámení.',
         lines: [
           ['Buenas noches. ¿Qué se le ofrece?', 'Dobrý večer. Co si přejete?'],
@@ -81,7 +81,7 @@
         ],
       },
       {
-        id: 'planes-finde', title: 'Planes para el fin de semana', who: 'Tomás',
+        id: 'planes-finde', title: 'Planes para el fin de semana', who: 'Tomás', place: 'Valparaíso, Chile',
         scene: 'Tomás z hostelu ve Valparaísu chce o víkendu někam vyrazit. Domlouváte se.',
         lines: [
           ['¿Qué te parece si el sábado vamos a Viña del Mar?', 'Co kdybychom v sobotu jeli do Viña del Mar?'],
@@ -103,7 +103,7 @@
         ],
       },
       {
-        id: 'malentendido', title: 'Un malentendido', who: 'Señora Rosa',
+        id: 'malentendido', title: 'Un malentendido', who: 'Señora Rosa', place: 'Antigua, Guatemala',
         scene: 'Bydlíš u hostitelské rodiny v Antigue. Při večeři ti paní Rosa nabízí další jídlo. Je ti trochu trapně.',
         lines: [
           ['¿Quieres más arroz, mijo?', 'Chceš ještě rýži, chlapče?'],
@@ -125,7 +125,7 @@
         ],
       },
       {
-        id: 'banco-telefono', title: 'Llamada al banco', who: 'Operadora',
+        id: 'banco-telefono', title: 'Llamada al banco', who: 'Operadora', place: 'Lima, Perú',
         scene: 'V Limě ti bankomat zablokoval kartu. Voláš na zákaznickou linku banky.',
         lines: [
           ['Gracias por llamar. Le atiende Carla. ¿En qué puedo servirle?', 'Děkujeme za zavolání. U telefonu Carla. S čím vám mohu posloužit?'],
@@ -151,7 +151,7 @@
         ],
       },
       {
-        id: 'cena-familia', title: 'Cena con la familia de Camila', who: 'Papá de Camila',
+        id: 'cena-familia', title: 'Cena con la familia de Camila', who: 'Papá de Camila', place: 'Santiago, Chile',
         scene: 'Kamarádka Camila tě pozvala na nedělní oběd k rodičům v Santiagu. Její táta je zvědavý.',
         lines: [
           ['Así que tú eres el famoso amigo checo. ¡Bienvenido! ¿Qué te parece Chile?', 'Takže ty jsi ten slavný český kamarád. Vítej! Jak se ti líbí Chile?'],
@@ -173,7 +173,7 @@
         ],
       },
       {
-        id: 'despedida-familia', title: 'La despedida', who: 'Doña Rosa',
+        id: 'despedida-familia', title: 'La despedida', who: 'Doña Rosa', place: 'Antigua, Guatemala',
         scene: 'Po měsíci u hostitelské rodiny v Antigue odjíždíš. Loučíš se s paní Rosou.',
         lines: [
           ['¡Ay, mijo, no puedo creer que ya te vayas! Este mes pasó volando.', 'Jé, chlapče, nemůžu uvěřit, že už odjíždíš! Ten měsíc utekl jako voda.'],

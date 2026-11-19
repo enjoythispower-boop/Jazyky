@@ -3,7 +3,7 @@
   JZ.add('es', 'b1p', {
     texts: [
       {
-        title: 'Un año de voluntario en Bolivia',
+        title: 'Un año de voluntario en Bolivia', place: 'Bolivia',
         t: `— Lukas, ¿por qué decidiste hacer un voluntariado en Bolivia?
 — Después de terminar la carrera no sabía qué quería hacer con mi vida. Un amigo me habló de una organización que trabajaba con niños en El Alto, cerca de La Paz, y pensé: ¿por qué no?
 — ¿Qué hacías exactamente?
@@ -36,7 +36,7 @@
         ],
       },
       {
-        title: 'Los colectivos de Buenos Aires',
+        title: 'Los colectivos de Buenos Aires', place: 'Buenos Aires, Argentina',
         t: `Si quieres entender Buenos Aires, tienes que subirte a un colectivo. Así llaman los porteños a los autobuses urbanos, y hay más de cien líneas que recorren la ciudad las veinticuatro horas del día.
 Para alguien que llega de fuera, al principio pueden ser un poco caóticos. No hay horarios fijos y las paradas a veces son solo un cartelito en un árbol. Tienes que levantar la mano para que el colectivo pare, y si no lo haces, el chofer sigue de largo. Para pagar se usa una tarjeta recargable que se llama SUBE.
 Los choferes tienen fama de manejar rápido y de frenar de golpe, así que conviene agarrarse bien. Pero también son parte del folclore de la ciudad: muchos decoran su colectivo con dibujos, cintas y frases ingeniosas en un estilo llamado fileteado.
@@ -58,7 +58,7 @@ Nejvíc mě bavilo pozorovat lidi. Během půlhodinové jízdy uvidíš pána, k
         ],
       },
       {
-        title: 'El agua en la Ciudad de México',
+        title: 'El agua en la Ciudad de México', place: 'Ciudad de México, México',
         t: `Parece increíble, pero la Ciudad de México, una de las metrópolis más grandes del mundo, se construyó sobre un lago. Cuando llegaron los españoles en el siglo dieciséis, Tenochtitlan, la capital azteca, era una ciudad sobre el agua, con canales y jardines flotantes.
 Con el tiempo, los lagos se secaron para construir. Hoy la ciudad tiene un problema doble: por un lado, le falta agua, y por otro, se inunda cada vez que llueve mucho. Además, como el suelo es blando, la ciudad se hunde varios centímetros al año. Por eso algunos edificios antiguos están inclinados.
 Muchos barrios reciben agua solo algunos días a la semana, y las familias tienen que guardarla en tinacos, unos depósitos negros que se ven en los techos de casi todas las casas. En cambio, en las zonas más ricas casi nunca hay problemas.
@@ -102,7 +102,7 @@ Babička zemřela před třemi lety, v devadesáti dvou. Pokaždé, když se př
         ],
       },
       {
-        title: 'El Camino Inca',
+        title: 'El Camino Inca', place: 'Cusco, Perú',
         t: `El Camino Inca es una ruta de unos cuarenta kilómetros que lleva hasta Machu Picchu. Los incas construyeron una enorme red de caminos por todo su imperio, y este es uno de los tramos mejor conservados.
 Para hacerlo hay que reservar con meses de antelación, porque solo se permite la entrada a quinientas personas al día, incluidos guías y porteadores. Yo reservé en enero para ir en mayo, y aun así quedaban pocos lugares.
 La caminata dura cuatro días. El segundo día es el más duro: hay que subir hasta el Paso de la Mujer Muerta, a 4.215 metros. Me faltaba el aire y cada paso me costaba muchísimo. Lo que más me impresionó fueron los porteadores, que subían corriendo con mochilas enormes y sandalias.
@@ -146,7 +146,7 @@ Mnoho jazyků je však ohrožených. Po staletí se mluvení domorodým jazykem 
         ],
       },
       {
-        title: 'Reseña: La Cocina de Doña Mago',
+        title: 'Reseña: La Cocina de Doña Mago', place: 'Ciudad de México, México',
         t: `★★★★☆ Escondido en una calle tranquila del barrio de Coyoacán, este pequeño restaurante familiar es una de esas joyas que uno no quiere compartir con nadie.
 El lugar es sencillo: seis mesas de madera, manteles de colores y fotos antiguas en las paredes. Doña Mago, la dueña, cocina personalmente desde hace más de treinta años, y se nota. Pedimos el mole poblano, que estaba espectacular: espeso, ligeramente dulce y con un toque picante que aparece al final. Los chiles en nogada, un plato de temporada, también merecen la pena.
 El servicio es amable, aunque un poco lento cuando el local está lleno. Conviene ir temprano o reservar, sobre todo los fines de semana. Los precios son razonables: comimos tres personas, con bebidas y postre, por unos novecientos pesos.
@@ -220,7 +220,7 @@ Shrnuto: pokud ti někdo řekne, že jsi na učení moc starý, neposlouchej ho.
         ],
       },
       {
-        title: 'Una noche en el desierto de Atacama',
+        title: 'Una noche en el desierto de Atacama', place: 'Atacama, Chile',
         t: `El desierto de Atacama, en el norte de Chile, es el desierto más seco del mundo. Hay lugares donde nunca se ha registrado lluvia. Por eso, el cielo está despejado casi todas las noches del año, y muchos de los observatorios astronómicos más importantes del planeta están allí.
 Una noche fui a un tour astronómico desde San Pedro de Atacama. Nos llevaron en minibús a un lugar lejos de las luces del pueblo. Hacía muchísimo frío, así que nos dieron mantas y chocolate caliente.
 El guía, un astrónomo aficionado llamado Ramiro, apagó todas las linternas. Al principio no veía nada, pero cuando mis ojos se acostumbraron a la oscuridad, me quedé sin palabras. Había tantas estrellas que el cielo parecía blanco. Ramiro nos mostró la Vía Láctea, la Cruz del Sur y dos pequeñas galaxias que solo se ven desde el hemisferio sur.

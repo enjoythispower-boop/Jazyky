@@ -3,7 +3,7 @@
   JZ.add('es', 'b1p', {
     texts: [
       {
-        title: 'El turismo en Cancún',
+        title: 'El turismo en Cancún', place: 'Cancún, México',
         t: `Hace cincuenta años, Cancún era un pequeño pueblo de pescadores con playas casi vacías. Hoy es uno de los destinos turísticos más famosos del mundo y recibe millones de visitantes cada año.
 Para muchos mexicanos, el turismo ha sido una gran oportunidad. Ha creado miles de empleos en hoteles, restaurantes y agencias, y gracias a él la región ha crecido muy rápido. Sin embargo, no todo es positivo.
 Por un lado, los grandes hoteles ocupan casi toda la costa y en algunos lugares los habitantes ya no pueden llegar a la playa. Por otro lado, la construcción ha destruido parte de los manglares, que son muy importantes para el ecosistema. Además, mucha gente que trabaja en el turismo gana poco y vive lejos de la zona hotelera.
@@ -55,7 +55,7 @@ Martin Dvořák`,
         ],
       },
       {
-        title: 'Rumbo a la Patagonia',
+        title: 'Rumbo a la Patagonia', place: 'El Calafate, Argentina',
         t: `Siempre había soñado con conocer la Patagonia. Cuando por fin llegué a El Calafate, en el sur de Argentina, ya llevaba cuatro meses viajando y estaba bastante cansado. Pero en cuanto vi el glaciar Perito Moreno, me olvidé de todo.
 Nunca había visto nada parecido. El hielo era de un azul intenso y la pared del glaciar medía más de sesenta metros. De vez en cuando se oía un ruido enorme, como un trueno, y un trozo de hielo caía al lago. La gente aplaudía como si fuera un espectáculo.
 Al día siguiente, tomé un autobús a El Chaltén para hacer senderismo. El primer día el viento era tan fuerte que casi no podía caminar. Una señora del hostal me había advertido: «En la Patagonia el clima cambia cada diez minutos». Tenía toda la razón: en una sola tarde tuve sol, lluvia, granizo y otra vez sol.
@@ -99,7 +99,7 @@ Osobně si myslím, že záleží na životní etapě. Když jsem byl student, n
         ],
       },
       {
-        title: 'Frida Kahlo',
+        title: 'Frida Kahlo', place: 'Ciudad de México, México',
         t: `Frida Kahlo es probablemente la pintora mexicana más famosa del mundo. Nació en 1907 en Coyoacán, un barrio de la Ciudad de México, en la casa azul que hoy es un museo.
 Su vida estuvo marcada por el dolor. De niña tuvo poliomielitis y, a los dieciocho años, sufrió un terrible accidente de autobús. Pasó meses en la cama sin poder moverse. Fue entonces cuando empezó a pintar: su madre le puso un espejo encima de la cama y Frida comenzó a hacer autorretratos.
 Más tarde se casó con el muralista Diego Rivera. Su relación fue apasionada y complicada: se separaron, se divorciaron y se volvieron a casar. Juntos viajaron a Estados Unidos y conocieron a artistas e intelectuales de todo el mundo.
@@ -185,7 +185,7 @@ Nakonec, když už jsme nemohli, někdo zvolal: „Potlesk pro asadora!“ a vš
         ],
       },
       {
-        title: 'El tren a las nubes',
+        title: 'El tren a las nubes', place: 'Salta, Argentina',
         t: `En el norte de Argentina, cerca de la frontera con Chile, hay un tren con un nombre muy poético: el Tren a las Nubes. Sale de la ciudad de San Antonio de los Cobres y sube hasta casi 4.200 metros de altura, hasta el famoso viaducto La Polvorilla.
 La línea se construyó en la primera mitad del siglo veinte. Fue una obra muy difícil: los ingenieros tuvieron que construir túneles, puentes y vías en zigzag para que el tren pudiera subir las montañas. Durante muchos años transportó minerales y personas entre Argentina y Chile.
 Yo hice el viaje en invierno. Hacía un frío terrible, pero el cielo estaba completamente despejado y el paisaje era impresionante: montañas de colores, salinas blancas y rebaños de llamas. Algunos pasajeros se sintieron mal por la altura. La tripulación les dio té de coca y oxígeno.

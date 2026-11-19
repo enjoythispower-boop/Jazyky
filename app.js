@@ -1323,7 +1323,7 @@ function viewTextList() {
   page('Překlad textu', `#/${L.code}`, `
     ${trSwitch('text')}
     <p class="muted lead">Vyber text, přelož ho celý a pak porovnej se vzorovým překladem.</p>
-    ${byLevel(L.texts, (x, i) => `<a class="row" href="#/${L.code}/preklad/text/${i}">
+    ${byLevel(L.texts, (x, i) => x.doc ? '' : `<a class="row" href="#/${L.code}/preklad/text/${i}">
       <span class="row-main tl">${esc(x.title)}</span>${I.arrow}</a>`)}`);
   bindTrSwitch();
 }
@@ -1429,7 +1429,8 @@ function viewReadList() {
       <span class="row-main tl">${esc(x.title)}</span><span class="row-sub">${r ? `přečteno ${r.n}× · ` : ''}${esc(x.t.slice(0, 60).replace(/\n/g, ' '))}…</span>${I.arrow}</a>`; })}`);
 }
 
-function glossify(text, gloss) {
+// Řádky textu s vyznačenými slovy ze slovníčku; fn dostane řádek a funkci, která ho převede na HTML
+function glossLines(text, gloss) {
   const keys = Object.keys(gloss).sort((a, b) => b.length - a.length);
   const hits = [];
   let s = text;
@@ -1437,23 +1438,72 @@ function glossify(text, gloss) {
     const re = new RegExp(`(?<![\\p{L}\\p{M}])${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\p{L}\\p{M}])`, 'giu');
     s = s.replace(re, m => { hits.push([m, k]); return `\u0001${hits.length - 1}\u0002`; });
   }
-  return s.split('\n').map(p => `<p>${esc(p).replace(/\u0001(\d+)\u0002/g, (_, n) =>
-    `<span class="g" role="button" tabindex="0" data-g="${esc(hits[n][1])}">${esc(hits[n][0])}</span>`)}</p>`).join('');
+  const html = p => esc(p).replace(/\u0001(\d+)\u0002/g, (_, n) =>
+    `<span class="g" role="button" tabindex="0" data-g="${esc(hits[n][1])}">${esc(hits[n][0])}</span>`);
+  return s.split('\n').map(p => [p, html]);
+}
+const glossify = (text, gloss) => glossLines(text, gloss).map(([p, html]) => `<p>${html(p)}</p>`).join('');
+
+// Skutečné formáty (doc): 'paper' = lístek, cedule, jízdní řád, inzerát; 'chat' = zprávy v telefonu.
+// Řádky papíru: „## nadpis“, „# oddíl“, „~ drobná poznámka“, „položka | cena“, jinak odstavec.
+// Řádky chatu: „Jméno: zpráva“; moje zprávy mají jméno z x.me.
+const docLine = p => p.replace(/^(##|#|~) /, '').replace(/ \| /g, ' – ');
+function docHTML(x) {
+  const lines = glossLines(x.t, x.gloss);
+  if (x.doc === 'chat') {
+    return `<div class="doc-chat tl" lang="${L.code}">${lines.map(([p, html]) => {
+      const m = p.match(/^([^:]{1,24}): (.*)$/);
+      if (!m) return `<p class="dc-day">${html(p)}</p>`;
+      const me = m[1] === x.me;
+      return `<div class="dc-msg ${me ? 'me' : 'them'}">${me ? '' : `<small>${esc(m[1])}</small>`}<p>${html(m[2])}</p></div>`;
+    }).join('')}</div>`;
+  }
+  return `<div class="doc-paper tl" lang="${L.code}">${lines.map(([p, html]) => {
+    if (p.startsWith('## ')) return `<p class="dp-title">${html(p.slice(3))}</p>`;
+    if (p.startsWith('# ')) return `<p class="dp-head">${html(p.slice(2))}</p>`;
+    if (p.startsWith('~ ')) return `<p class="dp-small">${html(p.slice(2))}</p>`;
+    const r = p.split(' | ');
+    if (r.length === 2) return `<p class="dp-row"><span>${html(r[0])}</span><span class="dp-dots"></span><span>${html(r[1])}</span></p>`;
+    return `<p>${html(p)}</p>`;
+  }).join('')}</div>`;
+}
+
+// Barevná hlavička s místem: plocha v barvě jazyka, kde se děj odehrává, a u španělštiny místo na trase cesty
+function routeHTML(place) {
+  const r = L.route;
+  if (!r || !place) return '';
+  const city = place.split(/,| · /)[0].trim(), at = r.indexOf(city);
+  if (at < 0) return '';
+  const pct = at / (r.length - 1) * 100;
+  return `<div class="route" title="Kde se to odehrává na trase ${esc(r[0])} – ${esc(r[r.length - 1])}">
+    <ol>${r.map((c, i) => `<li${i === at ? ' class="here"' : ''}></li>`).join('')}</ol>
+    <div class="route-lbl">${pct > 24 ? `<span>${esc(r[0])}</span>` : ''}<b style="left:${pct}%">${esc(city)}</b>${pct < 76 ? `<span class="end">${esc(r[r.length - 1])}</span>` : ''}</div></div>`;
+}
+function placeHead({ kicker, title, place, body = '' }) {
+  return `<header class="place-head">
+    <span class="ph-mark" aria-hidden="true">${esc(L.glyph)}</span>
+    <p class="ph-kicker">${esc(kicker)}</p>
+    <h2 class="ph-title tl" lang="${L.code}">${esc(title)}</h2>
+    ${body}${routeHTML(place)}
+  </header>`;
 }
 
 function readingHTML(x) {
+  const lv = `úroveň ${levelName(lvOf(x))}`;
+  const city = x.place && !x.doc ? x.place.split(/,| · /)[0].trim() : '';
+  // Novinová hlavička s místem místo iniciály
+  const text = x.doc ? docHTML(x) : glossLines(x.t, x.gloss).map(([p, html], i) =>
+    `<p>${i === 0 && city ? `<span class="dateline">${esc(city.toLocaleUpperCase('cs'))} —</span> ` : ''}${html(p)}</p>`).join('');
   return `<article class="reading">
-      <header class="read-head">
-        <p class="read-kicker">${esc(L.name)} · úroveň ${levelName(lvOf(x))}</p>
-        <h2 class="read-title tl" lang="${L.code}">${esc(x.title)}</h2>
-        <div class="actions left">
-          ${tts.ok ? `<button type="button" class="chip" data-read>${I.sound}<span>Přečíst nahlas</span></button>` : ''}
-          <button type="button" class="chip" data-show>Zobrazit překlad</button>
-        </div>
-      </header>
-      <div class="text tl" lang="${L.code}">${glossify(x.t, x.gloss)}</div>
+      ${placeHead({ kicker: x.place ? `${x.place} · ${lv}` : `${L.name} · ${lv}`, title: x.title, place: x.place })}
+      <div class="actions left read-tools">
+        ${tts.ok ? `<button type="button" class="chip" data-read>${I.sound}<span>Přečíst nahlas</span></button>` : ''}
+        <button type="button" class="chip" data-show>Zobrazit překlad</button>
+      </div>
+      ${x.doc ? `<div class="doc">${text}</div>` : `<div class="text tl${city ? ' dated' : ''}" lang="${L.code}">${text}</div>`}
       <p class="read-help">Podtržená slova ťukni pro význam.</p>
-      <div class="translation" hidden><small>Překlad</small>${x.cz.split('\n').map(p => `<p>${esc(p)}</p>`).join('')}</div>
+      ${x.note ? `<aside class="note"><b>Poznámka</b><p>${esc(x.note)}</p></aside>` : ''}
+      <div class="translation" hidden><small>Překlad</small>${x.cz.split('\n').map(p => `<p>${esc(x.doc ? docLine(p) : p)}</p>`).join('')}</div>
       <details class="glossary"><summary>Slovníček textu</summary>
         <dl>${Object.entries(x.gloss).map(([k, v]) => `<div><dt class="tl">${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>
       <section class="questions">
@@ -1480,7 +1530,7 @@ function bindReading(x, root) {
   });
   $$('.g', root).forEach(b => b.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } });
   const rd = $('[data-read]', root);
-  if (rd) rd.onclick = () => tts.say(x.t.replace(/—/g, ''));
+  if (rd) rd.onclick = () => tts.say(x.t.split('\n').map(p => x.doc === 'chat' ? p.replace(/^[^:]{1,24}: /, '') : docLine(p)).join('\n').replace(/—/g, ''));
   $('[data-show]', root).onclick = e => {
     const tr = $('.translation', root);
     tr.hidden = !tr.hidden;
@@ -1498,7 +1548,7 @@ function bindReading(x, root) {
 function viewRead(i) {
   const x = L.texts[i];
   if (!x) return viewReadList();
-  page('Čtení', `#/${L.code}/cteni`, readingHTML(x) + `<a class="btn wide" href="#/${L.code}/preklad/text/${i}">Přeložit tento text</a>`);
+  page('Čtení', `#/${L.code}/cteni`, readingHTML(x) + (x.doc ? '' : `<a class="btn wide" href="#/${L.code}/preklad/text/${i}">Přeložit tento text</a>`));
   bindReading(x, app);
 }
 
@@ -1518,14 +1568,16 @@ function stepDialog(id, stage, done) {
   const write = typing() && settings.dlgWrite;
   let k = 0, good = 0, turns = 0;
   stage.innerHTML = `
-    <header class="dlg-head">
-      <h3 class="dlg-title tl" lang="${L.code}">${esc(d.title)}</h3>
-      <p class="dlg-scene">${esc(d.scene)}</p>
-      ${typing() ? `<div class="seg small" role="group" aria-label="Způsob odpovědi">
+    ${placeHead({ kicker: d.place ? `${d.place} · dialog` : `${L.name} · dialog`, title: d.title, place: d.place, body: `
+      <p class="ph-stage">${esc(d.scene)}</p>
+      <div class="ph-cast">
+        <span class="them"><i class="tl" lang="${L.code}">${esc(plain(d.who).charAt(0))}</i><span class="tl" lang="${L.code}">${esc(d.who)}</span></span>
+        <span class="me"><i>Ty</i><span>tvoje repliky</span></span>
+      </div>` })}
+    ${typing() ? `<header class="dlg-head"><div class="seg small" role="group" aria-label="Způsob odpovědi">
         <button type="button" class="seg-btn ${write ? '' : 'on'}" data-mode="0" aria-pressed="${!write}">Vybírat repliky</button>
         <button type="button" class="seg-btn ${write ? 'on' : ''}" data-mode="1" aria-pressed="${write}">Psát sám</button>
-      </div>` : ''}
-    </header>
+      </div></header>` : ''}
     <div class="chat" aria-live="polite"></div>
     <div class="reply"></div>`;
   const chat = $('.chat', stage), reply = $('.reply', stage);

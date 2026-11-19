@@ -698,9 +698,6 @@ mark { padding: 0 .15em; border-radius: 4px; background: var(--warn-soft); color
 
 /* ================= ČTENÍ: jako článek ================= */
 .reading { padding-bottom: 24px; }
-.read-head { padding: 14px 4px 22px; }
-.read-kicker { margin: 0; font-size: .78rem; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
-.read-title { margin: 10px 0 16px; font-size: clamp(2rem, 8vw, 2.75rem); line-height: 1.08; font-weight: 600; letter-spacing: -.02em; text-wrap: balance; }
 .reading .text { max-width: 34em; padding: 0 4px; font-size: 1.3125rem; line-height: 1.72; }
 .reading .text p { margin: 0 0 1em; }
 .reading .text p:first-child::first-letter {
@@ -708,6 +705,67 @@ mark { padding: 0 .15em; border-radius: 4px; background: var(--warn-soft); color
   font-size: 3.4em; line-height: .82; font-weight: 600; color: var(--accent);
 }
 .read-help { margin: 0 4px 18px; font-size: .84rem; color: var(--muted); }
+
+/* Hlavička s místem (čtení i dialog): plocha v barvě jazyka */
+.place-head {
+  position: relative; overflow: hidden; isolation: isolate;
+  margin: 8px 0 0; padding: 24px 22px 24px;
+  border-radius: var(--r-xl); background: var(--accent-deep); color: #fff;
+  animation: rise .5s var(--ease);
+}
+.place-head::after { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(120% 80% at 100% 0%, rgb(255 255 255 / .12), transparent 60%); }
+.ph-mark { position: absolute; z-index: -1; right: -.04em; top: -.22em; font: 600 clamp(9rem, 36vw, 13rem)/1 var(--serif); color: rgb(255 255 255 / .08); pointer-events: none; }
+.ph-kicker { margin: 0; font-size: .76rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; color: rgb(255 255 255 / .78); }
+.ph-title { margin: 10px 0 0; font: 600 clamp(2.1rem, 8.5vw, 2.9rem)/1.04 var(--serif); letter-spacing: -.025em; text-wrap: balance; }
+.ph-stage { margin: 14px 0 0; max-width: 34em; font: italic 400 1.0625rem/1.5 var(--serif); color: rgb(255 255 255 / .9); }
+.ph-cast { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 18px; padding-top: 14px; border-top: .5px solid rgb(255 255 255 / .25); font-size: .9rem; }
+.ph-cast > span { display: inline-flex; align-items: center; gap: 9px; }
+.ph-cast i { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; font: 600 1rem/1 var(--serif); }
+.ph-cast .them i { background: #fff; color: var(--accent-deep); }
+.ph-cast .me i { background: rgb(255 255 255 / .18); color: #fff; font-family: var(--sans); font-size: .8rem; }
+.ph-cast .me > span { color: rgb(255 255 255 / .72); }
+/* Trasa: kde se děj odehrává na cestě, ne kolik je hotovo */
+.route { margin-top: 22px; }
+.route ol { position: relative; display: flex; justify-content: space-between; list-style: none; margin: 0; padding: 0; }
+.route ol::before { content: ""; position: absolute; left: 4px; right: 4px; top: 3.5px; height: 1.5px; background: rgb(255 255 255 / .32); }
+.route li { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-deep); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .5); }
+.route li.here { width: 14px; height: 14px; margin-top: -3px; background: #fff; box-shadow: 0 0 0 4px rgb(255 255 255 / .2); }
+.route-lbl { position: relative; display: flex; justify-content: space-between; height: 1.2em; margin-top: 8px; font-size: .74rem; color: rgb(255 255 255 / .68); }
+.route-lbl .end { margin-left: auto; }
+.route-lbl b { position: absolute; top: 0; transform: translateX(-50%); color: #fff; font-weight: 650; white-space: nowrap; }
+.route-lbl b[style="left:0%"] { transform: none; }
+.route-lbl b[style="left:100%"] { transform: translateX(-100%); }
+.read-tools { margin: 14px 0 0; }
+.reading .text { padding-top: 18px; }
+.reading .text.dated p:first-child::first-letter { float: none; margin: 0; font-size: inherit; line-height: inherit; font-weight: inherit; color: inherit; }
+.dateline { font: 700 .8rem var(--sans); letter-spacing: .08em; color: var(--accent); }
+.note { margin: 0 0 18px; padding: 14px 16px 15px; border-left: 3px solid var(--accent); border-radius: 4px var(--r-sm) var(--r-sm) 4px; background: var(--surface); box-shadow: var(--shadow); }
+.note b { display: block; margin-bottom: 4px; font-size: .72rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.note p { margin: 0; font-size: .95rem; line-height: 1.5; color: var(--ink-2); }
+
+/* Skutečné formáty: papír (lístek, cedule, jízdní řád) a zprávy */
+.doc { padding: 22px 4px 18px; }
+.doc-paper {
+  max-width: 30em; margin: 0 auto; padding: 26px 22px 22px;
+  border-radius: 6px; background: #fbfaf7; color: #1d1b18;
+  box-shadow: 0 1px 0 rgb(0 0 0 / .06), 0 18px 34px -18px rgb(0 0 0 / .45);
+  transform: rotate(-.5deg); font-size: 1.0625rem; line-height: 1.45;
+}
+.doc-paper p { margin: 0 0 .5em; }
+.doc-paper .dp-title { margin: 0 0 4px; text-align: center; font: 600 1.6rem/1.15 var(--serif); }
+.doc-paper .dp-head { margin: 16px 0 6px; font: 650 .7rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--es-deep); }
+:root[data-lang="ru"] .doc-paper .dp-head { color: var(--ru-deep); }
+.doc-paper .dp-small { margin: 0 0 6px; text-align: center; font-style: italic; font-size: .92rem; color: #6b645a; }
+.doc-paper .dp-row { display: flex; align-items: baseline; gap: 6px; margin: 0 0 .3em; }
+.doc-paper .dp-dots { flex: 1; min-width: 12px; border-bottom: 1.5px dotted #b9b2a6; transform: translateY(-4px); }
+.doc-paper .g:hover, .doc-paper .g.on { background: rgb(193 58 14 / .12); color: inherit; }
+.doc-chat { display: flex; flex-direction: column; gap: 6px; max-width: 30em; margin: 0 auto; padding: 16px 12px; border-radius: var(--r-lg); background: var(--surface-2); box-shadow: inset 0 0 0 .5px var(--line); font-size: 1.0625rem; line-height: 1.4; }
+.doc-chat p { margin: 0; }
+.doc-chat .dc-day { align-self: center; margin: 4px 0; padding: 2px 10px; border-radius: 99px; background: var(--fill); font: 600 .75rem var(--sans); color: var(--muted); }
+.dc-msg { max-width: 84%; padding: 8px 12px 9px; border-radius: 16px; }
+.dc-msg small { display: block; margin-bottom: 1px; font: 650 .74rem var(--sans); color: var(--accent); }
+.dc-msg.them { align-self: flex-start; border-bottom-left-radius: 5px; background: var(--surface); box-shadow: var(--shadow); }
+.dc-msg.me { align-self: flex-end; border-bottom-right-radius: 5px; background: var(--accent-soft); }
 .g {
   text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: 5px;
   border-radius: 4px; cursor: pointer; transition: background .15s;
@@ -752,9 +810,7 @@ mark { padding: 0 .15em; border-radius: 4px; background: var(--warn-soft); color
 @media (prefers-color-scheme: dark) { .gloss-bar { background: rgb(58 56 54 / .92); } }
 
 /* ================= DIALOGY ================= */
-.dlg-head { padding: 4px 4px 0; }
-.dlg-title { margin: 0; font-size: 1.75rem; line-height: 1.15; font-weight: 600; }
-.dlg-scene { margin: 6px 0 14px; color: var(--muted); font-size: .9375rem; line-height: 1.45; }
+.dlg-head { padding: 14px 4px 0; }
 .dlg-head .seg { margin-bottom: 0; }
 .chat { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
 .bub {

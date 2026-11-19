@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     texts: [
       {
-        title: 'Un día en Antigua',
+        title: 'Un día en Antigua', place: 'Antigua, Guatemala',
         t: `Llegamos a Antigua Guatemala un martes por la tarde, después de un viaje largo en un autobús lleno de gente. La ciudad nos sorprendió desde el primer momento: calles empedradas, casas de colores y tres volcanes alrededor.
 Como estábamos cansados, buscamos un hostal barato cerca del parque central y dormimos casi diez horas. Al día siguiente, nos levantamos temprano para subir al volcán Pacaya. El guía nos contó que el volcán todavía está activo y que, a veces, se puede ver lava. No vimos lava, pero el paisaje valió la pena.
 Por la noche, cenamos en un pequeño comedor donde una señora preparaba pepián, un plato típico con carne y una salsa espesa. Fue uno de los mejores días del viaje.`,
@@ -94,7 +94,7 @@ Na noční cesty ti doporučuju vybrat si sedadlo, které se dá sklopit do lehu
         ],
       },
       {
-        title: 'Un año en Buenos Aires',
+        title: 'Un año en Buenos Aires', place: 'Buenos Aires, Argentina',
         t: `El próximo año voy a terminar mi viaje en Buenos Aires y, si encuentro trabajo, me quedaré allí unos meses. Me han dicho que la ciudad es enorme y que tiene una vida cultural increíble: teatros, librerías abiertas hasta la medianoche y cafés antiguos donde la gente pasa horas charlando.
 Me gustaría alquilar un departamento pequeño en un barrio tranquilo, quizás en Palermo o en San Telmo. También tendré que acostumbrarme al acento porteño, porque allí no dicen «tú tienes», sino «vos tenés».
 Al principio seguro que no entenderé nada, pero creo que con el tiempo lo aprenderé. Lo que más me preocupa es la inflación: dicen que los precios cambian cada mes.`,

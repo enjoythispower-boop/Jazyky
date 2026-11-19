@@ -3,7 +3,7 @@
   JZ.add('es', 'b1p', {
     dialogs: [
       {
-        id: 'debate-turismo', title: '¿El turismo es bueno?', who: 'Diego',
+        id: 'debate-turismo', title: '¿El turismo es bueno?', who: 'Diego', place: 'Tulum, México',
         scene: 'Sedíš s Diegem, kamarádem z Tulumu, na pláži. Začne mluvit o turistech.',
         lines: [
           ['¿Sabes qué? A veces pienso que el turismo está destruyendo Tulum.', 'Víš co? Někdy si myslím, že turistika ničí Tulum.'],
@@ -29,7 +29,7 @@
         ],
       },
       {
-        id: 'reclamo-vuelo', title: 'Un vuelo cancelado', who: 'Agente de la aerolínea',
+        id: 'reclamo-vuelo', title: 'Un vuelo cancelado', who: 'Agente de la aerolínea', place: 'Bogotá, Colombia',
         scene: 'Na letišti v Bogotě ti zrušili let do Limy. Jdeš k přepážce letecké společnosti.',
         lines: [
           ['Buenas tardes, ¿en qué le puedo ayudar?', 'Dobré odpoledne, s čím vám mohu pomoci?'],
@@ -103,7 +103,7 @@
         ],
       },
       {
-        id: 'consulta-medica', title: 'En la consulta', who: 'Doctora',
+        id: 'consulta-medica', title: 'En la consulta', who: 'Doctora', place: 'Iquitos, Perú',
         scene: 'Po výletě do džungle máš několik dní horečku. Jdeš na kliniku v Iquitos.',
         lines: [
           ['Pase, siéntese. Cuénteme, ¿qué le pasa?', 'Pojďte dál, posaďte se. Povídejte, co vás trápí?'],
@@ -129,7 +129,7 @@
         ],
       },
       {
-        id: 'entrevista-hostal', title: 'Entrevista en el hostal', who: 'Encargado',
+        id: 'entrevista-hostal', title: 'Entrevista en el hostal', who: 'Encargado', place: 'Montañita, Ecuador',
         scene: 'Ucházíš se o práci dobrovolníka na recepci hostelu v Montañitě (Ekvádor) výměnou za ubytování.',
         lines: [
           ['Hola, gracias por venir. Cuéntame un poco sobre ti.', 'Ahoj, díky, že jsi přišel. Řekni mi něco o sobě.'],
@@ -155,7 +155,7 @@
         ],
       },
       {
-        id: 'vecino-ruido', title: 'El vecino ruidoso', who: 'Vecino',
+        id: 'vecino-ruido', title: 'El vecino ruidoso', who: 'Vecino', place: 'Santiago, Chile',
         scene: 'Bydlíš v pronajatém bytě v Santiagu. Soused už třetí noc pouští hlasitou hudbu do dvou do rána. Zaklepeš.',
         lines: [
           ['¿Sí? ¿Qué pasa?', 'Ano? Co se děje?'],

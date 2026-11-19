@@ -41,6 +41,9 @@
     name: 'Španělština',
     native: 'Español',
     glyph: 'ñ',
+    // Trasa cesty od severu k jihu: hlavička textu nebo dialogu ukáže, kde se děj odehrává (place začíná jménem města)
+    route: ['Cancún', 'Mérida', 'Ciudad de México', 'Puebla', 'Oaxaca', 'Antigua', 'Cartagena', 'Medellín', 'Bogotá', 'Cali',
+      'Quito', 'Lima', 'Cusco', 'Arequipa', 'La Paz', 'Atacama', 'Santiago', 'Valparaíso', 'Mendoza', 'Buenos Aires'],
     chars: ['á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü', '¿', '¡'],
     modeWords: {
       slovicka: 'palabras', vety: 'frases', preklad: 'traducir', poslech: 'escuchar', cteni: 'leer',

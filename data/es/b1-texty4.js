@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     texts: [
       {
-        title: 'Tamales con la abuela',
+        title: 'Tamales con la abuela', place: 'Puebla, México',
         t: `Cada diciembre, toda la familia de mi amiga Lupe se reúne en casa de su abuela en Puebla para preparar tamales. Este año me invitaron a mí también.
 Empezamos temprano por la mañana. Los hombres cortaban la carne y las mujeres preparaban la masa con harina de maíz. La abuela daba las órdenes y probaba todo.
 Mi trabajo era poner la masa en las hojas de maíz. Al principio lo hacía muy mal y todos se reían, pero poco a poco aprendí.
@@ -23,7 +23,7 @@ Večer, po hodinách práce, jsme jedli tamales s kávou z hrnce. Nikdy předtí
         ],
       },
       {
-        title: 'Un fin de semana en Valparaíso',
+        title: 'Un fin de semana en Valparaíso', place: 'Valparaíso, Chile',
         t: `Valparaíso está a solo una hora y media de Santiago, así que el sábado tomamos un bus muy temprano. La ciudad está construida sobre cerros, y las casas tienen colores muy vivos.
 Para subir a los cerros usamos los ascensores, unos funiculares muy viejos que funcionan desde hace más de cien años. Cuestan muy poco y la vista desde arriba es espectacular.
 Por la tarde caminamos por las calles llenas de arte urbano. En casi todas las paredes hay murales. También visitamos La Sebastiana, la casa del poeta Pablo Neruda.
@@ -43,7 +43,7 @@ V neděli pršelo, takže jsme strávili den v kavárnách, pili horkou čokolá
         ],
       },
       {
-        title: 'Mi primera clase de salsa',
+        title: 'Mi primera clase de salsa', place: 'Cali, Colombia',
         t: `En Cali dicen que todo el mundo baila salsa, y es verdad. La primera noche fui a una discoteca y me quedé sentado toda la noche porque no sabía bailar.
 Al día siguiente me inscribí en una escuela de baile. Mi profesora se llamaba Yuli y tenía mucha paciencia. Me explicó que lo más importante es escuchar la música y no mirar los pies.
 La primera clase fue un desastre: pisé a Yuli varias veces y me perdía todo el tiempo. Pero ella se reía y me decía: «Tranquilo, nadie nace sabiendo».
@@ -63,7 +63,7 @@ Po dvou týdnech lekcí jsem se vrátil na stejnou diskotéku. Tentokrát mě je
         ],
       },
       {
-        title: 'Una mudanza complicada',
+        title: 'Una mudanza complicada', place: 'Monterrey, México',
         t: `El mes pasado mi hermana Carolina se mudó a un departamento nuevo en Monterrey. Le prometí que la ayudaría, así que viajé desde Guadalajara el viernes.
 El sábado por la mañana llegó el camión de la mudanza, pero con tres horas de retraso. Además, el elevador del edificio no funcionaba, y el departamento está en el sexto piso.
 Subimos todas las cajas por la escalera. El sofá no cabía por la puerta, así que tuvimos que quitarle las patas. A mediodía ya estábamos agotados.
@@ -103,7 +103,7 @@ I když přibývá velkých supermarketů, obchody v sousedství jsou pořád ve
         ],
       },
       {
-        title: 'Un día de lluvia en Lima',
+        title: 'Un día de lluvia en Lima', place: 'Lima, Perú',
         t: `En Lima casi nunca llueve. Durante el invierno el cielo está gris todo el tiempo y hay una llovizna muy fina que los limeños llaman «garúa», pero lluvia de verdad, casi nunca.
 Por eso, cuando un día de febrero empezó a llover fuerte, toda la ciudad se sorprendió. La gente salía de las tiendas para mirar el cielo y algunos niños bailaban en la calle.
 El problema es que la ciudad no está preparada para la lluvia. Muchas casas no tienen techos inclinados, las calles se inundaron rápido y el tráfico se volvió un caos.

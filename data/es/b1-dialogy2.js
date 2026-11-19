@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     dialogs: [
       {
-        id: 'terminal-boleto', title: 'En la terminal de buses', who: 'Vendedora',
+        id: 'terminal-boleto', title: 'En la terminal de buses', who: 'Vendedora', place: 'Ciudad de México, México',
         scene: 'Jsi na autobusovém terminálu v Mexiku City a chceš jet zítra do Oaxacy.',
         lines: [
           ['Buenos días, ¿a dónde viaja?', 'Dobrý den, kam cestujete?'],
@@ -29,7 +29,7 @@
         ],
       },
       {
-        id: 'pedir-direcciones', title: '¿Cómo llego al museo?', who: 'Señor',
+        id: 'pedir-direcciones', title: '¿Cómo llego al museo?', who: 'Señor', place: 'Bogotá, Colombia',
         scene: 'Jsi v Bogotě v centru a hledáš Muzeum zlata. Ptáš se staršího pána na ulici.',
         lines: [
           { ok: ['Disculpe, señor, ¿me podría decir cómo llego al Museo del Oro?', 'Promiňte, pane, mohl byste mi říct, jak se dostanu do Muzea zlata?'],
@@ -51,7 +51,7 @@
         ],
       },
       {
-        id: 'lavanderia', title: 'En la lavandería', who: 'Encargada',
+        id: 'lavanderia', title: 'En la lavandería', who: 'Encargada', place: 'Cusco, Perú',
         scene: 'Po dvou týdnech cestování neseš plný batoh špinavého prádla do prádelny v Cuzcu.',
         lines: [
           ['Hola, buenas. ¿Qué necesitas?', 'Ahoj, dobrý den. Co potřebuješ?'],
@@ -73,7 +73,7 @@
         ],
       },
       {
-        id: 'reservar-tour', title: 'Reservando una excursión', who: 'Agente',
+        id: 'reservar-tour', title: 'Reservando una excursión', who: 'Agente', place: 'Arequipa, Perú',
         scene: 'V cestovní kanceláři v Arequipě se ptáš na výlet do kaňonu Colca.',
         lines: [
           ['Buenas tardes, ¿en qué le puedo ayudar?', 'Dobré odpoledne, s čím vám můžu pomoct?'],
@@ -96,7 +96,7 @@
         ],
       },
       {
-        id: 'objetos-perdidos', title: 'Perdí mi mochila', who: 'Empleado',
+        id: 'objetos-perdidos', title: 'Perdí mi mochila', who: 'Empleado', place: 'Quito, Ecuador',
         scene: 'Nechal jsi batoh v autobuse. Jdeš do kanceláře ztrát a nálezů na terminálu v Quitu.',
         lines: [
           ['Buenos días. ¿En qué le ayudo?', 'Dobrý den. S čím vám pomůžu?'],

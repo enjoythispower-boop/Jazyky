@@ -3,7 +3,7 @@
   JZ.add('ru', 'a2', {
     dialogs: [
       {
-        id: 'gostinica', title: 'В гости́нице', who: 'Администра́тор',
+        id: 'gostinica', title: 'В гости́нице', who: 'Администра́тор', place: 'Каза́нь',
         scene: 'Přijel jsi večer do hotelu v Kazani. Máš rezervaci na tři noci.',
         lines: [
           ['До́брый ве́чер! Чем могу́ помо́чь?', 'Dobrý večer! Jak vám mohu pomoci?'],
@@ -25,7 +25,7 @@
         ],
       },
       {
-        id: 'vokzal', title: 'На вокза́ле', who: 'Касси́р',
+        id: 'vokzal', title: 'На вокза́ле', who: 'Касси́р', place: 'Москва́',
         scene: 'Na nádraží v Moskvě si kupuješ lístek do Petrohradu.',
         lines: [
           ['Сле́дующий! Слу́шаю вас.', 'Další! Poslouchám.'],
@@ -47,7 +47,7 @@
         ],
       },
       {
-        id: 'restoran', title: 'В рестора́не', who: 'Официа́нтка',
+        id: 'restoran', title: 'В рестора́не', who: 'Официа́нтка', place: 'Ирку́тск',
         scene: 'Večeříš v restauraci v Irkutsku. Máš alergii na ořechy.',
         lines: [
           ['До́брый ве́чер! Вы гото́вы сде́лать зака́з?', 'Dobrý večer! Jste připraveni si objednat?'],
@@ -69,7 +69,7 @@
         ],
       },
       {
-        id: 'v-poezde', title: 'Знако́мство в по́езде', who: 'Татья́на',
+        id: 'v-poezde', title: 'Знако́мство в по́езде', who: 'Татья́на', place: 'По́езд Москва́ – Ирку́тск',
         scene: 'V plackartu do Irkutsku si s tebou začne povídat paní Taťána.',
         lines: [
           ['Здра́вствуйте! Вы, наве́рное, не ру́сский? Отку́да вы?', 'Dobrý den! Vy asi nejste Rus? Odkud jste?'],
@@ -117,7 +117,7 @@
         ],
       },
       {
-        id: 'doroga', title: 'Как пройти́?', who: 'Прохо́жий',
+        id: 'doroga', title: 'Как пройти́?', who: 'Прохо́жий', place: 'Санкт-Петербу́рг',
         scene: 'V Petrohradu hledáš Ermitáž a zastavíš kolemjdoucího.',
         lines: [
           { ok: ['Извини́те, вы не подска́жете, как пройти́ к Эрмита́жу?', 'Promiňte, neporadíte mi, jak se dostanu k Ermitáži?'],
@@ -135,7 +135,7 @@
         ],
       },
       {
-        id: 'odezhda', title: 'В магази́не оде́жды', who: 'Продаве́ц',
+        id: 'odezhda', title: 'В магази́не оде́жды', who: 'Продаве́ц', place: 'Москва́',
         scene: 'V Moskvě je zima a ty potřebuješ teplou bundu.',
         lines: [
           ['Здра́вствуйте! Вам помо́чь?', 'Dobrý den! Můžu vám pomoct?'],

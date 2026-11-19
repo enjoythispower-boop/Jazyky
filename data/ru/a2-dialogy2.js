@@ -25,7 +25,7 @@
         ],
       },
       {
-        id: 'taksi', title: 'В такси́', who: 'Такси́ст',
+        id: 'taksi', title: 'В такси́', who: 'Такси́ст', place: 'Новосиби́рск',
         scene: 'Na letišti v Novosibirsku nasedáš do taxi. Jedeš do hotelu „Сиби́рь“.',
         lines: [
           ['До́брый день. Куда́ е́дем?', 'Dobrý den. Kam to bude?'],
@@ -47,7 +47,7 @@
         ],
       },
       {
-        id: 'rynok-a2', title: 'На ры́нке', who: 'Продавщи́ца',
+        id: 'rynok-a2', title: 'На ры́нке', who: 'Продавщи́ца', place: 'Росто́в-на-Дону́',
         scene: 'Na trhu v Rostově chceš koupit ovoce na piknik.',
         lines: [
           ['Молодо́й челове́к, бери́те клубни́ку! Сла́дкая, све́жая!', 'Mladý muži, berte jahody! Sladké, čerstvé!'],

@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     texts: [
       {
-        title: 'El mercado de Chichicastenango',
+        title: 'El mercado de Chichicastenango', place: 'Chichicastenango, Guatemala',
         t: `Los jueves y los domingos, el pequeño pueblo de Chichicastenango, en las montañas de Guatemala, se llena de gente. Desde muy temprano, comerciantes de toda la región llegan con sus productos: frutas, verduras, flores, máscaras de madera y tejidos de colores increíbles.
 El mercado ocupa la plaza central y muchas calles alrededor. Es fácil perderse entre tantos puestos. Las mujeres llevan huipiles, unas blusas tradicionales bordadas a mano, y cada pueblo tiene sus propios colores y dibujos.
 Al lado de la plaza está la iglesia de Santo Tomás. En sus escalones, la gente quema incienso y reza en una mezcla de catolicismo y tradiciones mayas. Es una de las cosas más impresionantes que he visto.
@@ -25,7 +25,7 @@ Pokud si chceš něco koupit, musíš smlouvat. Prodavači vždycky začínají 
         ],
       },
       {
-        title: 'Un problema con el banco',
+        title: 'Un problema con el banco', place: 'Lima, Perú',
         t: `El mes pasado, en Lima, tuve un problema que me dio mucho miedo. Fui a sacar dinero a un cajero automático y, después de escribir la contraseña, la máquina se tragó mi tarjeta. Esperé unos minutos, pero no salió nada.
 Como era domingo, el banco estaba cerrado. Llamé al número que estaba en el cajero, pero nadie contestaba. Estaba muy nervioso porque era mi única tarjeta y casi no tenía efectivo.
 Por suerte, un guardia de seguridad me vio preocupado y me explicó qué tenía que hacer. Me dijo que llamara a mi banco en la República Checa para bloquear la tarjeta y que volviera el lunes con el pasaporte.
@@ -46,7 +46,7 @@ V pondělí ráno jsem šel do banky. Musel jsem čekat skoro hodinu a vyplnit f
         ],
       },
       {
-        title: 'Se busca voluntario',
+        title: 'Se busca voluntario', place: 'Valle Sagrado, Perú',
         t: `SE BUSCA VOLUNTARIO O VOLUNTARIA
 Somos una pequeña granja orgánica en el Valle Sagrado, cerca de Cusco. Buscamos una persona que quiera ayudarnos durante al menos tres semanas.
 ¿Qué vas a hacer? Vas a trabajar en el huerto por las mañanas, cuidar de los animales (gallinas, cuyes y dos llamas) y ayudar en la cocina. También puedes enseñar inglés a los niños de la comunidad si te interesa.
@@ -71,7 +71,7 @@ Jestli tě to zajímá, napiš nám zprávu a řekni nám něco o sobě.`,
         ],
       },
       {
-        title: 'Las islas del Titicaca',
+        title: 'Las islas del Titicaca', place: 'Lago Titicaca, Perú y Bolivia',
         t: `El lago Titicaca está entre Perú y Bolivia, a casi cuatro mil metros de altura. Es tan grande que parece un mar. Desde Puno salen barcos hacia varias islas, y yo decidí pasar dos días allí.
 Primero visitamos las islas de los Uros, que no son islas normales: están hechas de totora, una planta que crece en el lago. Cuando caminas sobre ellas, el suelo se mueve un poco, como un colchón. Los Uros viven allí desde hace siglos y construyen también sus casas y sus barcos con totora.
 Después fuimos a la isla de Amantaní, donde dormí en casa de una familia. No había agua caliente ni internet, y la luz se iba a las nueve de la noche. La señora de la casa me preparó una sopa de quinua y me enseñó algunas palabras en quechua.
@@ -115,7 +115,7 @@ Když jsem ho ochutnal poprvé, připadalo mi hodně hořké. Teď, po pár měs
         ],
       },
       {
-        title: 'Una noche sin luz',
+        title: 'Una noche sin luz', place: 'Cartagena, Colombia',
         t: `Estábamos cenando en una pequeña pensión en Cartagena cuando, de repente, se fue la luz en todo el barrio. Al principio nadie dijo nada. Luego alguien se rio y la dueña de la pensión trajo unas velas.
 Como no había internet ni música, empezamos a hablar. Éramos ocho personas de seis países diferentes: dos chicas de Brasil, un señor francés, una pareja de Chile, un chico de Japón, la dueña colombiana y yo.
 Cada uno contó una historia de su viaje. El señor francés nos contó que había cruzado el Atlántico en un velero. La pareja de Chile se había conocido en un autobús en Bolivia. El chico japonés no hablaba mucho español, pero nos enseñó a hacer figuras de papel.
@@ -136,7 +136,7 @@ Elektřina se vrátila skoro o tři hodiny později, ale nikomu se nechtělo jí
         ],
       },
       {
-        title: 'Entrevista con una guía de Cusco',
+        title: 'Entrevista con una guía de Cusco', place: 'Cusco, Perú',
         t: `— Ana, ¿cuánto tiempo llevas trabajando como guía?
 — Ya llevo doce años. Empecé cuando tenía veinte y estudiaba turismo en la universidad.
 — ¿Qué es lo que más te gusta de tu trabajo?

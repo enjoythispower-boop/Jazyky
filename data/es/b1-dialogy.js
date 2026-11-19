@@ -3,7 +3,7 @@
   JZ.add('es', 'b1', {
     dialogs: [
       {
-        id: 'hostal-llegada', title: 'Llegada al hostal', who: 'Recepcionista',
+        id: 'hostal-llegada', title: 'Llegada al hostal', who: 'Recepcionista', place: 'Oaxaca, México',
         scene: 'Večer dorazíš do hostelu v Oaxace. Rezervaci máš, ale chceš se zeptat na pár věcí.',
         lines: [
           ['¡Buenas noches! Bienvenido. ¿Tienes reserva?', 'Dobrý večer! Vítej. Máš rezervaci?'],
@@ -30,7 +30,7 @@
         ],
       },
       {
-        id: 'restaurante-pedido', title: 'En el restaurante', who: 'Mesero',
+        id: 'restaurante-pedido', title: 'En el restaurante', who: 'Mesero', place: 'Lima, Perú',
         scene: 'Sedíš v malé restauraci v Limě. Nesmíš jíst mořské plody a chceš něco doporučit.',
         lines: [
           ['Buenas tardes. ¿Ya saben qué van a pedir?', 'Dobré odpoledne. Už víte, co si dáte?'],
@@ -56,7 +56,7 @@
         ],
       },
       {
-        id: 'taxi-precio', title: 'El precio del taxi', who: 'Taxista',
+        id: 'taxi-precio', title: 'El precio del taxi', who: 'Taxista', place: 'Cartagena, Colombia',
         scene: 'Je pozdě večer v Cartageně, potřebuješ taxi do hostelu v centru. Taxametr tu není.',
         lines: [
           ['Buenas noches, ¿a dónde vamos?', 'Dobrý večer, kam to bude?'],
@@ -82,7 +82,7 @@
         ],
       },
       {
-        id: 'farmacia', title: 'En la farmacia', who: 'Farmacéutica',
+        id: 'farmacia', title: 'En la farmacia', who: 'Farmacéutica', place: 'Quito, Ecuador',
         scene: 'Od rána tě bolí v krku a máš zvýšenou teplotu. Jdeš do lékárny v Quitu.',
         lines: [
           ['Buenos días, ¿en qué le puedo ayudar?', 'Dobrý den, s čím vám můžu pomoct?'],
@@ -108,7 +108,7 @@
         ],
       },
       {
-        id: 'nuevo-amigo', title: 'Conociendo a alguien', who: 'Valentina',
+        id: 'nuevo-amigo', title: 'Conociendo a alguien', who: 'Valentina', place: 'Medellín, Colombia',
         scene: 'V kuchyni hostelu v Medellínu si vaříš večeři. Přisedne si Valentina z Bogoty.',
         lines: [
           ['¡Hola! Huele muy rico. ¿Qué estás cocinando?', 'Ahoj! Krásně to voní. Co vaříš?'],
@@ -138,7 +138,7 @@
         ],
       },
       {
-        id: 'mercado-regateo', title: 'Regateando en el mercado', who: 'Vendedor',
+        id: 'mercado-regateo', title: 'Regateando en el mercado', who: 'Vendedor', place: 'Cusco, Perú',
         scene: 'Na trhu v Cuscu se ti líbí svetr z alpaky. Cena není napsaná.',
         lines: [
           ['¡Pase, pase, amigo! ¿Qué le gusta?', 'Pojďte dál, příteli! Co se vám líbí?'],
